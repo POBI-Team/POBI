@@ -6,21 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		9B01D2642D647CBE0060E8B7 /* PBDesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B01D2622D647CAE0060E8B7 /* PBDesignSystem.framework */; };
-		9B01D2652D647CBE0060E8B7 /* PBDesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B01D2622D647CAE0060E8B7 /* PBDesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-/* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		9B01D2612D647CAE0060E8B7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9B01D25D2D647CAD0060E8B7 /* PBDesignSystem.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 9B01D2502D647CAD0060E8B7;
-			remoteInfo = PBDesignSystem;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		9B01D2662D647CBE0060E8B7 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -28,7 +13,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				9B01D2652D647CBE0060E8B7 /* PBDesignSystem.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -36,7 +20,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		9B01D25D2D647CAD0060E8B7 /* PBDesignSystem.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PBDesignSystem.xcodeproj; path = PBDesignSystem/PBDesignSystem.xcodeproj; sourceTree = "<group>"; };
 		9BE14C3C2D6043DF008A0E49 /* Pobi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pobi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -53,21 +36,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B01D2642D647CBE0060E8B7 /* PBDesignSystem.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		9B01D25E2D647CAD0060E8B7 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				9B01D2622D647CAE0060E8B7 /* PBDesignSystem.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		9B01D2632D647CBE0060E8B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -78,7 +52,6 @@
 		9BE14C332D6043DF008A0E49 = {
 			isa = PBXGroup;
 			children = (
-				9B01D25D2D647CAD0060E8B7 /* PBDesignSystem.xcodeproj */,
 				9BE14C3E2D6043DF008A0E49 /* Pobi */,
 				9B01D2632D647CBE0060E8B7 /* Frameworks */,
 				9BE14C3D2D6043DF008A0E49 /* Products */,
@@ -146,28 +119,12 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9BE14C3D2D6043DF008A0E49 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 9B01D25E2D647CAD0060E8B7 /* Products */;
-					ProjectRef = 9B01D25D2D647CAD0060E8B7 /* PBDesignSystem.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				9BE14C3B2D6043DF008A0E49 /* Pobi */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		9B01D2622D647CAE0060E8B7 /* PBDesignSystem.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = PBDesignSystem.framework;
-			remoteRef = 9B01D2612D647CAE0060E8B7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		9BE14C3A2D6043DF008A0E49 /* Resources */ = {
