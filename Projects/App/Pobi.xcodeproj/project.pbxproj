@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9B01D38A2D64AD600060E8B7 /* PBDesignSystem.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B01D3892D64AD600060E8B7 /* PBDesignSystem.framework */; };
+		9B01D38B2D64AD600060E8B7 /* PBDesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B01D3892D64AD600060E8B7 /* PBDesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		9B01D2662D647CBE0060E8B7 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -13,6 +18,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				9B01D38B2D64AD600060E8B7 /* PBDesignSystem.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -20,6 +26,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9B01D3892D64AD600060E8B7 /* PBDesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PBDesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BE14C3C2D6043DF008A0E49 /* Pobi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pobi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -36,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B01D38A2D64AD600060E8B7 /* PBDesignSystem.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,6 +53,7 @@
 		9B01D2632D647CBE0060E8B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9B01D3892D64AD600060E8B7 /* PBDesignSystem.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
