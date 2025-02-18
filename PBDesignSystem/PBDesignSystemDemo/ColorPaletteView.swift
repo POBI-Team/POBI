@@ -219,9 +219,10 @@ struct ColorPaletteView: View {
       }
       .listRowSeparator(.hidden)
     }
+    .navigationTitle("Colors")
   }
 }
 
 #Preview {
-  ContentView()
+  ColorPaletteView()
 }

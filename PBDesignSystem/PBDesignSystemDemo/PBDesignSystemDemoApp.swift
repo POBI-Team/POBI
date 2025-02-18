@@ -7,11 +7,16 @@
 
 import SwiftUI
 
+import PBDesignSystem
+
 @main
 struct PBDesignSystemDemoApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
+        .onAppear {
+          PBFonts.registerFont()
         }
     }
+  }
 }

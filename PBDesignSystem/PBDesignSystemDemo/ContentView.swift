@@ -16,11 +16,18 @@ struct ContentView: View {
         NavigationLink("Color Palette") {
           ColorPaletteView()
         }
+        NavigationLink("Font List") {
+          FontListView()
+        }
       }
+      .navigationTitle("PBDesignSystem")
     }
   }
 }
 
 #Preview {
   ContentView()
+    .onAppear {
+      PBFonts.registerFont()
+    }
 }
