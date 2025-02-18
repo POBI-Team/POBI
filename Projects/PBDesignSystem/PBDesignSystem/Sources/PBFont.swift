@@ -14,7 +14,7 @@ public enum PBFonts {
   public typealias caption = Caption
   
   public static func registerFont() {
-    PBStyle.allCases.forEach {
+    PBFontStyle.allCases.forEach {
       guard let url = Bundle.module.url(forResource: "\($0.rawValue)", withExtension: ".otf") else {
         return
       }
@@ -23,7 +23,7 @@ public enum PBFonts {
   }
 }
 
-public enum PBStyle: String, CaseIterable {
+private enum PBFontStyle: String, CaseIterable {
   case bold = "Pretendard-Bold"
   case semiBold = "Pretendard-SemiBold"
   case medium = "Pretendard-Medium"
@@ -46,7 +46,7 @@ public enum Caption {
 }
 
 public extension UIFont {
-  fileprivate static func custom(_ weigth: PBStyle, size: CGFloat) -> UIFont {
+  fileprivate static func custom(_ weigth: PBFontStyle, size: CGFloat) -> UIFont {
     return UIFont(name: weigth.rawValue, size: size) ?? .systemFont(ofSize: size)
   }
   
