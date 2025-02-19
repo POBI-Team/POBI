@@ -53,49 +53,55 @@ public enum Yellow {
   public static var _50: UIColor { UIColor(hexString: "FFF6E3") }
 }
 
-public enum RedList {
+public protocol PBListColor {
+  static var _01: UIColor { get }
+  static var _02: UIColor { get }
+  static var _03: UIColor { get }
+}
+
+public enum RedList: PBListColor {
   public static var _01: UIColor { UIColor(hexString: "FFB9BE") }
   public static var _02: UIColor { UIColor(hexString: "FFD2D7") }
   public static var _03: UIColor { UIColor(hexString: "FFF0F0") }
 }
 
-public enum BlueList {
+public enum BlueList: PBListColor {
   public static var _01: UIColor { UIColor(hexString: "AADCFF") }
   public static var _02: UIColor { UIColor(hexString: "C3E6FF") }
   public static var _03: UIColor { UIColor(hexString: "EBF5FF") }
 }
 
-public enum YellowList {
+public enum YellowList: PBListColor {
   public static var _01: UIColor { UIColor(hexString: "FFD764") }
   public static var _02: UIColor { UIColor(hexString: "FFE696") }
   public static var _03: UIColor { UIColor(hexString: "FFFAE1") }
 }
 
-public enum PurpleList {
+public enum PurpleList: PBListColor {
   public static var _01: UIColor { UIColor(hexString: "BEBEFA") }
   public static var _02: UIColor { UIColor(hexString: "D7D7FF") }
   public static var _03: UIColor { UIColor(hexString: "F0F0FF") }
 }
 
-public enum GreenList {
+public enum GreenList: PBListColor {
   public static var _01: UIColor { UIColor(hexString: "B4E1A0") }
   public static var _02: UIColor { UIColor(hexString: "D2F0BE") }
   public static var _03: UIColor { UIColor(hexString: "F0FAE6") }
 }
 
-public enum PinkList {
+public enum PinkList: PBListColor {
   public static var _01: UIColor { UIColor(hexString: "FFC3FF") }
   public static var _02: UIColor { UIColor(hexString: "FFD2FF") }
   public static var _03: UIColor { UIColor(hexString: "FFEBFF") }
 }
 
-public enum MintList {
+public enum MintList: PBListColor {
   public static var _01: UIColor { UIColor(hexString: "A5E6E1") }
   public static var _02: UIColor { UIColor(hexString: "BEF0EB") }
   public static var _03: UIColor { UIColor(hexString: "E6FAF5") }
 }
 
-public enum GrayList {
+public enum GrayList: PBListColor {
   public static var _01: UIColor { UIColor(hexString: "DCDCE1") }
   public static var _02: UIColor { UIColor(hexString: "E6E6EB") }
   public static var _03: UIColor { UIColor(hexString: "F5F5F7") }
