@@ -17,7 +17,7 @@ struct PobiApp: App {
   
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      PocketList()
     }
   }
 }
