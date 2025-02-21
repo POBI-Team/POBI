@@ -20,7 +20,7 @@ struct PocketCell: View {
     VStack(alignment: .leading) {
       Spacer()
         .frame(height: 16)
-      Circle()
+      PBCircleEmojiView()
         .foregroundStyle(listColor._01.color)
         .frame(width: 32, height: 32)
         .padding(.leading, 16)
