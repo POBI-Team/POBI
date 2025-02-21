@@ -7,11 +7,17 @@
 
 import SwiftUI
 
+import PBDesignSystem
+
 @main
 struct PobiApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+  init() {
+    PBFonts.registerFont()
+  }
+  
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
     }
+  }
 }
