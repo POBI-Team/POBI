@@ -7,30 +7,102 @@
 
 import XCTest
 @testable import PBStorage
+@testable import PBStorageInterface
 
 final class PBStorageTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+  var sut: PocketStorage!
+  
+  override func setUpWithError() throws {
+    sut = try PocketStorage(isStoredInMemoryOnly: true)
+  }
+  
+  override func tearDownWithError() throws {
+    sut = nil
+  }
+  
+  func test_insert() {
+    // Arrange
+    let items = [
+      PocketItemModel(id: .init(), title: "first", memeo: "aa"),
+      PocketItemModel(id: .init(), title: "second", memeo: "bb"),
+      PocketItemModel(id: .init(), title: "third", memeo: "cc")
+    ]
+    let pocket = PocketModel(id: .init(), title: "Test", items: items)
+    // Act
+    sut.insert(pocket)
+    // Assert
+    do {
+      let outputPocket = try sut.read().first!
+      XCTAssertEqual(outputPocket, pocket)
+    } catch {
+      XCTFail("읽기 실패")
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+  }
+  
+  func test_delete() {
+    // Arrange
+    let items = [
+      PocketItemModel(id: .init(), title: "first", memeo: "aa"),
+      PocketItemModel(id: .init(), title: "second", memeo: "bb")
+    ]
+    let pocket = PocketModel(id: .init(), title: "Test", items: items)
+    sut.insert(pocket)
+    // Act
+    do {
+      try sut.delete(pocket.id)
+    } catch {
+      XCTFail("삭제 실패")
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    // Assert
+    do {
+      let outputPocket = try sut.read()
+      XCTAssertTrue(outputPocket.isEmpty)
+    } catch {
+      XCTFail("읽기 실패")
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+  }
+  
+  func test_update() {
+    // Arrange
+    let items = [
+      PocketItemModel(id: .init(), title: "first", memeo: "aa"),
+      PocketItemModel(id: .init(), title: "second", memeo: "bb")
+    ]
+    let pocket = PocketModel(id: .init(), title: "Test", items: items)
+    sut.insert(pocket)
+    do {
+      let pocket = try sut.read().first!
+      // Act
+      let newItem = PocketItemModel(id: .init(), title: "third", memeo: "cc")
+      pocket.items.append(newItem)
+      let output = try sut.read().first!.items
+      // Assert
+      XCTAssertEqual(output, items + [newItem])
+    } catch {
+      XCTFail("읽기 실패")
     }
-
+  }
+  
+  func test_multitude_pocket_insert() {
+    // Arrange
+    let pockets = [
+      PocketModel(id: .init(), title: "Test1"),
+      PocketModel(id: .init(), title: "Test2"),
+      PocketModel(id: .init(), title: "Test3"),
+      PocketModel(id: .init(), title: "Test4"),
+      PocketModel(id: .init(), title: "Test5"),
+      PocketModel(id: .init(), title: "Test6")
+    ]
+    // Act
+    pockets.forEach { pocket in
+      sut.insert(pocket)
+    }
+    // Assert
+    do {
+      let outputPocket = try sut.read()
+      XCTAssertEqual(outputPocket, pockets)
+    } catch {
+      XCTFail("읽기 실패")
+    }
+  }
 }
