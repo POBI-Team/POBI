@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		9BBC55CE2D6D941B006A30F7 /* PBStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBC55C32D6D941B006A30F7 /* PBStorage.framework */; };
+		9BBC560A2D6DCD54006A30F7 /* PBStorageInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBC55ED2D6DCD0D006A30F7 /* PBStorageInterface.framework */; };
+		9BBC560B2D6DCD54006A30F7 /* PBStorageInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBC55ED2D6DCD0D006A30F7 /* PBStorageInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -18,11 +20,33 @@
 			remoteGlobalIDString = 9BBC55C22D6D941B006A30F7;
 			remoteInfo = PBStorage;
 		};
+		9BBC560C2D6DCD54006A30F7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9BBC55BA2D6D941B006A30F7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9BBC55EC2D6DCD0D006A30F7;
+			remoteInfo = PBStorageInterface;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9BBC560E2D6DCD54006A30F7 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9BBC560B2D6DCD54006A30F7 /* PBStorageInterface.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		9BBC55C32D6D941B006A30F7 /* PBStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PBStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BBC55CD2D6D941B006A30F7 /* PBStorageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PBStorageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BBC55ED2D6DCD0D006A30F7 /* PBStorageInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PBStorageInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -32,6 +56,13 @@
 				PBStorage.h,
 			);
 			target = 9BBC55C22D6D941B006A30F7 /* PBStorage */;
+		};
+		9BBC55FE2D6DCD0D006A30F7 /* Exceptions for "PBStorageInterface" folder in "PBStorageInterface" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			publicHeaders = (
+				PBStorageInterface.h,
+			);
+			target = 9BBC55EC2D6DCD0D006A30F7 /* PBStorageInterface */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -49,6 +80,14 @@
 			path = PBStorageTests;
 			sourceTree = "<group>";
 		};
+		9BBC55EE2D6DCD0D006A30F7 /* PBStorageInterface */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9BBC55FE2D6DCD0D006A30F7 /* Exceptions for "PBStorageInterface" folder in "PBStorageInterface" target */,
+			);
+			path = PBStorageInterface;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BBC560A2D6DCD54006A30F7 /* PBStorageInterface.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,6 +107,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9BBC55EA2D6DCD0D006A30F7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -75,6 +122,8 @@
 			children = (
 				9BBC55C52D6D941B006A30F7 /* PBStorage */,
 				9BBC55D12D6D941B006A30F7 /* PBStorageTests */,
+				9BBC55EE2D6DCD0D006A30F7 /* PBStorageInterface */,
+				9BBC56092D6DCD54006A30F7 /* Frameworks */,
 				9BBC55C42D6D941B006A30F7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -84,14 +133,29 @@
 			children = (
 				9BBC55C32D6D941B006A30F7 /* PBStorage.framework */,
 				9BBC55CD2D6D941B006A30F7 /* PBStorageTests.xctest */,
+				9BBC55ED2D6DCD0D006A30F7 /* PBStorageInterface.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		9BBC56092D6DCD54006A30F7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
 		9BBC55BE2D6D941B006A30F7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9BBC55E82D6DCD0D006A30F7 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -109,10 +173,12 @@
 				9BBC55BF2D6D941B006A30F7 /* Sources */,
 				9BBC55C02D6D941B006A30F7 /* Frameworks */,
 				9BBC55C12D6D941B006A30F7 /* Resources */,
+				9BBC560E2D6DCD54006A30F7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				9BBC560D2D6DCD54006A30F7 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				9BBC55C52D6D941B006A30F7 /* PBStorage */,
@@ -147,6 +213,29 @@
 			productReference = 9BBC55CD2D6D941B006A30F7 /* PBStorageTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		9BBC55EC2D6DCD0D006A30F7 /* PBStorageInterface */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9BBC55FF2D6DCD0D006A30F7 /* Build configuration list for PBXNativeTarget "PBStorageInterface" */;
+			buildPhases = (
+				9BBC55E82D6DCD0D006A30F7 /* Headers */,
+				9BBC55E92D6DCD0D006A30F7 /* Sources */,
+				9BBC55EA2D6DCD0D006A30F7 /* Frameworks */,
+				9BBC55EB2D6DCD0D006A30F7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				9BBC55EE2D6DCD0D006A30F7 /* PBStorageInterface */,
+			);
+			name = PBStorageInterface;
+			packageProductDependencies = (
+			);
+			productName = PBStorageInterface;
+			productReference = 9BBC55ED2D6DCD0D006A30F7 /* PBStorageInterface.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -161,6 +250,9 @@
 						CreatedOnToolsVersion = 16.2;
 					};
 					9BBC55CC2D6D941B006A30F7 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					9BBC55EC2D6DCD0D006A30F7 = {
 						CreatedOnToolsVersion = 16.2;
 					};
 				};
@@ -181,6 +273,7 @@
 			targets = (
 				9BBC55C22D6D941B006A30F7 /* PBStorage */,
 				9BBC55CC2D6D941B006A30F7 /* PBStorageTests */,
+				9BBC55EC2D6DCD0D006A30F7 /* PBStorageInterface */,
 			);
 		};
 /* End PBXProject section */
@@ -194,6 +287,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		9BBC55CB2D6D941B006A30F7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9BBC55EB2D6DCD0D006A30F7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -217,6 +317,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9BBC55E92D6DCD0D006A30F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -224,6 +331,11 @@
 			isa = PBXTargetDependency;
 			target = 9BBC55C22D6D941B006A30F7 /* PBStorage */;
 			targetProxy = 9BBC55CF2D6D941B006A30F7 /* PBXContainerItemProxy */;
+		};
+		9BBC560D2D6DCD54006A30F7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9BBC55EC2D6DCD0D006A30F7 /* PBStorageInterface */;
+			targetProxy = 9BBC560C2D6DCD54006A30F7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -451,6 +563,72 @@
 			};
 			name = Release;
 		};
+		9BBC56002D6DCD0D006A30F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = S44QFR96WL;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.siwon.PBStorageInterface;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9BBC56012D6DCD0D006A30F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = S44QFR96WL;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.siwon.PBStorageInterface;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -477,6 +655,15 @@
 			buildConfigurations = (
 				9BBC55DC2D6D941B006A30F7 /* Debug */,
 				9BBC55DD2D6D941B006A30F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9BBC55FF2D6DCD0D006A30F7 /* Build configuration list for PBXNativeTarget "PBStorageInterface" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9BBC56002D6DCD0D006A30F7 /* Debug */,
+				9BBC56012D6DCD0D006A30F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
