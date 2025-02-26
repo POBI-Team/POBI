@@ -11,7 +11,7 @@ import SwiftData
 public final class PocketModel {
   @Attribute(.unique) public var id: UUID
   public var title: String
-  @Relationship() public var items: [PocketItemModel]
+  @Relationship(deleteRule: .cascade) public var items: [PocketItemModel]
   public var createAt: Date = Date()
   
   init(id: UUID, title: String, items: [PocketItemModel] = []) {
