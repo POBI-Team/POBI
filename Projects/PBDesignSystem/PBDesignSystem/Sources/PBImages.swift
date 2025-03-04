@@ -18,6 +18,7 @@ public struct PBImages {
   public static var back: UIImage { UIImage(named: "back", in: .module, with: nil)! }
   public static var manu24: UIImage { UIImage(named: "manu_24", in: .module, with: nil)! }
   public static var down: UIImage { UIImage(named: "down", in: .module, with: nil)! }
+  public static var up: UIImage { UIImage(named: "up", in: .module, with: nil)! }
 }
 
 public extension UIImage {
