@@ -38,6 +38,7 @@ public enum Navy {
   public static var _200: UIColor { UIColor(hexString: "9398B2") }
   public static var _100: UIColor { UIColor(hexString: "BCC0D2") }
   public static var _50: UIColor { UIColor(hexString: "E5E6EC") }
+  public static var _10: UIColor { UIColor(hexString: "F7F7FA") }
 }
 
 public enum Yellow {
