@@ -37,6 +37,7 @@ public struct PBAlarmSegmentControl: View {
               Text("일회성")
                 .font(PBFonts.body._2.font)
             }
+            .buttonStyle(PlainButtonStyle())
             .foregroundStyle(PBColors.navy._900.color)
             Spacer()
             Button {
@@ -46,6 +47,7 @@ public struct PBAlarmSegmentControl: View {
               Text("반복성")
                 .font(PBFonts.body._2.font)
             }
+            .buttonStyle(PlainButtonStyle())
             .foregroundStyle(PBColors.navy._900.color)
           }
           .padding(.horizontal, 22)
