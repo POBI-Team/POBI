@@ -12,7 +12,6 @@ public struct PBRoundButton: View {
   private let action: () -> Void
   private var title: LocalizedStringKey
   
-  
   public init(_ title: LocalizedStringKey, cornerRadius: CGFloat, action: @escaping () -> Void) {
     self.cornerRadius = cornerRadius
     self.title = title
