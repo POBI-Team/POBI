@@ -41,6 +41,7 @@ public struct PBSegmentView: View {
             .clipShape(RoundedRectangle(cornerRadius: 18))
         }
         .foregroundStyle(selected == i ? PBColors.list.gray._03.color : PBColors.navy._200.color)
+        .buttonStyle(PlainButtonStyle())
       }
     }
   }
