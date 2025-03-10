@@ -10,6 +10,7 @@ import SwiftUI
 
 public enum PBFonts {
   public typealias headline = Headline
+  public typealias title = Title
   public typealias body = Body
   public typealias caption = Caption
   
@@ -34,10 +35,15 @@ public enum Headline {
   public static var _2: UIFont { .custom(.semiBold, size: 24) }
 }
 
-public enum Body {
+public enum Title {
   public static var _1: UIFont { .custom(.semiBold, size: 18) }
+}
+
+public enum Body {
+  public static var _1: UIFont { .custom(.medium, size: 18) }
   public static var _2: UIFont { .custom(.semiBold, size: 16) }
-  public static var _3: UIFont { .custom(.semiBold, size: 14) }
+  public static var _3: UIFont { .custom(.medium, size: 16) }
+  public static var _4: UIFont { .custom(.semiBold, size: 14) }
 }
 
 public enum Caption {
