@@ -8,11 +8,10 @@
 import SwiftUI
 
 public struct PBAlarmSegmentControl: View {
-  @State var isRepeated: Bool = false
-  private let action: (Bool) -> Void
+  @Binding private var isRepeated: Bool
   
-  public init(action: @escaping (_ isRepeated: Bool) -> Void) {
-    self.action = action
+  public init(isRepeated: Binding<Bool>) {
+    self._isRepeated = isRepeated
   }
   
   public var body: some View {
@@ -32,7 +31,6 @@ public struct PBAlarmSegmentControl: View {
           HStack {
             Button {
               isRepeated = false
-              action(isRepeated)
             } label: {
               Text("일회성")
                 .font(PBFonts.body._2.font)
@@ -42,7 +40,6 @@ public struct PBAlarmSegmentControl: View {
             Spacer()
             Button {
               isRepeated = true
-              action(isRepeated)
             } label: {
               Text("반복성")
                 .font(PBFonts.body._2.font)
@@ -58,5 +55,5 @@ public struct PBAlarmSegmentControl: View {
 }
 
 #Preview {
-  PBAlarmSegmentControl(action: {_ in})
+  PBAlarmSegmentControl(isRepeated: .constant(false))
 }
