@@ -7,29 +7,31 @@
 
 import SwiftUI
 
-public struct PBRoundButton: View {
+public struct PBRoundButton<Label: View>: View {
   private let cornerRadius: CGFloat
   private let action: () -> Void
-  private var title: LocalizedStringKey
+  private var label:  () -> Label
   
-  public init(_ title: LocalizedStringKey, cornerRadius: CGFloat, action: @escaping () -> Void) {
+  public init(
+    _ cornerRadius: CGFloat,
+    action: @escaping () -> Void,
+    @ViewBuilder label: @escaping () -> Label
+  ) {
     self.cornerRadius = cornerRadius
-    self.title = title
     self.action = action
+    self.label = label
   }
   
   public var body: some View {
     Button(action: action) {
       RoundedRectangle(cornerRadius: cornerRadius)
         .overlay {
-          Text(title)
-            .foregroundStyle(PBColors.navy._900.color)
-            .font(PBFonts.caption._1.font)
+          label()
         }
     }
   }
 }
 
 #Preview {
-  PBRoundButton("10월 10일", cornerRadius: 10, action: {})
+  PBRoundButton(10, action: {}, label: { Text("Hello") })
 }
