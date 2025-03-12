@@ -6,11 +6,20 @@
 //
 
 import SwiftUI
+import SwiftData
 
 import PBDesignSystem
+import PBStorage
+import PBStorageInterface
 
 struct CreatePocketView: View {
-  @State private var title: String = ""
+  @Environment(\.modelContext) private var modelContext
+  @Environment(\.dismiss) private var dismiss
+  
+  @State private var pocket: PocketModel = PocketModel(
+    id: .init(),
+    title: ""
+  )
   @State private var isOn: Bool = false
   @State private var isSelectedDate: Bool = false
   @State private var isSelectedTime: Bool = false
@@ -37,7 +46,7 @@ struct CreatePocketView: View {
             .frame(width: 80, height: 80)
           
           PBTitleTextField(
-            text: $title,
+            text: $pocket.title,
             placeholder: "포켓 이름을 입력해주세요!"
           )
           
@@ -62,7 +71,7 @@ struct CreatePocketView: View {
             withAnimation {
               isDidTapDownButton.toggle()
             }
-
+            
           } label: {
             isDidTapDownButton ? PBImages.up.image : PBImages.down.image
           }
@@ -174,19 +183,30 @@ struct CreatePocketView: View {
         Spacer()
       }
       .padding(.horizontal, 20)
+      .padding(.bottom, 50)
     }
     .background(PBColors.navy._10.color)
     .overlay {
       VStack {
         Spacer()
         PBCapsuleButton("저장") {
-          
+          modelContext.insert(pocket)
+          dismiss()
         }
         .foregroundStyle(.white)
         .padding(.horizontal, 20)
       }
     }
-  }
+    .toolbar {
+      ToolbarItem(placement: .topBarLeading) {
+        Button(action: {
+          dismiss()
+        }) {
+          PBImages.back.image
+        }
+      }
+    }
+  }    
 }
 
 #Preview {
