@@ -8,6 +8,7 @@
 import SwiftUI
 
 import PBDesignSystem
+import PBStorage
 
 @main
 struct PobiApp: App {
@@ -17,7 +18,8 @@ struct PobiApp: App {
   
   var body: some Scene {
     WindowGroup {
-      PocketList()
+      HomeView()
+        .modelContainer(try! PocketStorage().modelContainer)
     }
   }
 }
