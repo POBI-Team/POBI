@@ -1,0 +1,194 @@
+//
+//  CreatePocketView.swift
+//  Pobi
+//
+//  Created by 이시원 on 3/4/25.
+//
+
+import SwiftUI
+
+import PBDesignSystem
+
+struct CreatePocketView: View {
+  @State private var title: String = ""
+  @State private var isOn: Bool = false
+  @State private var isSelectedDate: Bool = false
+  @State private var isSelectedTime: Bool = false
+  @State private var isDidTapDownButton: Bool = false
+  @State private var isRepeated: Bool = false
+  @State private var isXXX: Bool = false
+  
+  private let colors: [PBListColor.Type] = [
+    PBColors.list.red.self,
+    PBColors.list.yellow.self,
+    PBColors.list.green.self,
+    PBColors.list.mint.self,
+    PBColors.list.blue.self,
+    PBColors.list.purple.self,
+    PBColors.list.pink.self,
+    PBColors.list.gray.self
+  ]
+  
+  var body: some View {
+    ScrollView {
+      VStack(spacing: 12) {
+        VStack(alignment: .center, spacing: 16) {
+          PBCircleEmojiView()
+            .frame(width: 80, height: 80)
+          
+          PBTitleTextField(
+            text: $title,
+            placeholder: "포켓 이름을 입력해주세요!"
+          )
+          
+          if isDidTapDownButton {
+            VStack {
+              HStack(spacing: 8) {
+                Spacer()
+                ForEach(colors.indices, id: \.self) { i in
+                  Circle()
+                    .frame(width: 24, height: 24)
+                    .foregroundStyle(colors[i]._01.color)
+                }
+                Spacer()
+              }
+              .padding(.vertical, 18)
+              .background(PBColors.navy._10.color)
+              .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+          }
+          
+          Button {
+            withAnimation {
+              isDidTapDownButton.toggle()
+            }
+
+          } label: {
+            isDidTapDownButton ? PBImages.up.image : PBImages.down.image
+          }
+        }
+        .padding(.horizontal, 24)
+        .padding(.top, 20)
+        .padding(.bottom, 16)
+        .background(.white)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        
+        HStack {
+          Text("알림")
+          Spacer()
+          Toggle(isOn: $isOn) {
+            
+          }
+          .tint(PBColors.yellow._500.color)
+        }
+        .padding(.leading, 20)
+        .padding([.vertical, .trailing], 16)
+        .background(.white)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        
+        VStack(alignment: .center, spacing: 16) {
+          PBAlarmSegmentControl(isRepeated: $isRepeated)
+          HStack {
+            Text(isRepeated ? "반복" : "날짜")
+            Spacer()
+            if isRepeated {
+              Button {
+                isXXX.toggle()
+              } label: {
+                HStack(alignment: .center, spacing: 8) {
+                  Text("매주 월, 화, 수, 목, 금, 토, 일")
+                    .font(PBFonts.caption._1.font)
+                    .foregroundStyle(PBColors.navy._300.color)
+                    .lineLimit(1)
+                    .frame(minWidth: 115, minHeight: 34)
+                  PBImages.next.image
+                }
+              }
+              .sheet(isPresented: $isXXX) {
+                DateSelectView()
+                  .presentationDetents([.medium])
+              }
+            } else {
+              PBRoundButton(10) {
+                withAnimation {
+                  isSelectedDate.toggle()
+                }
+              } label: {
+                Text("12월 10일")
+                  .font(PBFonts.caption._1.font)
+                  .foregroundStyle(PBColors.navy._900.color)
+              }
+              .frame(width: 84, height: 34)
+              .foregroundStyle(PBColors.navy._50.color)
+            }
+          }
+          
+          if isSelectedDate {
+            VStack {
+              Divider()
+              DatePicker(
+                "",
+                selection: .constant(Date()),
+                displayedComponents: .date
+              )
+              .datePickerStyle(.graphical)
+              Divider()
+            }
+          }
+          
+          HStack {
+            Text("시간")
+            Spacer()
+            PBRoundButton(10) {
+              withAnimation {
+                isSelectedTime.toggle()
+              }
+            } label: {
+              Text("12:00 AM")
+                .font(PBFonts.caption._1.font)
+                .foregroundStyle(PBColors.navy._900.color)
+            }
+            .frame(width: 84, height: 34)
+            .foregroundStyle(PBColors.navy._50.color)
+          }
+          
+          if isSelectedTime {
+            VStack {
+              Divider()
+              DatePicker(
+                "",
+                selection: .constant(Date()),
+                displayedComponents: .hourAndMinute
+              )
+              .datePickerStyle(.wheel)
+              Divider()
+            }
+          }
+        }
+        .padding(.horizontal, 16)
+        .padding([.vertical], 16)
+        .background(.white)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .opacity(isOn ? 1 : 0)
+        .animation(.default, value: isOn)
+        Spacer()
+      }
+      .padding(.horizontal, 20)
+    }
+    .background(PBColors.navy._10.color)
+    .overlay {
+      VStack {
+        Spacer()
+        PBCapsuleButton("저장") {
+          
+        }
+        .foregroundStyle(.white)
+        .padding(.horizontal, 20)
+      }
+    }
+  }
+}
+
+#Preview {
+  CreatePocketView()
+}
