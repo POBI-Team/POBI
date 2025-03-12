@@ -10,9 +10,14 @@ import SwiftUI
 import PBDesignSystem
 
 struct PocketCell: View {
+  private let title: String
   private let listColor: PBListColor.Type
   
-  init(listColor: PBListColor.Type) {
+  init (
+    title: String,
+    listColor: PBListColor.Type
+  ) {
+    self.title = title
     self.listColor = listColor
   }
   
@@ -26,7 +31,7 @@ struct PocketCell: View {
         .padding(.leading, 16)
       Spacer()
       VStack(alignment: .leading, spacing: 5) {
-        Text("Hello, world!")
+        Text(title)
           .font(PBFonts.body._1.font)
           .foregroundStyle(PBColors.navy._900.color)
         Text("Hello, world!")
@@ -67,5 +72,5 @@ struct PocketCell: View {
 }
 
 #Preview {
-  PocketCell(listColor: PBColors.list.yellow.self)
+  PocketCell(title: "Test", listColor: PBColors.list.yellow.self)
 }
