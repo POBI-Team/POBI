@@ -10,12 +10,17 @@ import SwiftData
 import PBStorageInterface
  
 public final class PocketStorage: Storable {
+  public let modelContainer: ModelContainer
   private let modelContext: ModelContext
   
   public init(isStoredInMemoryOnly: Bool = false) throws {
     let schema = Schema([PocketModel.self, PocketItemModel.self])
+    #if DEBUG
+    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+    #else
     let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: isStoredInMemoryOnly)
-    let modelContainer = try ModelContainer(for: schema, configurations: modelConfiguration)
+    #endif
+    self.modelContainer = try ModelContainer(for: schema, configurations: modelConfiguration)
     self.modelContext = ModelContext(modelContainer)
   }
   
