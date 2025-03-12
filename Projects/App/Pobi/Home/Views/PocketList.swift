@@ -6,33 +6,43 @@
 //
 
 import SwiftUI
+import SwiftData
 
 import PBDesignSystem
+import PBStorageInterface
 
 struct PocketList: View {
+  @Query(sort: [SortDescriptor<PocketModel>(\.createAt, order: .forward)])
+  private var pockets: [PocketModel]
+  @State private var isPresentedCreate: Bool = false
+  
   var body: some View {
     ScrollView {
       LazyVGrid(
         columns: [GridItem(.flexible(), spacing: 15), GridItem(.flexible())],
         spacing: 15
       ) {
-        PocketCell(listColor: PBColors.list.blue.self)
-        PocketCell(listColor: PBColors.list.yellow.self)
-        PocketCell(listColor: PBColors.list.mint.self)
-        PocketCell(listColor: PBColors.list.pink.self)
-        PocketCell(listColor: PBColors.list.blue.self)
-        PocketCell(listColor: PBColors.list.yellow.self)
-        PocketCell(listColor: PBColors.list.mint.self)
-        PocketCell(listColor: PBColors.list.pink.self)
-        PocketCell(listColor: PBColors.list.blue.self)
-        PocketCell(listColor: PBColors.list.yellow.self)
-        PocketCell(listColor: PBColors.list.mint.self)
-        PocketCell(listColor: PBColors.list.pink.self)
+        ForEach(pockets) { pocket in
+          PocketCell(
+            title: pocket.title,
+            listColor: PBColors.list.blue.self
+          )
+        }
       }
+      .padding(.bottom, 80)
     }
     .scrollIndicators(.hidden)
     .overlay(alignment: .bottom) {
-      PBPlusButton(action: {})
+      PBPlusButton {
+        isPresentedCreate.toggle()
+      }
+    }
+    .fullScreenCover(isPresented: $isPresentedCreate) {
+      NavigationStack {
+        CreatePocketView()
+          .toolbarBackground(.white, for: .navigationBar)
+          .toolbarBackground(.visible, for: .navigationBar)
+      }
     }
   }
 }
