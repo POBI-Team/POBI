@@ -14,7 +14,7 @@ public final class PocketModel {
   @Relationship(deleteRule: .cascade) public var items: [PocketItemModel]
   public var createAt: Date = Date()
   
-  init(id: UUID, title: String, items: [PocketItemModel] = []) {
+  public init(id: UUID, title: String, items: [PocketItemModel] = []) {
     self.id = id
     self.title = title
     self.items = items
