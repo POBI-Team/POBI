@@ -11,6 +11,7 @@ import SwiftData
 public final class PocketModel {
   @Attribute(.unique) public var id: UUID
   public var title: String
+  public var onAlarm: Bool = false
   @Relationship(deleteRule: .cascade) public var items: [PocketItemModel]
   public var createAt: Date = Date()
   
