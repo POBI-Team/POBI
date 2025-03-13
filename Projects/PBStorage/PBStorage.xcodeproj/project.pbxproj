@@ -10,6 +10,7 @@
 		9BBC55CE2D6D941B006A30F7 /* PBStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBC55C32D6D941B006A30F7 /* PBStorage.framework */; };
 		9BBC560A2D6DCD54006A30F7 /* PBStorageInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBC55ED2D6DCD0D006A30F7 /* PBStorageInterface.framework */; };
 		9BBC560B2D6DCD54006A30F7 /* PBStorageInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBC55ED2D6DCD0D006A30F7 /* PBStorageInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9BCAA9632D830229007E9FC5 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9BCAA9622D830229007E9FC5 /* FirebaseStorage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BBC560A2D6DCD54006A30F7 /* PBStorageInterface.framework in Frameworks */,
+				9BCAA9632D830229007E9FC5 /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -185,6 +187,7 @@
 			);
 			name = PBStorage;
 			packageProductDependencies = (
+				9BCAA9622D830229007E9FC5 /* FirebaseStorage */,
 			);
 			productName = PBStorage;
 			productReference = 9BBC55C32D6D941B006A30F7 /* PBStorage.framework */;
@@ -266,6 +269,9 @@
 			);
 			mainGroup = 9BBC55B92D6D941B006A30F7;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9BCAA9612D830229007E9FC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9BBC55C42D6D941B006A30F7 /* Products */;
 			projectDirPath = "";
@@ -671,6 +677,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9BCAA9612D830229007E9FC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.9.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9BCAA9622D830229007E9FC5 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9BCAA9612D830229007E9FC5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9BBC55BA2D6D941B006A30F7 /* Project object */;
 }
