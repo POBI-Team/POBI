@@ -20,7 +20,6 @@ struct CreatePocketView: View {
     id: .init(),
     title: ""
   )
-  @State private var isOn: Bool = false
   @State private var isSelectedDate: Bool = false
   @State private var isSelectedTime: Bool = false
   @State private var isDidTapDownButton: Bool = false
@@ -83,15 +82,13 @@ struct CreatePocketView: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
         
         HStack {
-          Text("알림")
-          Spacer()
-          Toggle(isOn: $isOn) {
-            
+          Toggle(isOn: $pocket.onAlarm) {
+            Text("알림")
           }
           .tint(PBColors.yellow._500.color)
         }
-        .padding(.leading, 20)
-        .padding([.vertical, .trailing], 16)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 16)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         
@@ -178,8 +175,8 @@ struct CreatePocketView: View {
         .padding([.vertical], 16)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        .opacity(isOn ? 1 : 0)
-        .animation(.default, value: isOn)
+        .opacity(pocket.onAlarm ? 1 : 0)
+        .animation(.default, value: pocket.onAlarm)
         Spacer()
       }
       .padding(.horizontal, 20)
