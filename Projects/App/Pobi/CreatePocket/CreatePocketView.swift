@@ -24,7 +24,7 @@ struct CreatePocketView: View {
   @State private var isSelectedTime: Bool = false
   @State private var isDidTapDownButton: Bool = false
   @State private var isRepeated: Bool = false
-  @State private var isXXX: Bool = false
+  @State private var isPresentedDataSelectView: Bool = false
   
   private let colors: [PBListColor.Type] = [
     PBColors.list.red.self,
@@ -99,7 +99,7 @@ struct CreatePocketView: View {
             Spacer()
             if isRepeated {
               Button {
-                isXXX.toggle()
+                isPresentedDataSelectView.toggle()
               } label: {
                 HStack(alignment: .center, spacing: 8) {
                   Text("매주 월, 화, 수, 목, 금, 토, 일")
@@ -110,7 +110,7 @@ struct CreatePocketView: View {
                   PBImages.next.image
                 }
               }
-              .sheet(isPresented: $isXXX) {
+              .sheet(isPresented: $isPresentedDataSelectView) {
                 DateSelectView()
                   .presentationDetents([.medium])
               }
