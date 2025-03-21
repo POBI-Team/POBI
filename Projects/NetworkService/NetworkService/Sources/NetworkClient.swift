@@ -36,7 +36,7 @@ public final class NetworkClient: NetworkRequestable {
   }
   
   private func request(target: any TargetAPI) async throws(ServiceError) -> (Data, HTTPURLResponse) {
-    var urlRequest = try target.asURLRequest()    
+    let urlRequest = try target.asURLRequest()    
     guard let (data, response) = try? await urlSession.data(for: urlRequest),
           let response = response as? HTTPURLResponse else {
       throw .network(reason: .unknown)
