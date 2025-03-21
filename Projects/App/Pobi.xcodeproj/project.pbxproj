@@ -11,6 +11,8 @@
 		9B01D38B2D64AD600060E8B7 /* PBDesignSystem.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B01D3892D64AD600060E8B7 /* PBDesignSystem.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9BAB70C72D8199E0004D52A1 /* PBStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BAB70C62D8199E0004D52A1 /* PBStorage.framework */; };
 		9BAB70C82D8199E0004D52A1 /* PBStorage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BAB70C62D8199E0004D52A1 /* PBStorage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9BD4B1A92D8D7F8C00CA86C4 /* NetworkService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD4B1A82D8D7F8C00CA86C4 /* NetworkService.framework */; };
+		9BD4B1AA2D8D7F8C00CA86C4 /* NetworkService.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD4B1A82D8D7F8C00CA86C4 /* NetworkService.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -20,6 +22,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				9BD4B1AA2D8D7F8C00CA86C4 /* NetworkService.framework in Embed Frameworks */,
 				9BAB70C82D8199E0004D52A1 /* PBStorage.framework in Embed Frameworks */,
 				9B01D38B2D64AD600060E8B7 /* PBDesignSystem.framework in Embed Frameworks */,
 			);
@@ -31,6 +34,7 @@
 /* Begin PBXFileReference section */
 		9B01D3892D64AD600060E8B7 /* PBDesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PBDesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BAB70C62D8199E0004D52A1 /* PBStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PBStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BD4B1A82D8D7F8C00CA86C4 /* NetworkService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = NetworkService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BE14C3C2D6043DF008A0E49 /* Pobi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pobi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -47,6 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BD4B1A92D8D7F8C00CA86C4 /* NetworkService.framework in Frameworks */,
 				9BAB70C72D8199E0004D52A1 /* PBStorage.framework in Frameworks */,
 				9B01D38A2D64AD600060E8B7 /* PBDesignSystem.framework in Frameworks */,
 			);
@@ -58,6 +63,7 @@
 		9B01D2632D647CBE0060E8B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9BD4B1A82D8D7F8C00CA86C4 /* NetworkService.framework */,
 				9BAB70C62D8199E0004D52A1 /* PBStorage.framework */,
 				9B01D3892D64AD600060E8B7 /* PBDesignSystem.framework */,
 			);
