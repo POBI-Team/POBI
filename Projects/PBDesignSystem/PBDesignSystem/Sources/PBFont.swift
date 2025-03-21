@@ -13,10 +13,11 @@ public enum PBFonts {
   public typealias title = Title
   public typealias body = Body
   public typealias caption = Caption
+  public typealias tossFace = TossFace
   
   public static func registerFont() {
     PBFontStyle.allCases.forEach {
-      guard let url = Bundle.module.url(forResource: "\($0.rawValue)", withExtension: ".otf") else {
+      guard let url = Bundle.module.url(forResource: "\($0.rawValue)", withExtension: "ttf") else {
         return
       }
       CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
@@ -28,6 +29,7 @@ private enum PBFontStyle: String, CaseIterable {
   case bold = "Pretendard-Bold"
   case semiBold = "Pretendard-SemiBold"
   case medium = "Pretendard-Medium"
+  case tossFace = "TossFaceFontMac"
 }
 
 public enum Headline {
@@ -49,6 +51,12 @@ public enum Body {
 public enum Caption {
   public static var _1: UIFont { .custom(.medium, size: 14) }
   public static var _2: UIFont { .custom(.medium, size: 12) }
+}
+
+public enum TossFace {
+  public static var small: UIFont { .custom(.tossFace, size: 22) }
+  public static var medium: UIFont { .custom(.tossFace, size: 23) }
+  public static var large: UIFont { .custom(.tossFace, size: 35) }
 }
 
 public extension UIFont {
