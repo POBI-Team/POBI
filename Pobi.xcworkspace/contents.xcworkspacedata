@@ -5,6 +5,9 @@
       location = "group:Projects"
       name = "Projects">
       <FileRef
+         location = "group:LocalNotiService/LocalNotiService.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:NetworkService/NetworkService.xcodeproj">
       </FileRef>
       <FileRef
