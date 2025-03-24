@@ -7,11 +7,19 @@
 
 import SwiftUI
 
+import LocalNotiService
+
 @main
 struct LocalNotiDemoAppApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
+        .onAppear() {
+          Task {
+            let isSuccess = try await LocalNotiCenter.shared.requestAuthorization(options: [.alert, .sound])
+            print(isSuccess)
+          }
         }
     }
+  }
 }
