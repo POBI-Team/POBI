@@ -12,6 +12,7 @@ import NetworkServiceInterface
 public final class NetworkClient: NetworkRequestable {
   private let urlSession: URLSession
   private let jsonDecoder = JSONDecoder()
+  public static let shared = NetworkClient()
   
   init(urlSession: URLSession = .shared) {
     self.urlSession = urlSession
