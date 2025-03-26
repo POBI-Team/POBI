@@ -12,6 +12,8 @@ public final class PocketModel {
   @Attribute(.unique) public var id: UUID
   public var title: String
   public var onAlarm: Bool = false
+  public var colorIndex = 0
+  public var icon: String?
   @Relationship(deleteRule: .cascade) public var items: [PocketItemModel]
   public var createAt: Date = Date()
   
