@@ -32,7 +32,7 @@ struct PocketDetailView: View {
             }
           }
           Spacer()
-          PBCircleEmojiView()
+          PBCircleEmojiView("", size: .large)
             .frame(width: 60, height: 60)
             .foregroundStyle(colorType._01.color)
         }

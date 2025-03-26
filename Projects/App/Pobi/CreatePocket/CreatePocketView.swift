@@ -11,11 +11,13 @@ import SwiftData
 import PBDesignSystem
 import PBStorage
 import PBStorageInterface
+import NetworkService
 
 struct CreatePocketView: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
   
+  @State private var icons = [String]()
   @State private var pocket: PocketModel = PocketModel(
     id: .init(),
     title: ""
@@ -26,24 +28,14 @@ struct CreatePocketView: View {
   @State private var isRepeated: Bool = false
   @State private var isPresentedDataSelectView: Bool = false
   
-  private let colors: [PBListColor.Type] = [
-    PBColors.list.red.self,
-    PBColors.list.yellow.self,
-    PBColors.list.green.self,
-    PBColors.list.mint.self,
-    PBColors.list.blue.self,
-    PBColors.list.purple.self,
-    PBColors.list.pink.self,
-    PBColors.list.gray.self
-  ]
+  private let colors = PBColors.list.colors
   
   var body: some View {
     ScrollView {
       VStack(spacing: 12) {
         VStack(alignment: .center, spacing: 16) {
-          PBCircleEmojiView()
-            .frame(width: 80, height: 80)
-          
+          PBCircleEmojiView(pocket.icon, size: .xlarge)
+            .foregroundStyle(colors[pocket.colorIndex]._01.color)
           PBTitleTextField(
             text: $pocket.title,
             placeholder: "포켓 이름을 입력해주세요!"
@@ -203,7 +195,20 @@ struct CreatePocketView: View {
         }
       }
     }
-  }    
+    .onAppear {
+      Task {
+        do {
+          icons = try await NetworkClient.shared.request(
+            target: FirebaseAPI.icons,
+            of: [String].self
+          )
+          pocket.icon = icons.first ?? ""
+        } catch {
+          print(error.localizedDescription)
+        }
+      }
+    }
+  }
 }
 
 #Preview {
