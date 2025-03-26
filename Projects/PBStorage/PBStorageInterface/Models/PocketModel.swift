@@ -12,14 +12,15 @@ public final class PocketModel {
   @Attribute(.unique) public var id: UUID
   public var title: String
   public var onAlarm: Bool = false
+  public var repeats: Bool = false
   public var colorIndex = 0
   public var icon: String?
-  @Relationship(deleteRule: .cascade) public var items: [PocketItemModel]
+  @Relationship(deleteRule: .cascade) public var alarm: PocketAlarmModel?
+  @Relationship(deleteRule: .cascade) public var items: [PocketItemModel] = []
   public var createAt: Date = Date()
   
-  public init(id: UUID, title: String, items: [PocketItemModel] = []) {
+  public init(id: UUID, title: String) {
     self.id = id
     self.title = title
-    self.items = items
   }
 }
