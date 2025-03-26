@@ -178,11 +178,15 @@ struct CreatePocketView: View {
     .overlay {
       VStack {
         Spacer()
-        PBCapsuleButton("저장") {
-          modelContext.insert(pocket)
-          dismiss()
+        PBRoundButton(16) {
+          
+        } label: {
+          Text("설정")
+            .foregroundStyle(.white)
+            .font(PBFonts.body._1.font)
         }
-        .foregroundStyle(.white)
+        .foregroundStyle(PBColors.navy._900.color)
+        .frame(height: 48)
         .padding(.horizontal, 20)
       }
     }
