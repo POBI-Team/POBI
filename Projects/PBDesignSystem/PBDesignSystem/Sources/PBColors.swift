@@ -25,6 +25,17 @@ public enum List {
   public typealias pink = PinkList
   public typealias mint = MintList
   public typealias gray = GrayList
+  
+  public static let colors: [PBListColor.Type] = [
+    PBColors.list.red.self,
+    PBColors.list.yellow.self,
+    PBColors.list.green.self,
+    PBColors.list.mint.self,
+    PBColors.list.blue.self,
+    PBColors.list.purple.self,
+    PBColors.list.pink.self,
+    PBColors.list.gray.self
+  ]
 }
 
 public enum Navy {
