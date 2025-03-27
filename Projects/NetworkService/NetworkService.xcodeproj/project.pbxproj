@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		9BD4B0C32D8D6A4000CA86C4 /* NetworkService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD4B0B82D8D6A3F00CA86C4 /* NetworkService.framework */; };
 		9BD4B0F32D8D6D6400CA86C4 /* NetworkServiceInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD4B0DB2D8D6AE900CA86C4 /* NetworkServiceInterface.framework */; };
-		9BD4B0F42D8D6D6400CA86C4 /* NetworkServiceInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD4B0DB2D8D6AE900CA86C4 /* NetworkServiceInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,20 +27,6 @@
 			remoteInfo = NetworkServiceInterface;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		9BD4B0F72D8D6D6400CA86C4 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				9BD4B0F42D8D6D6400CA86C4 /* NetworkServiceInterface.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		9BD4B0B82D8D6A3F00CA86C4 /* NetworkService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NetworkService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -173,7 +158,6 @@
 				9BD4B0B42D8D6A3F00CA86C4 /* Sources */,
 				9BD4B0B52D8D6A3F00CA86C4 /* Frameworks */,
 				9BD4B0B62D8D6A3F00CA86C4 /* Resources */,
-				9BD4B0F72D8D6D6400CA86C4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

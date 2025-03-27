@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		9BBC55CE2D6D941B006A30F7 /* PBStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBC55C32D6D941B006A30F7 /* PBStorage.framework */; };
 		9BBC560A2D6DCD54006A30F7 /* PBStorageInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBC55ED2D6DCD0D006A30F7 /* PBStorageInterface.framework */; };
-		9BBC560B2D6DCD54006A30F7 /* PBStorageInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBC55ED2D6DCD0D006A30F7 /* PBStorageInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,20 +27,6 @@
 			remoteInfo = PBStorageInterface;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		9BBC560E2D6DCD54006A30F7 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				9BBC560B2D6DCD54006A30F7 /* PBStorageInterface.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		9BBC55C32D6D941B006A30F7 /* PBStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PBStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -173,7 +158,6 @@
 				9BBC55BF2D6D941B006A30F7 /* Sources */,
 				9BBC55C02D6D941B006A30F7 /* Frameworks */,
 				9BBC55C12D6D941B006A30F7 /* Resources */,
-				9BBC560E2D6DCD54006A30F7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
