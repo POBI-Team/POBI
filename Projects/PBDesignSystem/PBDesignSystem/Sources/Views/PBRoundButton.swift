@@ -29,6 +29,7 @@ public struct PBRoundButton<Label: View>: View {
           label()
         }
     }
+    .buttonStyle(.plain)
   }
 }
 
