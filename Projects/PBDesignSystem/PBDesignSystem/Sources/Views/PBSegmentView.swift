@@ -7,22 +7,13 @@
 
 import SwiftUI
 
-public struct PBSegmentItem {
-  let title: String
-  let action: () -> Void
-  
-  public init(title: String, action: @escaping () -> Void) {
-    self.title = title
-    self.action = action
-  }
-}
-
 public struct PBSegmentView: View {
-  private let items: [PBSegmentItem]
-  @State private var selected: Int = 0
+  private let items: [String]
+  @Binding private var selected: Int
   
-  public init(_ items: PBSegmentItem...) {
+  public init(selected: Binding<Int>, items: String...) {
     self.items = items
+    self._selected = selected
   }
   
   public var body: some View {
@@ -31,9 +22,8 @@ public struct PBSegmentView: View {
         Button {
           if selected == i { return }
           selected = i
-          items[i].action()
         } label: {
-          Text(items[i].title)
+          Text(items[i])
             .font(PBFonts.caption._1.font)
             .padding(.horizontal, 14)
             .padding(.vertical, 9)
@@ -49,17 +39,7 @@ public struct PBSegmentView: View {
 
 #Preview {
   PBSegmentView(
-      .init(
-        title: "전체",
-        action: {}
-      ),
-      .init(
-        title: "내 포켓",
-        action: {}
-      ),
-      .init(
-        title: "공유 포켓",
-        action: {}
-      )
+    selected: .constant(0),
+    items: "전체", "내 포켓", "공유 포켓"
   )
 }

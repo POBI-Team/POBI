@@ -10,6 +10,8 @@ import SwiftUI
 import PBDesignSystem
 
 struct HomeView: View {
+  @State private var seletedTabIndex: Int = 0
+  
   var body: some View {
     NavigationStack {
       VStack(alignment: .leading, spacing: 20) {
@@ -20,9 +22,7 @@ struct HomeView: View {
           }
           .padding(.vertical, 24)
           PBSegmentView(
-            PBSegmentItem(title: "전체", action: {}),
-            PBSegmentItem(title: "내 포켓", action: {}),
-            PBSegmentItem(title: "공유 포켓", action: {})
+            selected: $seletedTabIndex, items: "전체", "내 포켓", "공유 포켓"
           )
         }
         .padding(.leading, 4)
