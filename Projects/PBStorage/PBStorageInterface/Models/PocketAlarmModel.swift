@@ -10,12 +10,10 @@ import SwiftData
 @Model
 public final class PocketAlarmModel {
   public var date: String
-  public var hour: Int
-  public var minute: Int
+  public var time: Date
   
-  public init(date: String, hour: Int, minute: Int) {
+  public init(date: String, time: Date) {
     self.date = date
-    self.hour = hour
-    self.minute = minute
+    self.time = time
   }
 }
