@@ -18,8 +18,10 @@ struct PobiApp: App {
   
   var body: some Scene {
     WindowGroup {
-      HomeView()
-        .modelContainer(try! PocketStorage().modelContainer)
+      NavigationStack {
+        HomeView()
+          .modelContainer(try! PocketStorage().modelContainer)
+      }
     }
   }
 }

@@ -13,26 +13,39 @@ struct HomeView: View {
   @State private var seletedTabIndex: Int = 0
   
   var body: some View {
-    NavigationStack {
-      VStack(alignment: .leading, spacing: 20) {
-        VStack(alignment: .leading, spacing: 4) {
-          HStack {
-            Text("XXX의 포켓")
-              .font(PBFonts.headline._1.font)
+    VStack(alignment: .leading, spacing: 20) {
+      VStack(alignment: .leading, spacing: 4) {
+        HStack {
+          Text("XXX의 포켓")
+            .font(PBFonts.headline._1.font)
+            .padding(.top, 29)
+            .padding(.bottom, 20)
+          Spacer()
+          Button {
+            
+          } label: {
+            ZStack(alignment: .bottomTrailing) {
+              Circle()
+                .fill(Color.gray)
+                .frame(width: 48, height: 48)
+              PBImages.setting.image
+                .padding([.bottom, .trailing], -8)
+            }
+            
           }
-          .padding(.vertical, 24)
-          PBSegmentView(
-            selected: $seletedTabIndex, items: "전체", "내 포켓", "공유 포켓"
-          )
+          .buttonStyle(.plain)
         }
-        .padding(.leading, 4)
-        PocketList()
+        PBSegmentView(
+          selected: $seletedTabIndex, items: "전체", "내 포켓", "공유 포켓"
+        )
       }
-      .padding(.horizontal, 20)
+      .padding(.leading, 4)
+      PocketList()
     }
+    .padding(.horizontal, 24)
   }
 }
 
 #Preview {
-    HomeView()
+  HomeView()
 }

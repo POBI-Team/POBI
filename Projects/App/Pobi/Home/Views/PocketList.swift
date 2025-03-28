@@ -40,8 +40,6 @@ struct PocketList: View {
     .fullScreenCover(isPresented: $isPresentedCreate) {
       NavigationStack {
         CreatePocketView()
-          .toolbarBackground(.white, for: .navigationBar)
-          .toolbarBackground(.visible, for: .navigationBar)
       }
     }
   }
