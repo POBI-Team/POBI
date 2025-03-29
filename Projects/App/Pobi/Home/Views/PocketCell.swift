@@ -45,7 +45,7 @@ struct PocketCell: View {
           .font(PBFonts.caption._2.font)
           .foregroundStyle(PBColors.navy._900.color)
         Spacer()
-        PBImages.next.image
+        PBImages.right.image
       }
       .padding(.leading, 16)
       .padding(.trailing, 12)

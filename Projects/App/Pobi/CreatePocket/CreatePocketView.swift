@@ -159,7 +159,7 @@ struct CreatePocketView: View {
                       .foregroundStyle(PBColors.navy._300.color)
                       .lineLimit(1)
                       .frame(minHeight: 34)
-                      PBImages.next.image
+                      PBImages.right.image
                     }
                   }
                 } else {
