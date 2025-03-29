@@ -51,7 +51,7 @@ struct PocketDetailView: View {
           Button(action: {
             
           }) {
-            PBImages.back.image
+            PBImages.left.image
           }
         }
         ToolbarItem(placement: .topBarTrailing) {
