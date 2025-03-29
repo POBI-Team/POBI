@@ -58,7 +58,7 @@ struct PocketDetailView: View {
           Button(action: {
             
           }) {
-            PBImages.manu24.image
+            PBImages.manu.image
           }
         }
       }
