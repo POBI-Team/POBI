@@ -21,17 +21,21 @@ struct HomeView: View {
             .padding(.top, 29)
             .padding(.bottom, 20)
           Spacer()
-          Button {
-            
+          NavigationLink {
+            MyPageView()
           } label: {
             ZStack(alignment: .bottomTrailing) {
               Circle()
                 .fill(Color.gray)
                 .frame(width: 48, height: 48)
-              PBImages.setting.image
+              Circle()
+                .overlay {
+                  PBImages.setting.image
+                }
+                .foregroundStyle(PBColors.navy._10.color)
+                .frame(width: 24, height: 24)
                 .padding([.bottom, .trailing], -8)
             }
-            
           }
           .buttonStyle(.plain)
         }
