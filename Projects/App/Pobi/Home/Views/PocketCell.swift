@@ -62,7 +62,7 @@ struct PocketCell: View {
         Button {
           
         } label: {
-          PBImages.manu16.image
+          PBImages.manu24.image
         }
       }
       .padding(.top, 20)
