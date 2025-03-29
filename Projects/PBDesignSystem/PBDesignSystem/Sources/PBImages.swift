@@ -24,6 +24,7 @@ public struct PBImages {
   public static var like: UIImage { UIImage(named: "like", in: .module, with: nil)! }
   public static var mail: UIImage { UIImage(named: "mail", in: .module, with: nil)! }
   public static var trash: UIImage { UIImage(named: "trash", in: .module, with: nil)! }
+  public static var pobiInquiry: UIImage { UIImage(named: "pobi_inquiry", in: .module, with: nil)! }
 }
 
 public extension UIImage {
