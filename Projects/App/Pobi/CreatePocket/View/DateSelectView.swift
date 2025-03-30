@@ -49,7 +49,7 @@ struct DateSelectView: View {
         .frame(width: 36, height: 5)
         .padding(.bottom, 27)
         .foregroundStyle(PBColors.navy._50.color)
-      PBSegmentView(selected: $seletedTabIndex, items: "매주", "매월")
+      PBSegmentView(selected: $seletedTabIndex, items: .init("매주"), .init("매월"))
       if seletedTabIndex == 1 {
         RoundedRectangle(cornerRadius: 8)
           .fill(PBColors.navy._10.color)
