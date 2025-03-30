@@ -30,7 +30,7 @@ struct HomeView: View {
                 .frame(width: 48, height: 48)
               Circle()
                 .overlay {
-                  PBImages.setting.image
+                  PBImages.settingFill.image
                 }
                 .foregroundStyle(PBColors.navy._10.color)
                 .frame(width: 24, height: 24)
