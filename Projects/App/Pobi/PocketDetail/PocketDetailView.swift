@@ -22,12 +22,12 @@ struct PocketDetailView: View {
         HStack {
           VStack(alignment: .leading) {
             Text("Pocket Detail")
-              .font(PBFonts.headline._2.font)
+              .font(PBFonts.title._1.font)
               .foregroundStyle(PBColors.navy._900.color)
             HStack(spacing: 2) {
               PBImages.clock.image
               Text("Pocket Detail")
-                .font(PBFonts.caption._2.font)
+                .font(PBFonts.label._1.font)
                 .foregroundStyle(PBColors.navy._400.color)
             }
           }

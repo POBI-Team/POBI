@@ -11,8 +11,11 @@ import SwiftUI
 public enum PBFonts {
   public typealias headline = Headline
   public typealias title = Title
+  public typealias subTitie = SubTitle
   public typealias body = Body
+  public typealias button = ButtonFont
   public typealias caption = Caption
+  public typealias label = Label
   public typealias tossFace = TossFace
   
   public static func registerFont() {
@@ -33,11 +36,15 @@ private enum PBFontStyle: String, CaseIterable {
 }
 
 public enum Headline {
-  public static var _1: UIFont { .custom(.bold, size: 24) }
-  public static var _2: UIFont { .custom(.semiBold, size: 24) }
+  public static var _1: UIFont { .custom(.semiBold, size: 24) }
 }
 
 public enum Title {
+  public static var _1: UIFont { .custom(.semiBold, size: 20) }
+  public static var _2: UIFont { .custom(.semiBold, size: 18) }
+}
+
+public enum SubTitle {
   public static var _1: UIFont { .custom(.semiBold, size: 18) }
 }
 
@@ -45,12 +52,22 @@ public enum Body {
   public static var _1: UIFont { .custom(.medium, size: 18) }
   public static var _2: UIFont { .custom(.semiBold, size: 16) }
   public static var _3: UIFont { .custom(.medium, size: 16) }
-  public static var _4: UIFont { .custom(.semiBold, size: 14) }
+  public static var _4: UIFont { .custom(.medium, size: 14) }
+}
+
+public enum ButtonFont {
+  public static var _1: UIFont { .custom(.semiBold, size: 18) }
+  public static var _2: UIFont { .custom(.semiBold, size: 16) }
+  public static var _3: UIFont { .custom(.medium, size: 16) }
 }
 
 public enum Caption {
-  public static var _1: UIFont { .custom(.medium, size: 14) }
-  public static var _2: UIFont { .custom(.medium, size: 12) }
+  public static var _1: UIFont { .custom(.semiBold, size: 16) }
+  public static var _2: UIFont { .custom(.medium, size: 14) }
+}
+
+public enum Label {
+  public static var _1: UIFont { .custom(.semiBold, size: 14) }
 }
 
 public enum TossFace {

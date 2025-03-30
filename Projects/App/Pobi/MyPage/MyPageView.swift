@@ -34,7 +34,7 @@ struct MyPageView: View {
         }
         Text("XXX")
           .padding(.bottom, 12)
-          .font(PBFonts.headline._2.font)
+          .font(PBFonts.title._1.font)
         Group {
           VStack(spacing: 24) {
             Group {
