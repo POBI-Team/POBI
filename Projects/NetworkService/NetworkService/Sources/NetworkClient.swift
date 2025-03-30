@@ -11,7 +11,11 @@ import NetworkServiceInterface
 
 public final class NetworkClient: NetworkRequestable {
   private let urlSession: URLSession
-  private let jsonDecoder = JSONDecoder()
+  private let jsonDecoder: JSONDecoder = {
+    let decoder = JSONDecoder()
+    decoder.keyDecodingStrategy = .convertFromSnakeCase
+    return decoder
+  }()
   public static let shared = NetworkClient()
   
   init(urlSession: URLSession = .shared) {

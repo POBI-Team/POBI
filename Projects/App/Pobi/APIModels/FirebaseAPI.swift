@@ -9,28 +9,25 @@ import NetworkServiceInterface
 
 enum FirebaseAPI {
   case icons
+  case items
 }
 
 extension FirebaseAPI: TargetAPI {
   var baseURL: String {
-    switch self {
-    case .icons:
-      "https://pobi-470c2-default-rtdb.firebaseio.com/"
-    }
+    "https://pobi-470c2-default-rtdb.firebaseio.com/"
   }
   
   var path: String {
     switch self {
     case .icons:
       "icons.json"
+    case .items:
+      "items.json"
     }
   }
   
   var method: NetworkServiceInterface.HTTPMethod {
-    switch self {
-    case .icons:
-        .get
-    }
+    .get
   }
   
   var headers: [String : String] {
