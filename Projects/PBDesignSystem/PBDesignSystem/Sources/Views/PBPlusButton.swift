@@ -22,7 +22,7 @@ public struct PBPlusButton: View {
         .frame(width: 61, height: 61)
         .foregroundStyle(PBColors.navy._900.color)
         .overlay {
-          PBImages.plus.image
+          PBImages.plus36.image
         }
     }
   }
