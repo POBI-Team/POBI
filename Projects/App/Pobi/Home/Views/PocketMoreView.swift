@@ -46,6 +46,10 @@ struct PocketMoreView: View {
             
             Button {
               dismiss()
+              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                let newPocket = PocketModel.copy(pocket)
+                modelContext.insert(newPocket)
+              }
             } label: {
               HStack(spacing: 8) {
                 PBImages.copy.image
@@ -85,10 +89,9 @@ struct PocketMoreView: View {
               dismiss()
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 #warning("해당 부분 Create와 중복 코드")
-                let triggerType: TrigerType
-                if pocket.repeats {
-                  guard let splitedDate = pocket.alarm?.date
-                    .split(separator: " ") else { return }
+                var triggerType: TrigerType?
+                if pocket.repeats, let splitedDate = pocket.alarm?.date
+                  .split(separator: " ") {
                   switch splitedDate[0] {
                   case "매주":
                     let weeks: [TrigerType.Weekday] = splitedDate[1]
@@ -104,16 +107,19 @@ struct PocketMoreView: View {
                     triggerType = .week(weeks: TrigerType.Weekday.allCases)
                   default: return
                   }
-                } else {
-                  guard let splitedDate = pocket.alarm?.date
-                    .split(separator: "-").compactMap({ UInt($0) }) else { return }
+                  
+                } else if let splitedDate = pocket.alarm?.date
+                  .split(separator: "-").compactMap({ UInt($0) }) {
                   triggerType = .date(
                     year: splitedDate[0],
                     month: splitedDate[1],
                     day: splitedDate[2]
                   )
                 }
-                LocalNotiCenter.shared.remove(id: pocket.id.uuidString, type: triggerType)
+                
+                if let triggerType {
+                  LocalNotiCenter.shared.remove(id: pocket.id.uuidString, type: triggerType)
+                }
                 modelContext.delete(pocket)
               }
             } label: {

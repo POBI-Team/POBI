@@ -24,4 +24,16 @@ public final class PocketModel {
     self.id = id
     self.title = title
   }
+  
+  public static func copy(_ pocket: PocketModel) -> PocketModel {
+    let newPocket = PocketModel(id: UUID(), title: pocket.title)
+    newPocket.onAlarm = pocket.onAlarm
+    newPocket.repeats = pocket.repeats
+    newPocket.colorIndex = pocket.colorIndex
+    newPocket.icon = pocket.icon
+    newPocket.isHidden = pocket.isHidden
+    newPocket.alarm = pocket.alarm
+    newPocket.items = pocket.items
+    return newPocket
+  }
 }
