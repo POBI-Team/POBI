@@ -9,9 +9,11 @@ import SwiftUI
 
 import PBDesignSystem
 import PBStorageInterface
+import LocalNotiService
 
 struct PocketMoreView: View {
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.modelContext) private var modelContext
   private let pocket: PocketModel
   
   init(_ pokcet: PocketModel) {
@@ -41,7 +43,7 @@ struct PocketMoreView: View {
               .padding(.vertical, 14)
             }
             .background(.white)
-           
+            
             Button {
               dismiss()
             } label: {
@@ -81,6 +83,39 @@ struct PocketMoreView: View {
             
             Button {
               dismiss()
+              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                #warning("해당 부분 Create와 중복 코드")
+                let triggerType: TrigerType
+                if pocket.repeats {
+                  guard let splitedDate = pocket.alarm?.date
+                    .split(separator: " ") else { return }
+                  switch splitedDate[0] {
+                  case "매주":
+                    let weeks: [TrigerType.Weekday] = splitedDate[1]
+                      .components(separatedBy: ", ")
+                      .compactMap { .weekday(string: $0) }
+                    triggerType = .week(weeks: weeks)
+                  case "매월":
+                    let days = splitedDate[1]
+                      .components(separatedBy: ", ")
+                      .compactMap { UInt($0) }
+                    triggerType = .day(days: days)
+                  case "매일":
+                    triggerType = .week(weeks: TrigerType.Weekday.allCases)
+                  default: return
+                  }
+                } else {
+                  guard let splitedDate = pocket.alarm?.date
+                    .split(separator: "-").compactMap({ UInt($0) }) else { return }
+                  triggerType = .date(
+                    year: splitedDate[0],
+                    month: splitedDate[1],
+                    day: splitedDate[2]
+                  )
+                }
+                LocalNotiCenter.shared.remove(id: pocket.id.uuidString, type: triggerType)
+                modelContext.delete(pocket)
+              }
             } label: {
               HStack(spacing: 8) {
                 PBImages.trash.image
