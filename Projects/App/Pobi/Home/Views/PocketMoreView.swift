@@ -8,8 +8,16 @@
 import SwiftUI
 
 import PBDesignSystem
+import PBStorageInterface
 
 struct PocketMoreView: View {
+  @Environment(\.dismiss) private var dismiss
+  private let pocket: PocketModel
+  
+  init(_ pokcet: PocketModel) {
+    self.pocket = pokcet
+  }
+  
   var body: some View {
     PBColors.navy._10.color
       .ignoresSafeArea(.all)
@@ -20,7 +28,7 @@ struct PocketMoreView: View {
             .frame(width: 36, height: 5)
           VStack(spacing: 1) {
             Button {
-              
+              dismiss()
             } label: {
               HStack(spacing: 8) {
                 PBImages.setting.image
@@ -35,7 +43,7 @@ struct PocketMoreView: View {
             .background(.white)
            
             Button {
-              
+              dismiss()
             } label: {
               HStack(spacing: 8) {
                 PBImages.copy.image
@@ -50,11 +58,18 @@ struct PocketMoreView: View {
             .background(.white)
             
             Button {
-              
+              dismiss()
+              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                pocket.isHidden.toggle()
+              }
             } label: {
               HStack(spacing: 8) {
-                PBImages.eyeOff.image
-                Text("포켓 숨기기")
+                if pocket.isHidden {
+                  PBImages.eyeOn.image
+                } else {
+                  PBImages.eyeOff.image
+                }
+                Text(pocket.isHidden ? "포켓 숨기기 해제" : "포켓 숨기기")
                   .foregroundStyle(PBColors.navy._900.color)
                   .font(PBFonts.button._1.font)
                 Spacer()
@@ -65,7 +80,7 @@ struct PocketMoreView: View {
             .background(.white)
             
             Button {
-              
+              dismiss()
             } label: {
               HStack(spacing: 8) {
                 PBImages.trash.image
@@ -83,7 +98,7 @@ struct PocketMoreView: View {
           .padding(.top, 27)
           
           PBRoundButton(16) {
-            
+            dismiss()
           } label: {
             Text("닫기")
               .foregroundStyle(PBColors.navy._900.color)
@@ -106,6 +121,6 @@ struct PocketMoreView: View {
     .sheet(
       isPresented: .constant(true),
       content: {
-        PocketMoreView()
+        PocketMoreView(.init(id: .init(), title: "테스트"))
       })
 }

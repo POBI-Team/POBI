@@ -15,6 +15,7 @@ public final class PocketModel {
   public var repeats: Bool = false
   public var colorIndex = 0
   public var icon: String?
+  public var isHidden: Bool = false
   @Relationship(deleteRule: .cascade) public var alarm: PocketAlarmModel?
   @Relationship(deleteRule: .cascade) public var items: [PocketItemModel] = []
   public var createAt: Date = Date()

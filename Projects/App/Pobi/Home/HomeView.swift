@@ -44,7 +44,7 @@ struct HomeView: View {
         )
       }
       .padding(.leading, 4)
-      PocketList()
+      PocketList(seletedTabIndex: seletedTabIndex)
     }
     .padding(.horizontal, 24)
   }

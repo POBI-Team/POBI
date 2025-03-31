@@ -8,30 +8,30 @@
 import SwiftUI
 
 import PBDesignSystem
+import PBStorageInterface
 
 struct PocketCell: View {
-  private let title: String
-  private let listColor: PBListColor.Type
+  private let pocket: PocketModel
+  private let colors = PBColors.list.colors
+  @State private var isPresentedPocketMoreView = false
   
   init (
-    title: String,
-    listColor: PBListColor.Type
+    _ pocket: PocketModel
   ) {
-    self.title = title
-    self.listColor = listColor
+    self.pocket = pocket
   }
   
   var body: some View {
     VStack(alignment: .leading) {
       Spacer()
         .frame(height: 16)
-      PBCircleEmojiView("", size: .small)
-        .foregroundStyle(listColor._01.color)
+      PBCircleEmojiView(pocket.icon, size: .small)
+        .foregroundStyle(colors[pocket.colorIndex]._01.color)
         .frame(width: 32, height: 32)
         .padding(.leading, 16)
       Spacer()
       VStack(alignment: .leading, spacing: 5) {
-        Text(title)
+        Text(pocket.title)
           .font(PBFonts.body._1.font)
           .foregroundStyle(PBColors.navy._900.color)
         Text("Hello, world!")
@@ -50,17 +50,20 @@ struct PocketCell: View {
       .padding(.leading, 16)
       .padding(.trailing, 12)
       .frame(height: 40)
-      .background(listColor._02.color)
+      .background(colors[pocket.colorIndex]._02.color)
       .clipShape(RoundedRectangle(cornerRadius: 20))
     }
-    .background(listColor._03.color)
+    .sheet(isPresented: $isPresentedPocketMoreView) {
+      PocketMoreView(pocket)
+    }
+    .background(colors[pocket.colorIndex]._03.color)
     .clipShape(RoundedRectangle(cornerRadius: 20))
     .aspectRatio(1, contentMode: .fit)
     .overlay(alignment: .top) {
       HStack {
         Spacer()
         Button {
-          
+          isPresentedPocketMoreView = true
         } label: {
           PBImages.manu.image
         }
@@ -72,5 +75,5 @@ struct PocketCell: View {
 }
 
 #Preview {
-  PocketCell(title: "Test", listColor: PBColors.list.yellow.self)
+  PocketCell(.init(id: .init(), title: "테스트"))
 }

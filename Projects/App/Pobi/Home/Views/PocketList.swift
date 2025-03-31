@@ -15,6 +15,22 @@ struct PocketList: View {
   @Query(sort: [SortDescriptor<PocketModel>(\.createAt, order: .forward)])
   private var pockets: [PocketModel]
   @State private var isPresentedCreate: Bool = false
+  private var seletedTabIndex: Int
+  
+  private func pockectFilter(_ pocket: PocketModel) -> Bool {
+    switch seletedTabIndex {
+    case 0:
+      return !pocket.isHidden
+    case 1:
+      return pocket.isHidden
+    default:
+      return false
+    }
+  }
+  
+  init(seletedTabIndex: Int) {
+    self.seletedTabIndex = seletedTabIndex
+  }
   
   var body: some View {
     ScrollView {
@@ -22,11 +38,8 @@ struct PocketList: View {
         columns: [GridItem(.flexible(), spacing: 15), GridItem(.flexible())],
         spacing: 15
       ) {
-        ForEach(pockets) { pocket in
-          PocketCell(
-            title: pocket.title,
-            listColor: PBColors.list.blue.self
-          )
+        ForEach(pockets.filter { pockectFilter($0) }) { pocket in
+          PocketCell(pocket)
         }
       }
       .padding(.bottom, 80)
@@ -46,5 +59,5 @@ struct PocketList: View {
 }
 
 #Preview {
-  PocketList()
+  PocketList(seletedTabIndex: 0)
 }
