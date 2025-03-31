@@ -50,7 +50,7 @@ struct PocketMoreView: View {
             Button {
               dismiss()
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                let newPocket = PocketModel.copy(pocket)
+                let newPocket = pocket.copy()
                 modelContext.insert(newPocket)
               }
             } label: {

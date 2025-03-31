@@ -11,13 +11,30 @@ import SwiftData
 public final class PocketItemModel {
   @Attribute(.unique) public var id: UUID
   public var title: String
-  public var memeo: String
+  public var memo: String
   public var isChecked: Bool
-  
-  public init(id: UUID, title: String, memeo: String, isChecked: Bool = false) {
+  public var sortIndex: Int 
+
+  public init(
+    id: UUID = UUID(),
+    title: String = "",
+    memo: String = "",
+    isChecked: Bool = false,
+    sortIndex: Int = 0
+  ) {
     self.id = id
     self.title = title
-    self.memeo = memeo
+    self.memo = memo
     self.isChecked = isChecked
+    self.sortIndex = sortIndex
+  }
+  
+  public func copy() -> PocketItemModel {
+    return PocketItemModel(
+      title: self.title,
+      memo: self.memo,
+      isChecked: self.isChecked,
+      sortIndex: self.sortIndex
+    )
   }
 }

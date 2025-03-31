@@ -11,29 +11,77 @@ import SwiftData
 public final class PocketModel {
   @Attribute(.unique) public var id: UUID
   public var title: String
-  public var onAlarm: Bool = false
-  public var repeats: Bool = false
-  public var colorIndex = 0
+  public var onAlarm: Bool
+  public var repeats: Bool
+  public var colorIndex: Int
   public var icon: String?
-  public var isHidden: Bool = false
+  public var isHidden: Bool
   @Relationship(deleteRule: .cascade) public var alarm: PocketAlarmModel?
-  @Relationship(deleteRule: .cascade) public var items: [PocketItemModel] = []
-  public var createAt: Date = Date()
+  @Relationship(deleteRule: .cascade) public var items: [PocketItemModel]
+  public var createAt: Date
   
-  public init(id: UUID = UUID(), title: String = "") {
+  public init(
+    id: UUID = UUID(),
+    title: String = "",
+    onAlarm: Bool = false,
+    repeats: Bool = false,
+    colorIndex: Int = 0,
+    icon: String? = nil,
+    isHidden: Bool = false,
+    alarm: PocketAlarmModel? = nil,
+    items: [PocketItemModel] = [],
+    createAt: Date = .now
+  ) {
     self.id = id
     self.title = title
+    self.onAlarm = onAlarm
+    self.repeats = repeats
+    self.colorIndex = colorIndex
+    self.icon = icon
+    self.isHidden = isHidden
+    self.alarm = alarm
+    self.items = items
+    self.createAt = createAt
   }
   
-  public static func copy(_ pocket: PocketModel) -> PocketModel {
-    let newPocket = PocketModel(id: UUID(), title: pocket.title)
-    newPocket.onAlarm = pocket.onAlarm
-    newPocket.repeats = pocket.repeats
-    newPocket.colorIndex = pocket.colorIndex
-    newPocket.icon = pocket.icon
-    newPocket.isHidden = pocket.isHidden
-    newPocket.alarm = pocket.alarm
-    newPocket.items = pocket.items
+  public func copy() -> PocketModel {
+    let newPocket = PocketModel(id: UUID(), title: self.title)
+    newPocket.onAlarm = self.onAlarm
+    newPocket.repeats = self.repeats
+    newPocket.colorIndex = self.colorIndex
+    newPocket.icon = self.icon
+    newPocket.isHidden = self.isHidden
+    newPocket.alarm = self.alarm.map { $0.copy() }
+    newPocket.items = self.items.map { $0.copy() }
     return newPocket
+  }
+    
+  public func deleteItem(withId id: UUID) {
+    if let index = items.firstIndex(where: { $0.id == id }) {
+      items.remove(at: index)
+      updateSortIndices()
+    }
+  }
+  
+  public func moveItem(fromIndex: Int, toIndex: Int) {
+    guard fromIndex != toIndex,
+          fromIndex >= 0, fromIndex < items.count,
+          toIndex >= 0, toIndex <= items.count else {
+      return
+    }
+    let item = items.remove(at: fromIndex)
+    items.insert(item, at: toIndex)
+    updateSortIndices()
+  }
+  
+  public func appendItem(_ item: PocketItemModel) {
+    item.sortIndex = items.count
+    items.append(item)
+  }
+  
+  private func updateSortIndices() {
+    for (index, item) in items.enumerated() {
+      item.sortIndex = index
+    }
   }
 }

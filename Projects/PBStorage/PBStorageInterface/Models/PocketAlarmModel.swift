@@ -16,4 +16,8 @@ public final class PocketAlarmModel {
     self.date = date
     self.time = time
   }
+  
+  public func copy() -> PocketAlarmModel {
+    return PocketAlarmModel(date: self.date, time: self.time)
+  }
 }

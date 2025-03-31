@@ -9,6 +9,7 @@ import SwiftUI
 
 import PBDesignSystem
 import NetworkService
+import PBStorageInterface
 
 struct RecommendedListView: View {
   @Environment(\.dismiss) private var dismiss
@@ -16,6 +17,12 @@ struct RecommendedListView: View {
   @State private var recommendedItem: PBRecommendedItem? = nil
   @State private var items: [String] = []
   @State private var seletedItems: [String] = []
+  
+  private let pocket: PocketModel
+  
+  init(pocket: PocketModel) {
+    self.pocket = pocket
+  }
   
   var body: some View {
     PBNavigationBar {
@@ -72,7 +79,7 @@ struct RecommendedListView: View {
     .title("소지품 추천 리스트")
     .leftItem {
       Button {
-        
+        dismiss()
       } label: {
         PBImages.cancel.image
       }
@@ -80,10 +87,32 @@ struct RecommendedListView: View {
     .rightItem {
       Button {
         dismiss()
+        var index = pocket.items.count - 1
+        pocket.items += seletedItems.map {
+          index += 1
+          return PocketItemModel(title: $0, sortIndex: index)
+        }
       } label: {
         Text("추가")
       }
       .foregroundStyle(PBColors.yellow._600.color)
+    }
+    .onChange(of: seletedCategoryIndex) { oldValue, newValue in
+      guard oldValue != newValue,
+            let recommendedItem else { return }
+      switch newValue {
+      case 0:
+        items = recommendedItem.outing
+      case 1:
+        items = recommendedItem.work
+      case 2:
+        items = recommendedItem.health
+      case 3:
+        items = recommendedItem.domesticTravel
+      case 4:
+        items = recommendedItem.overseasTravel
+      default: break
+      }
     }
     .onAppear {
       Task {
@@ -112,5 +141,5 @@ private extension RecommendedListView {
 }
 
 #Preview {
-  RecommendedListView()
+  RecommendedListView(pocket: .init())
 }

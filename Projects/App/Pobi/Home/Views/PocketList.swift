@@ -39,7 +39,11 @@ struct PocketList: View {
         spacing: 15
       ) {
         ForEach(pockets.filter { pockectFilter($0) }) { pocket in
-          PocketCell(pocket)
+          NavigationLink {
+            PocketDetailView(pocket)
+          } label: {
+            PocketCell(pocket)
+          }
         }
       }
       .padding(.bottom, 80)

@@ -15,11 +15,7 @@ public final class PocketStorage: Storable {
   
   public init(isStoredInMemoryOnly: Bool = false) throws {
     let schema = Schema([PocketModel.self, PocketItemModel.self, PocketAlarmModel.self])
-    #if DEBUG
-    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-    #else
     let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: isStoredInMemoryOnly)
-    #endif
     self.modelContainer = try ModelContainer(for: schema, configurations: modelConfiguration)
     self.modelContext = ModelContext(modelContainer)
   }
