@@ -40,7 +40,7 @@ struct HomeView: View {
           .buttonStyle(.plain)
         }
         PBSegmentView(
-          selected: $seletedTabIndex, items: .init("전체"), .init("내 포켓"), .init("공유 포켓")
+          selected: $seletedTabIndex, items: .init("전체"), .init("숨긴 포켓")
         )
       }
       .padding(.leading, 4)

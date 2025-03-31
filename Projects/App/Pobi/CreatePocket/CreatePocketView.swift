@@ -12,16 +12,13 @@ import PBDesignSystem
 import PBStorage
 import PBStorageInterface
 import NetworkService
+import LocalNotiService
 
 struct CreatePocketView: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
   
   @State private var icons = [String]()
-  @State private var pocket: PocketModel = PocketModel(
-    id: .init(),
-    title: ""
-  )
   @State private var isSelectedDate: Bool = false
   @State private var isSelectedTime: Bool = false
   @State private var isDidTapDownButton: Bool = false
@@ -29,6 +26,10 @@ struct CreatePocketView: View {
   @State private var selectedDate: Date = .now
   @State private var selectedTime: Date = .now
   @State private var selectedDays: String = "매일"
+  @State private var pocket: PocketModel = PocketModel(
+    id: .init(),
+    title: ""
+  )
   
   private let colors = PBColors.list.colors
   
@@ -247,11 +248,13 @@ struct CreatePocketView: View {
                 dateString = selectedDays
               } else {
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "YYYY-M-d"
+                dateFormatter.dateFormat = "yyyy-M-d"
                 dateString = dateFormatter.string(from: selectedDate)
               }
               pocket.alarm = PocketAlarmModel(date: dateString, time: selectedTime)
-              #warning("푸쉬알림등록")
+              if pocket.onAlarm {
+                registerPushAlarm()
+              }              
             }
             modelContext.insert(pocket)
             dismiss()
@@ -311,6 +314,52 @@ private extension CreatePocketView {
     dateFormatter.locale = Locale(identifier: "en_US_POSIX")
     dateFormatter.dateFormat = "h:mm a"
     return dateFormatter.string(from: selectedTime)
+  }
+  
+  func registerPushAlarm() {
+    let triggerType: TrigerType
+    if pocket.repeats {
+      guard let splitedDate = pocket.alarm?.date
+        .split(separator: " ") else { return }
+      switch splitedDate[0] {
+      case "매주":
+        let weeks: [TrigerType.Weekday] = splitedDate[1]
+            .components(separatedBy: ", ")
+            .compactMap { .weekday(string: $0) }
+        triggerType = .week(weeks: weeks)
+      case "매월":
+        let days = splitedDate[1]
+            .components(separatedBy: ", ")
+            .compactMap { UInt($0) }
+        triggerType = .day(days: days)
+      case "매일":
+        triggerType = .week(weeks: TrigerType.Weekday.allCases)
+      default: return
+      }
+    } else {
+      guard let splitedDate = pocket.alarm?.date
+        .split(separator: "-").compactMap({ UInt($0) }) else { return }
+      triggerType = .date(
+        year: splitedDate[0],
+        month: splitedDate[1],
+        day: splitedDate[2]
+      )
+    }
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH-m"
+    let splitedTime = dateFormatter
+      .string(from: selectedTime)
+      .split(separator: "-")
+      .compactMap({ UInt($0) })
+#warning("사용자 닉네임")
+    LocalNotiCenter.shared.register(
+      title: "POBI",
+      body: "똑똑! XX님 '\(pocket.title)' 소지품 챙기세요!",
+      id: pocket.id.uuidString,
+      trigerType: triggerType,
+      hour: splitedTime[0],
+      minute: splitedTime[1]
+    )
   }
 }
 

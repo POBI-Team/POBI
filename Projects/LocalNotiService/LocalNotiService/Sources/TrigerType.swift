@@ -12,7 +12,7 @@ public enum TrigerType {
   case week(weeks: [Weekday])
   case date(year: UInt, month: UInt, day: UInt)
   
-  public enum Weekday: Int {
+  public enum Weekday: Int, CaseIterable {
     case mon = 1
     case tues
     case wednes
@@ -20,6 +20,19 @@ public enum TrigerType {
     case fri
     case satur
     case sun
+    
+    public static func weekday(string: String) -> Weekday? {
+      switch string {
+      case "월": return .mon
+      case "화": return .tues
+      case "수": return .wednes
+      case "목": return .thurs
+      case "금": return .fri
+      case "토": return .satur
+      case "일": return .sun
+      default: return nil
+      }
+    }
   }
   
   func requsetIds(id: String) -> [String] {

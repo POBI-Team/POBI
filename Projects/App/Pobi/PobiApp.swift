@@ -9,6 +9,7 @@ import SwiftUI
 
 import PBDesignSystem
 import PBStorage
+import LocalNotiService
 
 @main
 struct PobiApp: App {  
@@ -20,6 +21,11 @@ struct PobiApp: App {
     WindowGroup {
       NavigationStack {
         HomeView()
+          .onAppear {
+            Task {
+              try await LocalNotiCenter.shared.requestAuthorization(options: [.alert, .sound])
+            }
+          }
           .modelContainer(try! PocketStorage().modelContainer)
       }
     }
