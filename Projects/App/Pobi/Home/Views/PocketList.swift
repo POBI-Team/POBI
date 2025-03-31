@@ -50,6 +50,11 @@ struct PocketList: View {
         isPresentedCreate.toggle()
       }
     }
+    .overlay {
+      if pockets.filter({ pockectFilter($0) }).isEmpty {
+        PocketListEmptyView()
+      }
+    }
     .fullScreenCover(isPresented: $isPresentedCreate) {
       NavigationStack {
         CreatePocketView()

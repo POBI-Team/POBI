@@ -27,6 +27,7 @@ public struct PBImages {
   public static var trash: UIImage { UIImage(named: "trash", in: .module, with: nil)! }
   public static var pobiInquiry: UIImage { UIImage(named: "pobi_inquiry", in: .module, with: nil)! }
   public static var pobiAlert: UIImage { UIImage(named: "pobi_alert", in: .module, with: nil)! }
+  public static var pobiEmpty: UIImage { UIImage(named: "pobi_empty", in: .module, with: nil)! }
   public static var pen: UIImage { UIImage(named: "pen", in: .module, with: nil)! }
   public static var copy: UIImage { UIImage(named: "copy", in: .module, with: nil)! }
   public static var eyeOff: UIImage { UIImage(named: "eye_off", in: .module, with: nil)! }
