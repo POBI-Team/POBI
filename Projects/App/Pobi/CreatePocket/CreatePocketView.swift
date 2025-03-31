@@ -15,6 +15,11 @@ import NetworkService
 import LocalNotiService
 
 struct CreatePocketView: View {
+  enum Mode {
+    case create
+    case edit
+  }
+  
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
   
@@ -26,12 +31,16 @@ struct CreatePocketView: View {
   @State private var selectedDate: Date = .now
   @State private var selectedTime: Date = .now
   @State private var selectedDays: String = "매일"
-  @State private var pocket: PocketModel = PocketModel(
-    id: .init(),
-    title: ""
-  )
+  
   
   private let colors = PBColors.list.colors
+  private let mode: Mode
+  private let pocket: PocketModel
+  
+  init(_ mode: Mode = .create, pocket: PocketModel = .init()) {
+    self.mode = mode
+    self.pocket = pocket
+  }
   
   var body: some View {
     PBNavigationBar {
@@ -41,7 +50,10 @@ struct CreatePocketView: View {
             PBCircleEmojiView(pocket.icon, size: .xlarge)
               .foregroundStyle(colors[pocket.colorIndex]._01.color)
             PBTitleTextField(
-              text: $pocket.title,
+              text: Binding(
+                get: { pocket.title },
+                set: { pocket.title = $0 }
+              ),
               placeholder: "포켓 이름을 입력해주세요!"
             )
             
@@ -130,7 +142,12 @@ struct CreatePocketView: View {
           .clipShape(RoundedRectangle(cornerRadius: 20))
           
           HStack {
-            Toggle(isOn: $pocket.onAlarm) {
+            Toggle(
+              isOn: Binding(
+                get: { pocket.onAlarm },
+                set: { pocket.onAlarm = $0 }
+              )
+            ) {
               Text("알림")
                 .font(PBFonts.body._2.font)
             }
@@ -143,7 +160,12 @@ struct CreatePocketView: View {
           
           if pocket.onAlarm {
             VStack(alignment: .center, spacing: 16) {
-              PBAlarmSegmentControl(isRepeated: $pocket.repeats)
+              PBAlarmSegmentControl(
+                isRepeated: Binding(
+                  get: { pocket.repeats },
+                  set: { pocket.repeats = $0 }
+                )
+              )
               HStack {
                 Text(pocket.repeats ? "반복" : "날짜")
                   .font(PBFonts.body._2.font)
@@ -252,14 +274,14 @@ struct CreatePocketView: View {
                 dateString = dateFormatter.string(from: selectedDate)
               }
               pocket.alarm = PocketAlarmModel(date: dateString, time: selectedTime)
-              if pocket.onAlarm {
-                registerPushAlarm()
-              }              
+              registerPushAlarm()
             }
-            modelContext.insert(pocket)
+            if mode == .create {
+              modelContext.insert(pocket)
+            }
             dismiss()
           } label: {
-            Text("설정")
+            Text("저장")
               .foregroundStyle(.white)
               .font(PBFonts.body._1.font)
           }
@@ -292,10 +314,21 @@ struct CreatePocketView: View {
       }
     }
     .rightItem {
-      Button {
-        dismiss()
-      } label: {
-        PBImages.cancel.image
+      if mode == .create {
+        Button {
+          dismiss()
+        } label: {
+          PBImages.cancel.image
+        }
+      }
+    }
+    .leftItem {
+      if mode == .edit {
+        Button {
+          dismiss()
+        } label: {
+          PBImages.left.image
+        }
       }
     }
   }
@@ -363,6 +396,10 @@ private extension CreatePocketView {
   }
 }
 
-#Preview {
+#Preview("create") {
   CreatePocketView()
+}
+
+#Preview("edit") {
+  CreatePocketView(.edit)
 }

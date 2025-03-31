@@ -13,7 +13,8 @@ import PBStorageInterface
 struct PocketCell: View {
   private let pocket: PocketModel
   private let colors = PBColors.list.colors
-  @State private var isPresentedPocketMoreView = false
+  @State private var isPresentedPocketMore = false
+  @State private var isPresentedCreate = false
   
   init (
     _ pocket: PocketModel
@@ -53,8 +54,8 @@ struct PocketCell: View {
       .background(colors[pocket.colorIndex]._02.color)
       .clipShape(RoundedRectangle(cornerRadius: 20))
     }
-    .sheet(isPresented: $isPresentedPocketMoreView) {
-      PocketMoreView(pocket)
+    .sheet(isPresented: $isPresentedPocketMore) {
+      PocketMoreView(pocket, isPresentedCreate: $isPresentedCreate)
     }
     .background(colors[pocket.colorIndex]._03.color)
     .clipShape(RoundedRectangle(cornerRadius: 20))
@@ -63,13 +64,16 @@ struct PocketCell: View {
       HStack {
         Spacer()
         Button {
-          isPresentedPocketMoreView = true
+          isPresentedPocketMore = true
         } label: {
           PBImages.manu.image
         }
       }
       .padding(.top, 20)
       .padding(.trailing, 12)
+    }
+    .navigationDestination(isPresented: $isPresentedCreate) {
+      CreatePocketView(.edit, pocket: pocket)
     }
   }
 }

@@ -49,13 +49,13 @@ extension PBNavigationBar {
     return newView
   }
   
-  public func leftItem<T: View>(_ content: @escaping () -> T) -> Self {
+  public func leftItem<T: View>(@ViewBuilder _ content: @escaping () -> T) -> Self {
     var newView = self
     newView.leftItem = AnyView(content())
     return newView
   }
   
-  public func rightItem<T: View>(_ content: @escaping () -> T) -> Self {
+  public func rightItem<T: View>(@ViewBuilder _ content: @escaping () -> T) -> Self {
     var newView = self
     newView.rightItem = AnyView(content())
     return newView

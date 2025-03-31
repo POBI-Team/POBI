@@ -14,10 +14,12 @@ import LocalNotiService
 struct PocketMoreView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
+  @Binding var isPresentedCreate: Bool
   private let pocket: PocketModel
   
-  init(_ pokcet: PocketModel) {
+  init(_ pokcet: PocketModel, isPresentedCreate: Binding<Bool>) {
     self.pocket = pokcet
+    self._isPresentedCreate = isPresentedCreate
   }
   
   var body: some View {
@@ -30,6 +32,7 @@ struct PocketMoreView: View {
             .frame(width: 36, height: 5)
           VStack(spacing: 1) {
             Button {
+              isPresentedCreate = true
               dismiss()
             } label: {
               HStack(spacing: 8) {
@@ -162,6 +165,6 @@ struct PocketMoreView: View {
     .sheet(
       isPresented: .constant(true),
       content: {
-        PocketMoreView(.init(id: .init(), title: "테스트"))
+        PocketMoreView(.init(id: .init(), title: "테스트"), isPresentedCreate: .constant(false))
       })
 }
