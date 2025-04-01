@@ -34,6 +34,12 @@ public struct PBImages {
   public static var eyeOn: UIImage { UIImage(named: "eye_on", in: .module, with: nil)! }
   public static var lamp: UIImage { UIImage(named: "lamp", in: .module, with: nil)! }
   public static var slide: UIImage { UIImage(named: "slide", in: .module, with: nil)! }
+  public static var logo: UIImage { UIImage(named: "logo", in: .module, with: nil)! }
+  public static var onboardingFirst: UIImage { UIImage(named: "onboarding_first", in: .module, with: nil)! }
+  public static var onboardingSecond: UIImage { UIImage(named: "onboarding_second", in: .module, with: nil)! }
+  public static var onboardingThird: UIImage { UIImage(named: "onboarding_third", in: .module, with: nil)! }
+  public static var profileFirst: UIImage { UIImage(named: "profile_first", in: .module, with: nil)! }
+  public static var profileSecond: UIImage { UIImage(named: "profile_second", in: .module, with: nil)! }
 }
 
 public extension UIImage {

@@ -10,7 +10,7 @@ import SwiftUI
 
 public enum PBColors {
   public static var red: UIColor { UIColor(hexString: "FF5A5A") }
-  public static var white: UIColor { UIColor(hexString: "FFFFFF") }
+  public static var cream: UIColor { UIColor(hexString: "FFFEFB") }
   public typealias navy = Navy
   public typealias yellow = Yellow
   public typealias list = List

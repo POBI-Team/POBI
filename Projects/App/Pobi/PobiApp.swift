@@ -5,11 +5,21 @@
 //  Created by 이시원 on 2/15/25.
 //
 
+import UIKit
 import SwiftUI
 
 import PBDesignSystem
-import PBStorage
-import LocalNotiService
+
+extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
+  open override func viewDidLoad() {
+    super.viewDidLoad()
+    interactivePopGestureRecognizer?.delegate = self
+  }
+  
+  public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    return viewControllers.count > 1
+  }
+}
 
 @main
 struct PobiApp: App {  
@@ -19,14 +29,8 @@ struct PobiApp: App {
   
   var body: some Scene {
     WindowGroup {
-      NavigationStack {
-        HomeView()
-          .onAppear {
-            Task {
-              try await LocalNotiCenter.shared.requestAuthorization(options: [.alert, .sound])
-            }
-          }
-          .modelContainer(try! PocketStorage().modelContainer)
+      NavigationStack() {
+        SplashView()
       }
     }
   }

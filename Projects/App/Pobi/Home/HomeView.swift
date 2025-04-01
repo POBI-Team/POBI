@@ -8,9 +8,15 @@
 import SwiftUI
 
 import PBDesignSystem
+import LocalNotiService
 
 struct HomeView: View {
   @State private var seletedTabIndex: Int = 0
+  @Binding private var isPresentedCreate: Bool
+  
+  init(isPresentedCreate: Binding<Bool>) {
+    self._isPresentedCreate = isPresentedCreate
+  }
   
   var body: some View {
     VStack(alignment: .leading, spacing: 20) {
@@ -46,10 +52,21 @@ struct HomeView: View {
       .padding(.leading, 4)
       PocketList(seletedTabIndex: seletedTabIndex)
     }
+    .toolbar(.hidden)
     .padding(.horizontal, 24)
+    .fullScreenCover(isPresented: $isPresentedCreate) {
+      NavigationStack {
+        CreatePocketView()
+      }
+    }
+    .onAppear {
+      Task {
+        try await LocalNotiCenter.shared.requestAuthorization(options: [.alert, .sound])
+      }
+    }
   }
 }
 
 #Preview {
-  HomeView()
+  HomeView(isPresentedCreate: .constant(false))
 }

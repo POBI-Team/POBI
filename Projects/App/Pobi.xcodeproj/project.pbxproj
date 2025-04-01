@@ -13,6 +13,8 @@
 		9B0928D42D956389002B96A8 /* NetworkServiceInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B0928D22D956389002B96A8 /* NetworkServiceInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9B0928D62D9563AB002B96A8 /* PBStorageInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B0928D52D9563AB002B96A8 /* PBStorageInterface.framework */; };
 		9B0928D72D9563AB002B96A8 /* PBStorageInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B0928D52D9563AB002B96A8 /* PBStorageInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9B6192092D9BC41100DB18D1 /* Lottie-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 9B6192082D9BC41100DB18D1 /* Lottie-Dynamic */; };
+		9B61920A2D9BC41500DB18D1 /* Lottie-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 9B6192082D9BC41100DB18D1 /* Lottie-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9B626BB72D9A30F4001255F3 /* LocalNotiService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B626BB62D9A30F4001255F3 /* LocalNotiService.framework */; };
 		9B626BB82D9A30F4001255F3 /* LocalNotiService.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B626BB62D9A30F4001255F3 /* LocalNotiService.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9BAB70C72D8199E0004D52A1 /* PBStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BAB70C62D8199E0004D52A1 /* PBStorage.framework */; };
@@ -28,6 +30,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				9B61920A2D9BC41500DB18D1 /* Lottie-Dynamic in Embed Frameworks */,
 				9BD4B1AA2D8D7F8C00CA86C4 /* NetworkService.framework in Embed Frameworks */,
 				9BAB70C82D8199E0004D52A1 /* PBStorage.framework in Embed Frameworks */,
 				9B0928D72D9563AB002B96A8 /* PBStorageInterface.framework in Embed Frameworks */,
@@ -63,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B6192092D9BC41100DB18D1 /* Lottie-Dynamic in Frameworks */,
 				9BD4B1A92D8D7F8C00CA86C4 /* NetworkService.framework in Frameworks */,
 				9BAB70C72D8199E0004D52A1 /* PBStorage.framework in Frameworks */,
 				9B0928D62D9563AB002B96A8 /* PBStorageInterface.framework in Frameworks */,
@@ -126,6 +130,7 @@
 			);
 			name = Pobi;
 			packageProductDependencies = (
+				9B6192082D9BC41100DB18D1 /* Lottie-Dynamic */,
 			);
 			productName = Pobi;
 			productReference = 9BE14C3C2D6043DF008A0E49 /* Pobi.app */;
@@ -155,6 +160,9 @@
 			);
 			mainGroup = 9BE14C332D6043DF008A0E49;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9B6192052D9BC3FE00DB18D1 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9BE14C3D2D6043DF008A0E49 /* Products */;
 			projectDirPath = "";
@@ -397,6 +405,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9B6192052D9BC3FE00DB18D1 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9B6192082D9BC41100DB18D1 /* Lottie-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9B6192052D9BC3FE00DB18D1 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = "Lottie-Dynamic";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9BE14C342D6043DF008A0E49 /* Project object */;
 }

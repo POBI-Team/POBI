@@ -18,6 +18,7 @@ public struct PBTitleTextField: View {
   }
   
   @Binding public var text: String
+  @FocusState private var isFocused: Bool
   private let placeholder: String
   
   public init(text: Binding<String>, placeholder: String) {
@@ -29,6 +30,10 @@ public struct PBTitleTextField: View {
     TextField(placeholder, text: $text)
       .multilineTextAlignment(.center)
       .font(PBFonts.body._1.font)
+      .focused($isFocused)
+      .onAppear {
+        isFocused = true
+      }
     
     DottedLine()
       .stroke(
