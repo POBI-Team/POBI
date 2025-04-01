@@ -66,10 +66,12 @@ struct MyPageView: View {
                 
               } label: {
                 HStack {
-                  PBImages.trash.image
-                  Text("모든 리스트 초기화")
-                    .font(PBFonts.body._2.font)
-                    .foregroundStyle(PBColors.red.color)
+                  Group {
+                    PBImages.trash.image
+                    Text("모든 리스트 초기화")
+                      .font(PBFonts.body._2.font)
+                  }
+                  .foregroundStyle(PBColors.red.color)
                   Spacer()
                 }
               }

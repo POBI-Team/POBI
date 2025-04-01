@@ -127,10 +127,12 @@ struct PocketMoreView: View {
               }
             } label: {
               HStack(spacing: 8) {
-                PBImages.trash.image
-                Text("삭제하기")
-                  .foregroundStyle(PBColors.red.color)
-                  .font(PBFonts.button._1.font)
+                Group {
+                  PBImages.trash.image
+                  Text("삭제하기")
+                    .font(PBFonts.button._1.font)
+                }
+                .foregroundStyle(PBColors.red.color)
                 Spacer()
               }
               .padding(.horizontal, 20)

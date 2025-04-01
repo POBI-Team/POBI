@@ -33,6 +33,7 @@ public struct PBImages {
   public static var eyeOff: UIImage { UIImage(named: "eye_off", in: .module, with: nil)! }
   public static var eyeOn: UIImage { UIImage(named: "eye_on", in: .module, with: nil)! }
   public static var lamp: UIImage { UIImage(named: "lamp", in: .module, with: nil)! }
+  public static var slide: UIImage { UIImage(named: "slide", in: .module, with: nil)! }
 }
 
 public extension UIImage {

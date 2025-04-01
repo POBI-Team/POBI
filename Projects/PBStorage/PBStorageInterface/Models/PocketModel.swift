@@ -63,23 +63,12 @@ public final class PocketModel {
     }
   }
   
-  public func moveItem(fromIndex: Int, toIndex: Int) {
-    guard fromIndex != toIndex,
-          fromIndex >= 0, fromIndex < items.count,
-          toIndex >= 0, toIndex <= items.count else {
-      return
-    }
-    let item = items.remove(at: fromIndex)
-    items.insert(item, at: toIndex)
-    updateSortIndices()
-  }
-  
   public func appendItem(_ item: PocketItemModel) {
     item.sortIndex = items.count
     items.append(item)
   }
   
-  private func updateSortIndices() {
+  public func updateSortIndices() {
     for (index, item) in items.enumerated() {
       item.sortIndex = index
     }
