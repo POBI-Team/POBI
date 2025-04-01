@@ -32,8 +32,8 @@ public struct PBAlarmSegmentControl: View {
             Button {
               isRepeated = false
             } label: {
-              Text("일회성")
-                .font(PBFonts.body._2.font)
+              Text("1회 알림")
+                .font(PBFonts.button._2.font)
             }
             .buttonStyle(PlainButtonStyle())
             .foregroundStyle(PBColors.navy._900.color)
@@ -41,15 +41,18 @@ public struct PBAlarmSegmentControl: View {
             Button {
               isRepeated = true
             } label: {
-              Text("반복성")
-                .font(PBFonts.body._2.font)
+              Text("반복 알림")
+                .font(PBFonts.button._2.font)
             }
             .buttonStyle(PlainButtonStyle())
             .foregroundStyle(PBColors.navy._900.color)
           }
-          .padding(.horizontal, 22)
+          .padding(.trailing, 14)
+          .padding(.leading, 17)
+
         }
-        .padding(4)
+        .padding(.vertical, 4)
+        .padding(.horizontal, 5)
       }
   }
 }

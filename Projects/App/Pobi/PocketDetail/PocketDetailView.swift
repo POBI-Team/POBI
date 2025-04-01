@@ -61,17 +61,16 @@ struct PocketDetailView: View {
         }
       }
       ToolbarItem(placement: .topBarTrailing) {
-        Button(action: {
-          
-        }) {
-          PBImages.settingFill.image
+        NavigationLink {
+          CreatePocketView(.edit, pocket: pocket)
+        } label: {
+          PBImages.edit.image
         }
       }
     }
     .fullScreenCover(isPresented: $isPresnetedRecommend) {
       RecommendedListView(pocket: pocket)
     }
-    
     ItemList(pocket: pocket)
       .scrollDismissesKeyboard(.interactively)
       .overlay(alignment: .bottomTrailing) {

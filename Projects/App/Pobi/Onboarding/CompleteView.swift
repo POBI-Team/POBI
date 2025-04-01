@@ -25,8 +25,6 @@ struct CompleteView: View {
         .foregroundStyle(PBColors.navy._900.color)
       Spacer()
       PBRoundButton(16) {
-//        isPresentedHome = true
-//        isPresentedCreate = true
         NotificationCenter.default.post(name: .createPocket, object: nil)
       } label: {
         Text("포켓 만들기")
@@ -45,11 +43,8 @@ struct CompleteView: View {
           .foregroundStyle(PBColors.navy._300.color)
       }
     }
+    .toolbar(.hidden)
     .padding(.bottom, 12)
-//    .navigationDestination(isPresented: $isPresentedHome) {
-//      HomeView(isPresentedCreate: $isPresentedCreate)
-//        .modelContainer(try! PocketStorage().modelContainer)
-//    }
   }
 }
 

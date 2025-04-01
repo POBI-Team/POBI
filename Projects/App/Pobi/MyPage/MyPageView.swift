@@ -6,21 +6,32 @@
 //
 
 import SwiftUI
+import SwiftData
 
+import PBStorage
 import PBDesignSystem
+import PBStorageInterface
 
 struct MyPageView: View {
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.modelContext) private var modelContext
 
   var body: some View {
     PBNavigationBar {
       VStack(spacing: 20) {
         ZStack(alignment: .bottomTrailing) {
-          Circle()
-            .fill(Color.gray)
-            .frame(width: 120, height: 120)
-          Button {
-            
+          if let image = ProfileStorage.shared.loadProfileImageType()?.profileImage {
+            image
+              .resizable()
+              .frame(width: 120, height: 120)
+          } else {
+            Circle()
+              .fill(Color.gray)
+              .frame(width: 120, height: 120)
+          }
+          
+          NavigationLink {
+            ProfileEditView()
           } label: {
             Circle()
               .overlay {
@@ -32,38 +43,42 @@ struct MyPageView: View {
           .frame(width: 36, height: 36)
           .padding(.bottom, -4)
         }
-        Text("XXX")
+        Text(ProfileStorage.shared.loadNickname() ?? "사용자")
           .padding(.bottom, 12)
           .font(PBFonts.title._1.font)
         Group {
           VStack(spacing: 24) {
             Group {
+//              Button {
+//                
+//              } label: {
+//                HStack {
+//                  PBImages.like.image
+//                  Text("친구에게 포비 추천하기")
+//                    .font(PBFonts.body._2.font)
+//                    .foregroundStyle(PBColors.navy._900.color)
+//                  Spacer()
+//                  PBImages.right.image
+//                }
+//              }
+//              Button {
+//                
+//              } label: {
+//                HStack {
+//                  PBImages.mail.image
+//                  Text("앱스토어 리뷰 쓰기")
+//                    .font(PBFonts.body._2.font)
+//                    .foregroundStyle(PBColors.navy._900.color)
+//                  Spacer()
+//                  PBImages.right.image
+//                }
+//              }
               Button {
-                
-              } label: {
-                HStack {
-                  PBImages.like.image
-                  Text("친구에게 포비 추천하기")
-                    .font(PBFonts.body._2.font)
-                    .foregroundStyle(PBColors.navy._900.color)
-                  Spacer()
-                  PBImages.right.image
-                }
-              }
-              Button {
-                
-              } label: {
-                HStack {
-                  PBImages.mail.image
-                  Text("앱스토어 리뷰 쓰기")
-                    .font(PBFonts.body._2.font)
-                    .foregroundStyle(PBColors.navy._900.color)
-                  Spacer()
-                  PBImages.right.image
-                }
-              }
-              Button {
-                
+                try? modelContext.fetch(FetchDescriptor<PocketModel>())
+                  .forEach({ pocket in
+                    modelContext.delete(pocket)
+                  })
+                try? modelContext.save()
               } label: {
                 HStack {
                   Group {

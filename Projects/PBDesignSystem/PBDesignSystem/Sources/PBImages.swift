@@ -40,6 +40,7 @@ public struct PBImages {
   public static var onboardingThird: UIImage { UIImage(named: "onboarding_third", in: .module, with: nil)! }
   public static var profileFirst: UIImage { UIImage(named: "profile_first", in: .module, with: nil)! }
   public static var profileSecond: UIImage { UIImage(named: "profile_second", in: .module, with: nil)! }
+  public static var edit: UIImage { UIImage(named: "edit", in: .module, with: nil)! }
 }
 
 public extension UIImage {

@@ -8,9 +8,11 @@
 import SwiftUI
 
 import PBDesignSystem
+import PBStorage
 import LocalNotiService
 
 struct HomeView: View {
+  @Environment(\.modelContext) private var modelContext
   @State private var seletedTabIndex: Int = 0
   @Binding private var isPresentedCreate: Bool
   
@@ -22,18 +24,26 @@ struct HomeView: View {
     VStack(alignment: .leading, spacing: 20) {
       VStack(alignment: .leading, spacing: 4) {
         HStack {
-          Text("XXX의 포켓")
+          Text("\(ProfileStorage.shared.loadNickname() ?? "사용자")의 포켓")
             .font(PBFonts.headline._1.font)
             .padding(.top, 29)
             .padding(.bottom, 20)
           Spacer()
           NavigationLink {
             MyPageView()
+              .modelContext(modelContext)
           } label: {
             ZStack(alignment: .bottomTrailing) {
-              Circle()
-                .fill(Color.gray)
-                .frame(width: 48, height: 48)
+              if let image = ProfileStorage.shared.loadProfileImageType()?.profileImage {
+                image
+                  .resizable()
+                  .frame(width: 48, height: 48)
+              } else {
+                Circle()
+                  .fill(Color.gray)
+                  .frame(width: 48, height: 48)
+              }
+             
               Circle()
                 .overlay {
                   PBImages.settingFill.image

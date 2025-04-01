@@ -73,7 +73,14 @@ struct SplashView: View {
                 .store(in: &cancelBag)
             }
         }
-        .transition(.move(edge: .trailing))
+        .transition(
+          .asymmetric(
+            insertion: .move(
+              edge: .trailing
+            ),
+            removal: .move(edge: .leading)
+          )
+        )
       }
     }
   }

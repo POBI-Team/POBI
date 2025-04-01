@@ -21,29 +21,35 @@ public struct PBTitleTextField: View {
   @FocusState private var isFocused: Bool
   private let placeholder: String
   
-  public init(text: Binding<String>, placeholder: String) {
+  public init(
+    text: Binding<String>,
+    placeholder: String
+  ) {
     self._text = text
     self.placeholder = placeholder
   }
   
   public var body: some View {
-    TextField(placeholder, text: $text)
-      .multilineTextAlignment(.center)
-      .font(PBFonts.body._1.font)
-      .focused($isFocused)
-      .onAppear {
-        isFocused = true
-      }
-    
-    DottedLine()
-      .stroke(
-        style: StrokeStyle(
-          lineWidth: 2,
-          dash: text.isEmpty ? [2,2] : [1,0]
+    VStack(spacing: 8) {
+      TextField(placeholder, text: $text)
+        .multilineTextAlignment(.center)
+        .font(PBFonts.body._1.font)
+        .focused($isFocused)
+        .onAppear {
+          isFocused = true
+        }
+      //.padding(.bottom, 8)
+      
+      DottedLine()
+        .stroke(
+          style: StrokeStyle(
+            lineWidth: 2,
+            dash: text.isEmpty ? [2,2] : [1,0]
+          )
         )
-      )
-      .foregroundColor(PBColors.navy._50.color)
-      .frame(height: 1)
+        .foregroundColor(PBColors.navy._50.color)
+        .frame(height: 1)
+    }
   }
 }
 

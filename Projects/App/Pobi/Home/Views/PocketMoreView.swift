@@ -36,7 +36,7 @@ struct PocketMoreView: View {
               dismiss()
             } label: {
               HStack(spacing: 8) {
-                PBImages.setting.image
+                PBImages.edit.image
                 Text("수정하기")
                   .foregroundStyle(PBColors.navy._900.color)
                   .font(PBFonts.button._1.font)

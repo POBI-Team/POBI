@@ -35,14 +35,14 @@ struct PocketCell: View {
         Text(pocket.title)
           .font(PBFonts.body._1.font)
           .foregroundStyle(PBColors.navy._900.color)
-        Text("Hello, world!")
+        Text(timeLabel ?? "")
           .font(PBFonts.caption._2.font)
           .foregroundStyle(PBColors.navy._400.color)
       }
       .padding(.horizontal, 16)
       Spacer()
       HStack {
-        Text("Hello, world!")
+        Text("\(pocket.items.count) itmes")
           .font(PBFonts.caption._2.font)
           .foregroundStyle(PBColors.navy._900.color)
         Spacer()
@@ -75,6 +75,16 @@ struct PocketCell: View {
     .navigationDestination(isPresented: $isPresentedCreate) {
       CreatePocketView(.edit, pocket: pocket)
     }
+  }
+}
+
+private extension PocketCell {
+  var timeLabel: String? {
+    guard let alarmTime = pocket.alarm?.time else { return nil }
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "ko_KR") // 한국 로케일 설정
+    formatter.dateFormat = "a h:mm" // "오전/오후 시:분" 형태
+    return formatter.string(from: alarmTime)
   }
 }
 

@@ -1,0 +1,82 @@
+//
+//  ProfileEditView.swift
+//  Pobi
+//
+//  Created by 이시원 on 4/1/25.
+//
+
+import SwiftUI
+
+import PBDesignSystem
+import PBStorage
+
+struct ProfileEditView: View {
+  @State private var profileType: ProfileImageType?
+  @State private var nickname: String
+  @Environment(\.dismiss) private var dismiss
+  @FocusState private var isFocused: Bool
+  
+  init() {
+    self.profileType = ProfileStorage.shared.loadProfileImageType()
+    self.nickname = ProfileStorage.shared.loadNickname() ?? ""
+  }
+  
+  var body: some View {
+    PBNavigationBar {
+      VStack {
+        HStack(spacing: 20) {
+          Button {
+            profileType = .first
+          } label: {
+            PBImages.profileFirst.image
+              .grayscale(profileType == .first ? 0.0 : 1.0)
+          }
+          .buttonStyle(PlainButtonStyle())
+          
+          Button {
+            profileType = .second
+          } label: {
+            PBImages.profileSecond.image
+              .grayscale(profileType == .second ? 0.0 : 1.0)
+          }
+         
+          .buttonStyle(PlainButtonStyle())
+        }
+        .padding(.top, 32)
+        .padding(.bottom, 36)
+        PBTitleTextField(
+          text: $nickname,
+          placeholder: "별명을 입력해주세요!"
+        )
+      }
+      .padding(.horizontal, 44)
+      
+      Spacer()
+      PBRoundButton(16) {
+        ProfileStorage.shared.saveNickname(nickname)
+        ProfileStorage.shared.saveProfileImageType(profileType ?? .first)
+      } label: {
+        Text("포켓 만들기")
+          .foregroundStyle(.white)
+          .font(PBFonts.button._1.font)
+      }
+      .frame(height: 52)
+      .padding(.horizontal, 20)
+      .padding(.bottom, 12)
+      .foregroundStyle(PBColors.navy._900.color)
+
+    }
+    .title("마이페이지")
+    .leftItem {
+      Button {
+        dismiss()
+      } label: {
+        PBImages.left.image
+      }
+    }
+  }
+}
+
+#Preview {
+  ProfileEditView()
+}

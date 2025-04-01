@@ -5,9 +5,22 @@
 //  Created by 이시원 on 4/1/25.
 //
 
+import SwiftUI
+
+import PBDesignSystem
+
 public enum ProfileImageType: String {
   case first
   case second
+  
+  public var profileImage: Image {
+    switch self {
+    case .first:
+      PBImages.profileFirst.image
+    case .second:
+      PBImages.profileSecond.image
+    }
+  }
 }
 
 public final class ProfileStorage: @unchecked Sendable {
