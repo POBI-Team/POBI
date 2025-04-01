@@ -48,6 +48,7 @@ struct ProfileSettingView: View {
       .padding(.horizontal, 44)
       Spacer()
       PBRoundButton(16) {
+        ProfileStorage.shared.saveNotFirstEntry()
         ProfileStorage.shared.saveNickname(nickname)
         ProfileStorage.shared.saveProfileImageType(profileTpye)
         isPresnetedComplete = true

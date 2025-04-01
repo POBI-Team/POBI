@@ -25,8 +25,9 @@ struct CompleteView: View {
         .foregroundStyle(PBColors.navy._900.color)
       Spacer()
       PBRoundButton(16) {
-        isPresentedHome = true
-        isPresentedCreate = true
+//        isPresentedHome = true
+//        isPresentedCreate = true
+        NotificationCenter.default.post(name: .createPocket, object: nil)
       } label: {
         Text("포켓 만들기")
           .foregroundStyle(.white)
@@ -36,9 +37,8 @@ struct CompleteView: View {
       .padding(.horizontal, 20)
       .padding(.bottom, 19)
       .foregroundStyle(PBColors.navy._900.color)
-      NavigationLink {
-        HomeView(isPresentedCreate: $isPresentedCreate)
-          .modelContainer(try! PocketStorage().modelContainer)
+      Button {
+        NotificationCenter.default.post(name: .skip, object: nil)
       } label: {
         Text("건너뛰기")
           .font(PBFonts.button._2.font)
@@ -46,10 +46,10 @@ struct CompleteView: View {
       }
     }
     .padding(.bottom, 12)
-    .navigationDestination(isPresented: $isPresentedHome) {
-      HomeView(isPresentedCreate: $isPresentedCreate)
-        .modelContainer(try! PocketStorage().modelContainer)
-    }
+//    .navigationDestination(isPresented: $isPresentedHome) {
+//      HomeView(isPresentedCreate: $isPresentedCreate)
+//        .modelContainer(try! PocketStorage().modelContainer)
+//    }
   }
 }
 

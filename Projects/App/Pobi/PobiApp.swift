@@ -29,9 +29,7 @@ struct PobiApp: App {
   
   var body: some Scene {
     WindowGroup {
-      NavigationStack() {
-        SplashView()
-      }
+      SplashView()
     }
   }
 }

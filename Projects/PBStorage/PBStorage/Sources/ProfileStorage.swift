@@ -18,6 +18,14 @@ public final class ProfileStorage: @unchecked Sendable {
     self.userDefaults = userDefaults
   }
   
+  public func saveNotFirstEntry() {
+    userDefaults.set(true, forKey: "firstEntry")
+  }
+  
+  public func loadNotFirstEntry() -> Bool {
+    return userDefaults.bool(forKey: "firstEntry")
+  }
+  
   public func saveNickname(_ nickname: String) {
     userDefaults.set(nickname, forKey: "nickname")
   }
