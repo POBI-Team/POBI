@@ -29,14 +29,11 @@ struct PocketDetailView: View {
               .font(PBFonts.title._1.font)
               .foregroundStyle(PBColors.navy._900.color)
             HStack(spacing: 2) {
-              if let alarmDate = pocket.alarm?.date,
-                 let alarmTime = timeLabel {
-                PBImages.clock.image
-                Text("\(alarmDate) / \(alarmTime)")
-                  .font(PBFonts.label._1.font)
-                  .foregroundStyle(PBColors.navy._400.color)
-                  .lineLimit(1)
-              }
+              PBImages.clock.image
+              Text("\(pocket.alarm.date) / \(timeLabel)")
+                .font(PBFonts.label._1.font)
+                .foregroundStyle(PBColors.navy._400.color)
+                .lineLimit(1)
             }
           }
           Spacer()
@@ -88,7 +85,7 @@ struct PocketDetailView: View {
     }
     .rightItem {
       NavigationLink {
-        CreatePocketView(.edit)
+        CreatePocketView(.edit, pocket: pocket)
       } label: {
         PBImages.edit.image
       }
@@ -97,8 +94,8 @@ struct PocketDetailView: View {
 }
 
 private extension PocketDetailView {
-  var timeLabel: String? {
-    guard let alarmTime = pocket.alarm?.time else { return nil }
+  var timeLabel: String {
+    let alarmTime = pocket.alarm.time
     let formatter = DateFormatter()
     formatter.locale = Locale(identifier: "ko_KR") // 한국 로케일 설정
     formatter.dateFormat = "a h:mm" // "오전/오후 시:분" 형태
@@ -111,7 +108,7 @@ private extension PocketDetailView {
     PocketDetailView(
       PocketModel(
         title: "테스트",
-        alarm: PocketAlarmModel(date: "매주 월, 목", time: .now)
+        alarm: PocketAlarmModel(day: "매주 월, 목", date: .now, time: .now)
       )
     )
   }

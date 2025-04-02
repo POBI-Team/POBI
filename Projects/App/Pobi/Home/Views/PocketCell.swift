@@ -35,7 +35,7 @@ struct PocketCell: View {
         Text(pocket.title)
           .font(PBFonts.title._2.font)
           .foregroundStyle(PBColors.navy._900.color)
-        Text(timeLabel ?? "")
+        Text(timeLabel)
           .font(PBFonts.label._1.font)
           .foregroundStyle(PBColors.navy._400.color)
       }
@@ -64,7 +64,10 @@ struct PocketCell: View {
       HStack {
         Spacer()
         Button {
-          isPresentedPocketMore = true
+          withAnimation {
+            isPresentedPocketMore = true
+          }
+          
         } label: {
           PBImages.manu.image
         }
@@ -79,8 +82,8 @@ struct PocketCell: View {
 }
 
 private extension PocketCell {
-  var timeLabel: String? {
-    guard let alarmTime = pocket.alarm?.time else { return nil }
+  var timeLabel: String {
+    let alarmTime = pocket.alarm.time
     let formatter = DateFormatter()
     formatter.locale = Locale(identifier: "ko_KR") // 한국 로케일 설정
     formatter.dateFormat = "a h:mm" // "오전/오후 시:분" 형태

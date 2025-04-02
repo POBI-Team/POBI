@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
 
 import PBDesignSystem
 import PBStorage
@@ -28,16 +27,13 @@ struct CreatePocketView: View {
   @State private var isSelectedTime: Bool = false
   @State private var isDidTapDownButton: Bool = false
   @State private var isPresentedDataSelectView: Bool = false
-  @State private var selectedDate: Date = .now
-  @State private var selectedTime: Date = .now
-  @State private var selectedDays: String = "매일"
   
   
   private let colors = PBColors.list.colors
   private let mode: Mode
   private let pocket: PocketModel
   
-  init(_ mode: Mode = .create, pocket: PocketModel = .init()) {
+  init(_ mode: Mode, pocket: PocketModel) {
     self.mode = mode
     self.pocket = pocket
   }
@@ -186,7 +182,7 @@ struct CreatePocketView: View {
                         } label: {
                           HStack(spacing: 8) {
                             Spacer()
-                            Text(selectedDays)
+                            Text(pocket.alarm.day)
                               .font(PBFonts.caption._1.font)
                               .foregroundStyle(PBColors.navy._300.color)
                               .lineLimit(1)
@@ -214,7 +210,11 @@ struct CreatePocketView: View {
                         Divider()
                         DatePicker(
                           "",
-                          selection: $selectedDate,
+                          selection: Binding(get: {
+                            pocket.alarm.date
+                          }, set: {
+                            pocket.alarm.date = $0
+                          }),
                           displayedComponents: .date
                         )
                         .tint(PBColors.yellow._500.color)
@@ -246,7 +246,11 @@ struct CreatePocketView: View {
                         Divider()
                         DatePicker(
                           "",
-                          selection: $selectedTime,
+                          selection: Binding(get: {
+                            pocket.alarm.time
+                          }, set: {
+                            pocket.alarm.time = $0
+                          }),
                           displayedComponents: .hourAndMinute
                         )
                         .datePickerStyle(.wheel)
@@ -269,8 +273,12 @@ struct CreatePocketView: View {
             .scrollDismissesKeyboard(.interactively)
             .animation(.easeInOut, value: pocket.onAlarm)
             .sheet(isPresented: $isPresentedDataSelectView) {
-              DateSelectView(date: $selectedDays)
-                .presentationDetents([.medium])
+              DateSelectView(date: Binding(get: {
+                pocket.alarm.day
+              }, set: {
+                pocket.alarm.day = $0
+              }))
+              .presentationDetents([.medium])
             }
             .onChange(of: pocket.repeats, { _, _ in
               withAnimation {
@@ -288,21 +296,12 @@ struct CreatePocketView: View {
                     pocket.icon = icons.first ?? ""
                   }
                 } catch {
-                  #warning("에러 처리")
+#warning("에러 처리")
                 }
               }
             }
             PBRoundButton(16) {
               if pocket.onAlarm {
-                let dateString: String
-                if pocket.repeats {
-                  dateString = selectedDays
-                } else {
-                  let dateFormatter = DateFormatter()
-                  dateFormatter.dateFormat = "yyyy-M-d"
-                  dateString = dateFormatter.string(from: selectedDate)
-                }
-                pocket.alarm = PocketAlarmModel(date: dateString, time: selectedTime)
                 registerPushAlarm()
               }
               if mode == .create {
@@ -346,21 +345,21 @@ private extension CreatePocketView {
     let dateFormatter = DateFormatter()
     dateFormatter.locale = Locale(identifier: "ko_KR")
     dateFormatter.dateFormat = "M월 d일"
-    return dateFormatter.string(from: selectedDate)
+    return dateFormatter.string(from: pocket.alarm.date)
   }
   
   var timeLable: String {
     let dateFormatter = DateFormatter()
     dateFormatter.locale = Locale(identifier: "en_US_POSIX")
     dateFormatter.dateFormat = "h:mm a"
-    return dateFormatter.string(from: selectedTime)
+    return dateFormatter.string(from: pocket.alarm.time)
   }
   
   func registerPushAlarm() {
     let triggerType: TrigerType
     if pocket.repeats {
-      guard let splitedDate = pocket.alarm?.date
-        .split(separator: " ") else { return }
+      let splitedDate = pocket.alarm.day
+        .split(separator: " ")
       switch splitedDate[0] {
       case "매주":
         let weeks: [TrigerType.Weekday] = splitedDate[1]
@@ -377,8 +376,12 @@ private extension CreatePocketView {
       default: return
       }
     } else {
-      guard let splitedDate = pocket.alarm?.date
-        .split(separator: "-").compactMap({ UInt($0) }) else { return }
+      let dateFormatter = DateFormatter()
+      dateFormatter.dateFormat = "yyyy-M-d"
+      let splitedDate = dateFormatter
+        .string(from: pocket.alarm.date)
+        .components(separatedBy: "-")
+        .compactMap({ UInt($0) })
       triggerType = .date(
         year: splitedDate[0],
         month: splitedDate[1],
@@ -388,7 +391,7 @@ private extension CreatePocketView {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "HH-m"
     let splitedTime = dateFormatter
-      .string(from: selectedTime)
+      .string(from: pocket.alarm.time)
       .split(separator: "-")
       .compactMap({ UInt($0) })
     let nickname = ProfileStorage.shared.loadNickname() ?? "사용자"
@@ -401,16 +404,4 @@ private extension CreatePocketView {
       minute: splitedTime[1]
     )
   }
-}
-
-#Preview("create") {
-  CreatePocketView()
-}
-
-#Preview("alramOn") {
-  CreatePocketView(pocket: .init(onAlarm: true))
-}
-
-#Preview("edit") {
-  CreatePocketView(.edit)
 }

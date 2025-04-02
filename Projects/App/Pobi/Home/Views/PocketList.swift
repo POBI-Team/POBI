@@ -63,7 +63,7 @@ struct PocketList: View {
     }
     .fullScreenCover(isPresented: $isPresentedCreate) {
       NavigationStack {
-        CreatePocketView()
+        CreatePocketView(.create, pocket: .init())
       }
     }
   }

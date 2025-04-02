@@ -93,8 +93,9 @@ struct PocketMoreView: View {
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 #warning("해당 부분 Create와 중복 코드")
                 var triggerType: TrigerType?
-                if pocket.repeats, let splitedDate = pocket.alarm?.date
-                  .split(separator: " ") {
+                if pocket.repeats {
+                  let splitedDate = pocket.alarm.day
+                    .split(separator: " ")
                   switch splitedDate[0] {
                   case "매주":
                     let weeks: [TrigerType.Weekday] = splitedDate[1]
@@ -111,8 +112,9 @@ struct PocketMoreView: View {
                   default: return
                   }
                   
-                } else if let splitedDate = pocket.alarm?.date
-                  .split(separator: "-").compactMap({ UInt($0) }) {
+                } else {
+                  let splitedDate = pocket.alarm.day
+                    .split(separator: "-").compactMap({ UInt($0) })
                   triggerType = .date(
                     year: splitedDate[0],
                     month: splitedDate[1],
