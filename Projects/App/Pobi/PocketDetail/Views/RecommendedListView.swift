@@ -48,6 +48,8 @@ struct RecommendedListView: View {
                 Text(items[i])
                 Spacer()
                 PBImages.plus16.image
+                  .renderingMode(.template)
+                  .foregroundStyle(iconColor(items[i]))
                   .rotationEffect(.init(degrees: iconAngle(items[i])))
               }
               .padding(.horizontal, 20)
@@ -137,6 +139,10 @@ private extension RecommendedListView {
   
   func iconAngle(_ item: String) -> Double {
     seletedItems.contains(item) ? 45.0 : 0
+  }
+  
+  func iconColor(_ item: String) -> Color {
+    seletedItems.contains(item) ? PBColors.yellow._600.color : PBColors.navy._100.color
   }
 }
 

@@ -56,7 +56,7 @@ struct ProfileEditView: View {
         ProfileStorage.shared.saveNickname(nickname)
         ProfileStorage.shared.saveProfileImageType(profileType ?? .first)
       } label: {
-        Text("포켓 만들기")
+        Text("프로필 설정하기")
           .foregroundStyle(.white)
           .font(PBFonts.button._1.font)
       }

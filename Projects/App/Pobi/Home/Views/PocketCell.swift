@@ -31,12 +31,12 @@ struct PocketCell: View {
         .frame(width: 32, height: 32)
         .padding(.leading, 16)
       Spacer()
-      VStack(alignment: .leading, spacing: 5) {
+      VStack(alignment: .leading, spacing: 4) {
         Text(pocket.title)
-          .font(PBFonts.body._1.font)
+          .font(PBFonts.title._2.font)
           .foregroundStyle(PBColors.navy._900.color)
         Text(timeLabel ?? "")
-          .font(PBFonts.caption._2.font)
+          .font(PBFonts.label._1.font)
           .foregroundStyle(PBColors.navy._400.color)
       }
       .padding(.horizontal, 16)

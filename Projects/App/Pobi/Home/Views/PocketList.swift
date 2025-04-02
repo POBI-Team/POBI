@@ -53,10 +53,12 @@ struct PocketList: View {
       PBPlusButton {
         isPresentedCreate.toggle()
       }
+      .padding(.bottom, 10)
     }
     .overlay {
       if pockets.filter({ pockectFilter($0) }).isEmpty {
         PocketListEmptyView()
+          .padding(.bottom, 70)
       }
     }
     .fullScreenCover(isPresented: $isPresentedCreate) {

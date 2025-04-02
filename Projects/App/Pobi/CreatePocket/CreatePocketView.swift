@@ -284,9 +284,11 @@ struct CreatePocketView: View {
                     target: FirebaseAPI.icons,
                     of: [String].self
                   )
-                  pocket.icon = icons.first ?? ""
+                  if pocket.icon == nil {
+                    pocket.icon = icons.first ?? ""
+                  }
                 } catch {
-#warning("에러 처리")
+                  #warning("에러 처리")
                 }
               }
             }
@@ -389,10 +391,10 @@ private extension CreatePocketView {
       .string(from: selectedTime)
       .split(separator: "-")
       .compactMap({ UInt($0) })
-#warning("사용자 닉네임")
+    let nickname = ProfileStorage.shared.loadNickname() ?? "사용자"
     LocalNotiCenter.shared.register(
       title: "POBI",
-      body: "똑똑! XX님 '\(pocket.title)' 소지품 챙기세요!",
+      body: "똑똑! \(nickname)님 '\(pocket.title)' 소지품 챙기세요!",
       id: pocket.id.uuidString,
       trigerType: triggerType,
       hour: splitedTime[0],
