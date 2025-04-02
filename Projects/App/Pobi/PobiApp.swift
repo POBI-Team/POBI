@@ -9,6 +9,7 @@ import UIKit
 import SwiftUI
 
 import PBDesignSystem
+import PBStorage
 
 extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
   open override func viewDidLoad() {
@@ -39,6 +40,7 @@ struct PobiApp: App {
   var body: some Scene {
     WindowGroup {
       SplashView()
+        .modelContainer(try! PocketStorage().modelContainer)
     }
   }
 }

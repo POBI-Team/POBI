@@ -15,6 +15,7 @@ import LocalNotiService
 import Lottie
 
 struct SplashView: View {
+  @Environment(\.modelContext) private var modelContext
   @State private var isEndSplash: Bool = false
   @State private var isNotFirstEntry: Bool
   @State private var isPresnetedCreate: Bool = false
@@ -48,7 +49,7 @@ struct SplashView: View {
       if isNotFirstEntry {
          NavigationStack {
            HomeView(isPresentedCreate: $isPresnetedCreate)
-             .modelContainer(try! PocketStorage().modelContainer)
+             .modelContext(modelContext)
         }
          .transition(.move(edge: .trailing))
       } else {

@@ -51,38 +51,36 @@ struct DateSelectView: View {
         .foregroundStyle(PBColors.navy._50.color)
       PBSegmentView(selected: $seletedTabIndex, items: .init("매주"), .init("매월"))
       if seletedTabIndex == 1 {
-        RoundedRectangle(cornerRadius: 8)
-          .fill(PBColors.navy._10.color)
-          .frame(height: 246)
-          .padding(.top, 24)
-          .overlay {
-            LazyVGrid(
-              columns: gridColumns) {
-                ForEach(1...31, id: \.self) { day in
-                  Button {
-                    if selectedDays.contains(day) {
-                      selectedDays.remove(day)
-                      return
-                    }
-                    selectedDays.insert(day)
-                  } label: {
-                    Circle()
-                      .foregroundStyle(
-                        selectedDays.contains(day) ? PBColors.yellow._500.color : Color.clear
-                      )
-                      .frame(width: 40, height: 40)
-                      .overlay {
-                        Text("\(day)")
-                          .font(PBFonts.body._2.font)
-                          .foregroundColor(
-                            selectedDays.contains(day) ? .white : PBColors.navy._900.color
-                          )
-                      }
-                  }
-                  .buttonStyle(PlainButtonStyle())
-                }
+        LazyVGrid(columns: gridColumns) {
+          ForEach(1...31, id: \.self) { day in
+            Button {
+              if selectedDays.contains(day) {
+                selectedDays.remove(day)
+                return
               }
+              selectedDays.insert(day)
+            } label: {
+              Circle()
+                .foregroundStyle(
+                  selectedDays.contains(day) ? PBColors.yellow._500.color : Color.clear
+                )
+                .frame(width: 40, height: 40)
+                .overlay {
+                  Text("\(day)")
+                    .font(PBFonts.body._1.font)
+                    .foregroundColor(
+                      selectedDays.contains(day) ? .white : PBColors.navy._900.color
+                    )
+                }
+            }
+            .buttonStyle(PlainButtonStyle())
           }
+        }
+        .frame(height: 246)
+        .background(PBColors.navy._10.color)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .padding(.top, 24)
+        
       } else {
         HStack {
           ForEach(days.indices, id: \.self) { i in

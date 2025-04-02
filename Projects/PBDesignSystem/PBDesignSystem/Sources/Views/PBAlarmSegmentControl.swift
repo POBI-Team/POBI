@@ -26,11 +26,12 @@ public struct PBAlarmSegmentControl: View {
             .foregroundStyle(.white)
           if !isRepeated { Spacer() }
         }
-        .animation(.easeOut, value: isRepeated)
         .overlay {
           HStack {
             Button {
-              isRepeated = false
+              withAnimation(.default.speed(2)) {
+                isRepeated = false
+              }
             } label: {
               Text("1회 알림")
                 .font(PBFonts.button._2.font)
@@ -39,7 +40,9 @@ public struct PBAlarmSegmentControl: View {
             .foregroundStyle(PBColors.navy._900.color)
             Spacer()
             Button {
-              isRepeated = true
+              withAnimation(.default.speed(2)) {
+                isRepeated = true
+              }
             } label: {
               Text("반복 알림")
                 .font(PBFonts.button._2.font)
