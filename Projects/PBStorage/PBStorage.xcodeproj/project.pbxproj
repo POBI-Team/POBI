@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9B9A22F22D9E56A000B54A52 /* LocalNotiService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B9A22F12D9E56A000B54A52 /* LocalNotiService.framework */; };
 		9BBC55CE2D6D941B006A30F7 /* PBStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBC55C32D6D941B006A30F7 /* PBStorage.framework */; };
 		9BBC560A2D6DCD54006A30F7 /* PBStorageInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBC55ED2D6DCD0D006A30F7 /* PBStorageInterface.framework */; };
 /* End PBXBuildFile section */
@@ -29,6 +30,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9B9A22EB2D9E4D9300B54A52 /* LocalNotiService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LocalNotiService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B9A22F12D9E56A000B54A52 /* LocalNotiService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LocalNotiService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BBC55C32D6D941B006A30F7 /* PBStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PBStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BBC55CD2D6D941B006A30F7 /* PBStorageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PBStorageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BBC55ED2D6DCD0D006A30F7 /* PBStorageInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PBStorageInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,6 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B9A22F22D9E56A000B54A52 /* LocalNotiService.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +130,8 @@
 		9BBC56092D6DCD54006A30F7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9B9A22F12D9E56A000B54A52 /* LocalNotiService.framework */,
+				9B9A22EB2D9E4D9300B54A52 /* LocalNotiService.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

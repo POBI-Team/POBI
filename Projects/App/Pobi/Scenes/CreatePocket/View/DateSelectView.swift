@@ -11,13 +11,35 @@ import PBDesignSystem
 import PBStorageInterface
 
 struct DateSelectView: View {
-  @Environment(\.dismiss) private var dismiss
-  @State private var seletedTabIndex = 0
-  @State private var selectedWeekDays: Set<String> = []
-  @State private var selectedDays: Set<Int> = []
-  @Binding private var date: String
+  enum Weekday: Int, CaseIterable, CustomStringConvertible {
+    case mon = 1
+    case tues
+    case wednes
+    case thurs
+    case fri
+    case satur
+    case sun
+    
+    var description: String {
+      switch self {
+      case .mon: "월"
+      case .tues: "화"
+      case .wednes: "수"
+      case .thurs: "목"
+      case .fri: "금"
+      case .satur: "토"
+      case .sun: "일"
+      }
+    }
+  }
   
-  private let days = ["월", "화", "수", "목", "금", "토", "일"]
+  
+  @Environment(\.dismiss) private var dismiss
+  @State private var selectedTabIndex: Int
+  @State private var selectedWeekDays: Set<Weekday>
+  @State private var selectedDays: Set<Int>
+    
+  private let pocket: PocketModel
   private let gridColumns = [
     GridItem(spacing: 0),
     GridItem(spacing: 0),
@@ -28,19 +50,11 @@ struct DateSelectView: View {
     GridItem(spacing: 0)
   ]
   
-  init(date: Binding<String>) {
-    guard !date.wrappedValue.isEmpty else { self._date = date; return }
-    let splitedDate = date.wrappedValue.split(separator: " ", maxSplits: 1)
-    self.seletedTabIndex = splitedDate[0] == "매월" ? 1 : 0
-    if splitedDate[0] == "매월" {
-      self.selectedDays = Set(splitedDate[1].split(separator: ", ").compactMap { Int($0) })
-      
-    } else if splitedDate[0] == "매일" {
-      self.selectedWeekDays = Set(days)
-    } else {
-      self.selectedWeekDays = Set(splitedDate[1].split(separator: ", ").map { String($0) })
-    }
-    self._date = date
+  init(pocket: PocketModel) {
+    self.pocket = pocket
+    self.selectedTabIndex = pocket.alarm.isWeekRepeat ? 0 : 1
+    self.selectedWeekDays = Set(pocket.alarm.weekDays.compactMap { Weekday(rawValue: $0) })
+    self.selectedDays = Set(pocket.alarm.days)
   }
   
   var body: some View {
@@ -49,8 +63,8 @@ struct DateSelectView: View {
         .frame(width: 36, height: 5)
         .padding(.bottom, 27)
         .foregroundStyle(PBColors.navy._50.color)
-      PBSegmentView(selected: $seletedTabIndex, items: .init("매주"), .init("매월"))
-      if seletedTabIndex == 1 {
+      PBSegmentView(selected: $selectedTabIndex, items: .init("매주"), .init("매월"))
+      if selectedTabIndex == 1 {
         LazyVGrid(columns: gridColumns) {
           ForEach(1...31, id: \.self) { day in
             Button {
@@ -83,20 +97,20 @@ struct DateSelectView: View {
         
       } else {
         HStack {
-          ForEach(days.indices, id: \.self) { i in
+          ForEach(Weekday.allCases, id: \.self) { weekDay in
             Button {
-              if selectedWeekDays.contains(days[i]) {
-                selectedWeekDays.remove(days[i])
+              if selectedWeekDays.contains(weekDay) {
+                selectedWeekDays.remove(weekDay)
                 return
               }
-              selectedWeekDays.insert(days[i])
+              selectedWeekDays.insert(weekDay)
             } label: {
-              if selectedWeekDays.contains(days[i]) {
+              if selectedWeekDays.contains(weekDay) {
                 Circle()
                   .foregroundStyle(PBColors.yellow._500.color)
                   .frame(width: 40, height: 40)
                   .overlay {
-                    Text(days[i])
+                    Text(weekDay.description)
                       .font(PBFonts.body._4.font)
                       .foregroundColor(.white)
                   }
@@ -105,7 +119,7 @@ struct DateSelectView: View {
                   .stroke(PBColors.navy._100.color, lineWidth: 1)
                   .frame(width: 40, height: 40)
                   .overlay {
-                    Text(days[i])
+                    Text(weekDay.description)
                       .font(PBFonts.body._4.font)
                       .foregroundColor(PBColors.navy._100.color)
                   }
@@ -118,25 +132,12 @@ struct DateSelectView: View {
       }
       Spacer()
       PBRoundButton(16) {
-        if seletedTabIndex == 1, !selectedDays.isEmpty {
-          if selectedDays.count == 31 {
-            date = "매일"
-          } else {
-            date = "매월 " + (1...31)
-              .filter { selectedDays.contains($0) }
-              .map { String($0) }
-              .joined(separator: ", ")
-          }
-        } else if seletedTabIndex == 0, !selectedWeekDays.isEmpty {
-          if selectedWeekDays.count == 7 {
-            date = "매일"
-          } else {
-            date = "매주 " + days
-              .filter { selectedWeekDays.contains($0) }
-              .joined(separator: ", ")
-          }
-        } else {
-          date = ""
+        if selectedTabIndex == 1 {
+          pocket.alarm.isWeekRepeat = false
+          pocket.alarm.days = selectedDays.sorted(by: <)
+        } else if selectedTabIndex == 0 {
+          pocket.alarm.isWeekRepeat = true
+          pocket.alarm.weekDays = selectedWeekDays.map { $0.rawValue }.sorted(by: <)
         }
         dismiss()
       } label: {
@@ -144,14 +145,24 @@ struct DateSelectView: View {
           .foregroundStyle(.white)
           .font(PBFonts.body._1.font)
       }
+      .disabled(isSettingButtonDisabled)
       .foregroundStyle(PBColors.navy._900.color)
       .frame(height: 48)
     }
     .padding(.top, 5)
     .padding(.horizontal, 20)
+    .presentationDetents([.medium])
+  }
+}
+
+extension DateSelectView {
+  var isSettingButtonDisabled: Bool {
+    if selectedTabIndex == 0, selectedWeekDays.isEmpty { return true }
+    else if selectedTabIndex == 1, selectedDays.isEmpty { return true }
+    return false
   }
 }
 
 #Preview {
-  DateSelectView(date: .constant("매일"))
+  DateSelectView(pocket: .init())
 }

@@ -108,7 +108,7 @@ private extension PocketDetailView {
     PocketDetailView(
       PocketModel(
         title: "테스트",
-        alarm: PocketAlarmModel(day: "매주 월, 목", date: .now, time: .now)
+        alarm: PocketAlarmModel(isWeekRepeat: true, weekDays: [1,2], days: [], date: .now, time: .now)
       )
     )
   }

@@ -8,53 +8,39 @@
 import UserNotifications
 
 public enum TrigerType {
-  case day(days: [UInt])
-  case week(weeks: [Weekday])
-  case date(year: UInt, month: UInt, day: UInt)
-  
-  public enum Weekday: Int, CaseIterable {
-    case mon = 1
-    case tues
-    case wednes
-    case thurs
-    case fri
-    case satur
-    case sun
-    
-    public static func weekday(string: String) -> Weekday? {
-      switch string {
-      case "월": return .mon
-      case "화": return .tues
-      case "수": return .wednes
-      case "목": return .thurs
-      case "금": return .fri
-      case "토": return .satur
-      case "일": return .sun
-      default: return nil
-      }
-    }
-  }
+  case day(days: [Int])
+  case week(weeks: [Int])
+  case date(Date)
   
   func requsetIds(id: String) -> [String] {
     switch self {
     case let .day(days):
       return days.map { id + "-\($0)" }
     case let .week(weeks):
-      return weeks.map { id + "-\($0.rawValue)" }
-    case let .date(year, month, day):
-      return [id + "-\(year)" + "-\(month)" + "-\(day)"]
+      return weeks.map { id + "-\($0)" }
+    case let .date(date):
+      return [id + "-\(date.description)"]
     }
   }
   
-  func makeRequsts(hour: UInt, minute: UInt, id: String, content: UNMutableNotificationContent) -> [UNNotificationRequest] {
+  func makeRequsts(time: Date, id: String, content: UNMutableNotificationContent) -> [UNNotificationRequest] {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH-m"
+    let splitedTime = dateFormatter
+      .string(from: time)
+      .split(separator: "-")
+      .compactMap({ Int($0) })
+    let hour = splitedTime[0]
+    let minute = splitedTime[1]
+    var dateComponents = DateComponents()
+    dateComponents.hour = hour
+    dateComponents.minute = minute
+    
     switch self {
     case let .day(days): // 매달 특정 일에 반복
       return Array(zip(days, self.requsetIds(id: id)))
-        .map { (day: UInt, id: String) in
-          var dateComponents = DateComponents()
-          dateComponents.day = Int(day)
-          dateComponents.hour = Int(hour)
-          dateComponents.minute = Int(minute)
+        .map { (day: Int, id: String) in
+          dateComponents.day = day
           let triger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
           return UNNotificationRequest(
             identifier: id,
@@ -64,11 +50,8 @@ public enum TrigerType {
         }
     case let .week(weeks): // 매주 특정 요일마다 반복
       return Array(zip(weeks, self.requsetIds(id: id)))
-        .map { (week: Weekday, id: String) in
-          var dateComponents = DateComponents()
-          dateComponents.weekday = week.rawValue
-          dateComponents.hour = Int(hour)
-          dateComponents.minute = Int(minute)
+        .map { (week: Int, id: String) in
+          dateComponents.weekday = week
           let triger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
           return UNNotificationRequest(
             identifier: id,
@@ -76,17 +59,19 @@ public enum TrigerType {
             trigger: triger
           )
         }
-    case let .date(year, month, day): // 특정 날짜 하루
-      var dateComponents = DateComponents()
-      dateComponents.year = Int(year)
-      dateComponents.month = Int(month)
-      dateComponents.day = Int(day)
-      dateComponents.hour = Int(hour)
-      dateComponents.minute = Int(minute)
+    case let .date(date): // 특정 날짜 하루
+      dateFormatter.dateFormat = "yyyy-M-d"
+      let splitedDate = dateFormatter
+        .string(from: date)
+        .components(separatedBy: "-")
+        .compactMap { Int($0) }
+      dateComponents.year = splitedDate[0]
+      dateComponents.month = splitedDate[1]
+      dateComponents.day = splitedDate[2]
       let triger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
       return [
         UNNotificationRequest(
-          identifier: self.requsetIds(id: id).first!,
+          identifier: self.requsetIds(id: id)[0],
           content: content,
           trigger: triger
         )

@@ -7,6 +7,8 @@
 
 import SwiftData
 
+import LocalNotiService
+
 @Model
 public final class PocketModel {
   @Attribute(.unique) public var id: UUID
@@ -28,7 +30,7 @@ public final class PocketModel {
     colorIndex: Int = 0,
     icon: String? = nil,
     isHidden: Bool = false,
-    alarm: PocketAlarmModel = .init(day: "매일", date: .now, time: .now),
+    alarm: PocketAlarmModel = .init(isWeekRepeat: true, weekDays: [1,2,3,4,5,6,7], days: [], date: .now, time: .now),
     items: [PocketItemModel] = [],
     createAt: Date = .now
   ) {
@@ -71,6 +73,32 @@ public final class PocketModel {
   public func updateSortIndices() {
     for (index, item) in items.enumerated() {
       item.sortIndex = index
+    }
+  }
+  
+  public func registerPushAlarm(userNickname: String) {
+    LocalNotiCenter.shared.register(
+      title: "POBI",
+      body: "똑똑! \(userNickname)님 '\(title)' 소지품 챙기세요!",
+      id: id.uuidString,
+      trigerType: pushType,
+      time: alarm.time
+    )
+  }
+  
+  public func deletePushAlarm() {
+    LocalNotiCenter.shared.remove(id: id.uuidString, type: pushType)
+  }
+  
+  private var pushType: TrigerType {
+    if repeats {
+      if alarm.isWeekRepeat {
+        return .week(weeks: alarm.weekDays)
+      } else {
+        return .day(days: alarm.days)
+      }
+    } else {
+      return .date(alarm.date)
     }
   }
 }

@@ -11,7 +11,6 @@ import PBDesignSystem
 import PBStorage
 import PBStorageInterface
 import NetworkService
-import LocalNotiService
 
 struct CreatePocketView: View {
   enum Mode {
@@ -27,7 +26,6 @@ struct CreatePocketView: View {
   @State private var isSelectedTime: Bool = false
   @State private var isDidTapDownButton: Bool = false
   @State private var isPresentedDataSelectView: Bool = false
-  
   
   private let colors = PBColors.list.colors
   private let mode: Mode
@@ -182,13 +180,14 @@ struct CreatePocketView: View {
                         } label: {
                           HStack(spacing: 8) {
                             Spacer()
-                            Text(pocket.alarm.day)
+                            Text(repeatLabel)
                               .font(PBFonts.caption._1.font)
                               .foregroundStyle(PBColors.navy._300.color)
                               .lineLimit(1)
                             PBImages.right.image
                           }
                           .frame(maxWidth: 125)
+                          .frame(height: 34)
                         }
                       } else {
                         PBRoundButton(10) {
@@ -196,7 +195,7 @@ struct CreatePocketView: View {
                             isSelectedDate.toggle()
                           }
                         } label: {
-                          Text(dateLable)
+                          Text(dateLabel)
                             .font(PBFonts.caption._1.font)
                             .foregroundStyle(PBColors.navy._900.color)
                         }
@@ -233,7 +232,7 @@ struct CreatePocketView: View {
                           isSelectedTime.toggle()
                         }
                       } label: {
-                        Text(timeLable)
+                        Text(timeLabel)
                           .font(PBFonts.caption._1.font)
                           .foregroundStyle(PBColors.navy._900.color)
                       }
@@ -273,12 +272,7 @@ struct CreatePocketView: View {
             .scrollDismissesKeyboard(.interactively)
             .animation(.easeInOut, value: pocket.onAlarm)
             .sheet(isPresented: $isPresentedDataSelectView) {
-              DateSelectView(date: Binding(get: {
-                pocket.alarm.day
-              }, set: {
-                pocket.alarm.day = $0
-              }))
-              .presentationDetents([.medium])
+              DateSelectView(pocket: pocket)
             }
             .onChange(of: pocket.repeats, { _, _ in
               withAnimation {
@@ -296,13 +290,14 @@ struct CreatePocketView: View {
                     pocket.icon = icons.first ?? ""
                   }
                 } catch {
-#warning("에러 처리")
+                  #warning("에러 처리")
                 }
               }
             }
             PBRoundButton(16) {
+              pocket.deletePushAlarm()
               if pocket.onAlarm {
-                registerPushAlarm()
+                pocket.registerPushAlarm(userNickname: "")
               }
               if mode == .create {
                 modelContext.insert(pocket)
@@ -314,8 +309,8 @@ struct CreatePocketView: View {
                 .font(PBFonts.body._1.font)
             }
             .foregroundStyle(PBColors.navy._900.color)
-            .frame(height: 48)
-            .padding([.horizontal, .bottom], 20)
+            .frame(height: 52)
+            .padding([.horizontal, .bottom], 14)
           }
         }
     }
@@ -341,67 +336,23 @@ struct CreatePocketView: View {
 }
 
 private extension CreatePocketView {
-  var dateLable: String {
-    let dateFormatter = DateFormatter()
-    dateFormatter.locale = Locale(identifier: "ko_KR")
-    dateFormatter.dateFormat = "M월 d일"
-    return dateFormatter.string(from: pocket.alarm.date)
+  var dateLabel: String {
+    PBFormatter.shared.label(pocket.alarm.date, format: "M월 d일")
   }
   
-  var timeLable: String {
-    let dateFormatter = DateFormatter()
-    dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-    dateFormatter.dateFormat = "h:mm a"
-    return dateFormatter.string(from: pocket.alarm.time)
+  var timeLabel: String {
+    PBFormatter.shared.label(pocket.alarm.time, format: "h:mm a")
   }
   
-  func registerPushAlarm() {
-    let triggerType: TrigerType
-    if pocket.repeats {
-      let splitedDate = pocket.alarm.day
-        .split(separator: " ")
-      switch splitedDate[0] {
-      case "매주":
-        let weeks: [TrigerType.Weekday] = splitedDate[1]
-          .components(separatedBy: ", ")
-          .compactMap { .weekday(string: $0) }
-        triggerType = .week(weeks: weeks)
-      case "매월":
-        let days = splitedDate[1]
-          .components(separatedBy: ", ")
-          .compactMap { UInt($0) }
-        triggerType = .day(days: days)
-      case "매일":
-        triggerType = .week(weeks: TrigerType.Weekday.allCases)
-      default: return
-      }
+  var repeatLabel: String {
+    if pocket.alarm.isWeekRepeat {
+      PBFormatter.shared.label(isWeekDay: true, days: pocket.alarm.weekDays)
     } else {
-      let dateFormatter = DateFormatter()
-      dateFormatter.dateFormat = "yyyy-M-d"
-      let splitedDate = dateFormatter
-        .string(from: pocket.alarm.date)
-        .components(separatedBy: "-")
-        .compactMap({ UInt($0) })
-      triggerType = .date(
-        year: splitedDate[0],
-        month: splitedDate[1],
-        day: splitedDate[2]
-      )
+      PBFormatter.shared.label(isWeekDay: false, days: pocket.alarm.days)
     }
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "HH-m"
-    let splitedTime = dateFormatter
-      .string(from: pocket.alarm.time)
-      .split(separator: "-")
-      .compactMap({ UInt($0) })
-    let nickname = ProfileStorage.shared.loadNickname() ?? "사용자"
-    LocalNotiCenter.shared.register(
-      title: "POBI",
-      body: "똑똑! \(nickname)님 '\(pocket.title)' 소지품 챙기세요!",
-      id: pocket.id.uuidString,
-      trigerType: triggerType,
-      hour: splitedTime[0],
-      minute: splitedTime[1]
-    )
   }
+}
+
+#Preview {
+  CreatePocketView(.create, pocket: .init(onAlarm: true))
 }

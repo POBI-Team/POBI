@@ -91,40 +91,7 @@ struct PocketMoreView: View {
             Button {
               dismiss()
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                #warning("해당 부분 Create와 중복 코드")
-                var triggerType: TrigerType?
-                if pocket.repeats {
-                  let splitedDate = pocket.alarm.day
-                    .split(separator: " ")
-                  switch splitedDate[0] {
-                  case "매주":
-                    let weeks: [TrigerType.Weekday] = splitedDate[1]
-                      .components(separatedBy: ", ")
-                      .compactMap { .weekday(string: $0) }
-                    triggerType = .week(weeks: weeks)
-                  case "매월":
-                    let days = splitedDate[1]
-                      .components(separatedBy: ", ")
-                      .compactMap { UInt($0) }
-                    triggerType = .day(days: days)
-                  case "매일":
-                    triggerType = .week(weeks: TrigerType.Weekday.allCases)
-                  default: return
-                  }
-                  
-                } else {
-                  let splitedDate = pocket.alarm.day
-                    .split(separator: "-").compactMap({ UInt($0) })
-                  triggerType = .date(
-                    year: splitedDate[0],
-                    month: splitedDate[1],
-                    day: splitedDate[2]
-                  )
-                }
-                
-                if let triggerType {
-                  LocalNotiCenter.shared.remove(id: pocket.id.uuidString, type: triggerType)
-                }
+                pocket.deletePushAlarm()
                 modelContext.delete(pocket)
               }
             } label: {

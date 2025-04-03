@@ -9,17 +9,27 @@ import SwiftData
 
 @Model
 public final class PocketAlarmModel {
-  public var day: String
+  public var isWeekRepeat: Bool
+  public var weekDays: [Int]
+  public var days: [Int]
   public var date: Date
   public var time: Date
   
-  public init(day: String, date: Date, time: Date) {
-    self.day = day
+  public init(isWeekRepeat: Bool, weekDays: [Int], days: [Int], date: Date, time: Date) {
+    self.isWeekRepeat = isWeekRepeat
+    self.weekDays = weekDays
+    self.days = days
     self.date = date
     self.time = time
   }
   
   public func copy() -> PocketAlarmModel {
-    return PocketAlarmModel(day: self.day, date: self.date, time: self.time)
+    return PocketAlarmModel(
+      isWeekRepeat: self.isWeekRepeat,
+      weekDays: self.weekDays,
+      days: self.days,
+      date: self.date,
+      time: self.time
+    )
   }
 }

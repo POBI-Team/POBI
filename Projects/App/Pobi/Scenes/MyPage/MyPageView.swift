@@ -11,6 +11,7 @@ import SwiftData
 import PBStorage
 import PBDesignSystem
 import PBStorageInterface
+import LocalNotiService
 
 struct MyPageView: View {
   @Environment(\.dismiss) private var dismiss
@@ -74,6 +75,7 @@ struct MyPageView: View {
 //                }
 //              }
               Button {
+                LocalNotiCenter.shared.removeAll()
                 try? modelContext.fetch(FetchDescriptor<PocketModel>())
                   .forEach({ pocket in
                     modelContext.delete(pocket)

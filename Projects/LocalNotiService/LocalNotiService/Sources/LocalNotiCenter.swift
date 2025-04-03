@@ -30,14 +30,13 @@ public final class LocalNotiCenter: Sendable {
     body: String,
     id: String,
     trigerType: TrigerType,
-    hour: UInt,
-    minute: UInt
+    time: Date
   ) {
     let content = UNMutableNotificationContent()
     content.title = title
     content.body = body
     content.sound = .default
-    trigerType.makeRequsts(hour: hour, minute: minute, id: id, content: content).forEach {
+    trigerType.makeRequsts(time: time, id: id, content: content).forEach {
       UNUserNotificationCenter.current().add($0)
     }
   }
