@@ -12,9 +12,12 @@ import PBDesignSystem
 import PBStorageInterface
 
 struct PocketList: View {
+  @EnvironmentObject var notificationManager: NotificationManager
   @Query(sort: [SortDescriptor<PocketModel>(\.createAt, order: .forward)])
   private var pockets: [PocketModel]
   @State private var isPresentedCreate: Bool = false
+  @State private var isPresentedDetail: Bool = false
+  @State private var seletedPocket: PocketModel?
   private var seletedTabIndex: Int
   
   private func pockectFilter(_ pocket: PocketModel) -> Bool {
@@ -65,6 +68,17 @@ struct PocketList: View {
       NavigationStack {
         CreatePocketView(.create, pocket: .init())
       }
+    }
+    .onAppear {
+      if let id = notificationManager.seletedPocketID {
+        seletedPocket = pockets.filter({$0.id == id}).first
+      }
+    }
+    .navigationDestination(item: $seletedPocket) { pocket in
+      PocketDetailView(pocket)
+        .onAppear {
+          notificationManager.seletedPocketID = nil
+        }
     }
   }
 }

@@ -22,17 +22,47 @@ extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
   }
 }
 
-extension View {
-    func hideKeyboard() {
-        UIApplication.shared.sendAction(
-            #selector(UIResponder.resignFirstResponder),
-            to: nil, from: nil, for: nil
-        )
+class NotificationManager: ObservableObject {
+  @Published var seletedPocketID: UUID?
+  
+  func handleNotificationTap(id: UUID?) {
+    seletedPocketID = id
+  }
+}
+
+class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+  var notificationManager = NotificationManager()
+  func application(_ application: UIApplication,
+                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    UNUserNotificationCenter.current().delegate = self
+    return true
+  }
+  
+//  앱이 포그라운드에 있을 때 알림 표시
+//  func userNotificationCenter(_ center: UNUserNotificationCenter,
+//                              willPresent notification: UNNotification,
+//                              withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+//    completionHandler([.banner, .sound])
+//  }
+  
+  nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter,
+                              didReceive response: UNNotificationResponse,
+                              withCompletionHandler completionHandler: @escaping () -> Void) {
+    defer {
+      completionHandler()
     }
+    guard let id = response.notification.request.content.userInfo["id"] as? String else { return }
+    DispatchQueue.main.async {
+      self.notificationManager.handleNotificationTap(id: UUID(uuidString: id))
+    }
+  }
 }
 
 @main
-struct PobiApp: App {  
+struct PobiApp: App {
+  @StateObject var notificationManager = NotificationManager()
+  @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+  
   init() {
     PBFonts.registerFont()
   }
@@ -40,6 +70,7 @@ struct PobiApp: App {
   var body: some Scene {
     WindowGroup {
       SplashView()
+        .environmentObject(appDelegate.notificationManager)
         .modelContainer(try! PocketStorage().modelContainer)
     }
   }

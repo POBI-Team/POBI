@@ -297,7 +297,8 @@ struct CreatePocketView: View {
             PBRoundButton(16) {
               pocket.deletePushAlarm()
               if pocket.onAlarm {
-                pocket.registerPushAlarm(userNickname: "")
+                let nickName = ProfileStorage.shared.loadNickname()
+                pocket.registerPushAlarm(userNickname: nickName ?? "사용자")
               }
               if mode == .create {
                 modelContext.insert(pocket)

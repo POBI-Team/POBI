@@ -36,6 +36,7 @@ public final class LocalNotiCenter: Sendable {
     content.title = title
     content.body = body
     content.sound = .default
+    content.userInfo = ["id": id]
     trigerType.makeRequsts(time: time, id: id, content: content).forEach {
       UNUserNotificationCenter.current().add($0)
     }

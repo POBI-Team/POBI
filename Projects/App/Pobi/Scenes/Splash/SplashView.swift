@@ -15,6 +15,7 @@ import LocalNotiService
 import Lottie
 
 struct SplashView: View {
+  @EnvironmentObject var notificationManager: NotificationManager
   @Environment(\.modelContext) private var modelContext
   @State private var isEndSplash: Bool = false
   @State private var isNotFirstEntry: Bool
