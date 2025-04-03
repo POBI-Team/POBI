@@ -46,6 +46,8 @@ struct RecommendedListView: View {
             ForEach(items.indices, id: \.self) { i in
               HStack {
                 Text(items[i])
+                  .font(PBFonts.body._3.font)
+                  .foregroundStyle(PBColors.navy._900.color)
                 Spacer()
                 PBImages.plus16.image
                   .renderingMode(.template)
@@ -68,6 +70,7 @@ struct RecommendedListView: View {
             }
           }
         }
+        .scrollIndicators(.hidden)
         .padding(.horizontal, 20)
         .overlay {
           if recommendedItem == nil {
@@ -96,6 +99,7 @@ struct RecommendedListView: View {
         }
       } label: {
         Text("추가")
+          .font(PBFonts.button._1.font)
       }
       .foregroundStyle(PBColors.yellow._600.color)
     }

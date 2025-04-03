@@ -44,8 +44,8 @@ struct ItemList: View {
               Button(role: .destructive) {
                 pocket.deleteItem(withId: item.id)
               } label: {
-                PBImages.trash.image
-                  .foregroundStyle(.white)
+                Text("삭제")
+                  .font(PBFonts.button._3.font)
               }
             }
             Spacer()

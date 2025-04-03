@@ -28,9 +28,9 @@ struct PocketDetailView: View {
             Text(pocket.title)
               .font(PBFonts.title._1.font)
               .foregroundStyle(PBColors.navy._900.color)
-            HStack(spacing: 2) {
+            HStack(spacing: 8) {
               PBImages.clock.image
-              Text("\(pocket.alarm.date) / \(timeLabel)")
+              Text(alarmLabel)
                 .font(PBFonts.label._1.font)
                 .foregroundStyle(PBColors.navy._400.color)
                 .lineLimit(1)
@@ -47,7 +47,7 @@ struct PocketDetailView: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
         
       }
-      .padding(.top, 20)
+      .padding(.vertical, 20)
       .padding(.horizontal, 20)
       .fullScreenCover(isPresented: $isPresnetedRecommend) {
         RecommendedListView(pocket: pocket)
@@ -94,12 +94,17 @@ struct PocketDetailView: View {
 }
 
 private extension PocketDetailView {
-  var timeLabel: String {
-    let alarmTime = pocket.alarm.time
-    let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "ko_KR") // 한국 로케일 설정
-    formatter.dateFormat = "a h:mm" // "오전/오후 시:분" 형태
-    return formatter.string(from: alarmTime)
+  var alarmLabel: String {
+    if pocket.onAlarm {
+      let time = PBFormatter.shared.label(pocket.alarm.time, format: "a h:mm", locale: Locale(identifier: "ko_KR"))
+      if pocket.repeats {
+        let days = PBFormatter.shared.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
+        return "\(days) / \(time)"
+      }
+      let date = PBFormatter.shared.label(pocket.alarm.date, format: "M월 d일")
+      return "\(date) / \(time)"
+    }
+    return "알람 없음"
   }
 }
 
@@ -108,6 +113,7 @@ private extension PocketDetailView {
     PocketDetailView(
       PocketModel(
         title: "테스트",
+        onAlarm: true,
         alarm: PocketAlarmModel(isWeekRepeat: true, days: [1,2], date: .now, time: .now)
       )
     )

@@ -11,8 +11,9 @@ final class PBFormatter: Sendable {
   static let shared = PBFormatter()
   let dateFormatter = DateFormatter()
   
-  func label(_ date: Date, format: String) -> String {
+  func label(_ date: Date, format: String, locale: Locale? = nil) -> String {
     dateFormatter.dateFormat = format
+    dateFormatter.locale = locale
     return dateFormatter.string(from: date)
   }
   
