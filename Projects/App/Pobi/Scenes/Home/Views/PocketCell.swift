@@ -35,7 +35,7 @@ struct PocketCell: View {
         Text(pocket.title)
           .font(PBFonts.title._2.font)
           .foregroundStyle(PBColors.navy._900.color)
-        Text(timeLabel)
+        Text(alarmLabel)
           .font(PBFonts.label._1.font)
           .foregroundStyle(PBColors.navy._400.color)
       }
@@ -82,15 +82,25 @@ struct PocketCell: View {
 }
 
 private extension PocketCell {
-  var timeLabel: String {
-    let alarmTime = pocket.alarm.time
-    let formatter = DateFormatter()
-    formatter.locale = Locale(identifier: "ko_KR") // 한국 로케일 설정
-    formatter.dateFormat = "a h:mm" // "오전/오후 시:분" 형태
-    return formatter.string(from: alarmTime)
+  var alarmLabel: String {
+    if pocket.onAlarm {
+      if pocket.repeats {
+        return PBFormatter.shared.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
+      }
+      return PBFormatter.shared.label(pocket.alarm.date, format: "M월 d일")
+    }
+    return ""
   }
 }
 
-#Preview {
-  PocketCell(.init(id: .init(), title: "테스트"))
+#Preview("week") {
+  PocketCell(.init(id: .init(), title: "테스트", onAlarm: true, repeats: true, alarm: .init(isWeekRepeat: true, days: [1,2], date: .now, time: .now)))
+}
+
+#Preview("day") {
+  PocketCell(.init(id: .init(), title: "테스트", onAlarm: true, repeats: true, alarm: .init(isWeekRepeat: false, days: [1,2], date: .now, time: .now)))
+}
+
+#Preview("date") {
+  PocketCell(.init(id: .init(), title: "테스트", onAlarm: true, alarm: .init(isWeekRepeat: true, days: [1,2], date: .now, time: .now)))
 }
