@@ -53,8 +53,13 @@ struct DateSelectView: View {
   init(pocket: PocketModel) {
     self.pocket = pocket
     self.selectedTabIndex = pocket.alarm.isWeekRepeat ? 0 : 1
-    self.selectedWeekDays = Set(pocket.alarm.weekDays.compactMap { Weekday(rawValue: $0) })
-    self.selectedDays = Set(pocket.alarm.days)
+    if pocket.alarm.isWeekRepeat {
+      self.selectedWeekDays = Set(pocket.alarm.days.compactMap { Weekday(rawValue: $0) })
+      self.selectedDays = []
+    } else {
+      self.selectedDays = Set(pocket.alarm.days)
+      self.selectedWeekDays = []
+    }
   }
   
   var body: some View {
@@ -137,7 +142,7 @@ struct DateSelectView: View {
           pocket.alarm.days = selectedDays.sorted(by: <)
         } else if selectedTabIndex == 0 {
           pocket.alarm.isWeekRepeat = true
-          pocket.alarm.weekDays = selectedWeekDays.map { $0.rawValue }.sorted(by: <)
+          pocket.alarm.days = selectedWeekDays.map { $0.rawValue }.sorted(by: <)
         }
         dismiss()
       } label: {

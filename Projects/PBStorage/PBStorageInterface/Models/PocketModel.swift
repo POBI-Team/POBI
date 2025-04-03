@@ -30,7 +30,7 @@ public final class PocketModel {
     colorIndex: Int = 0,
     icon: String? = nil,
     isHidden: Bool = false,
-    alarm: PocketAlarmModel = .init(isWeekRepeat: true, weekDays: [1,2,3,4,5,6,7], days: [], date: .now, time: .now),
+    alarm: PocketAlarmModel = .init(isWeekRepeat: true, days: [1,2,3,4,5,6,7], date: .now, time: .now),
     items: [PocketItemModel] = [],
     createAt: Date = .now
   ) {
@@ -93,7 +93,7 @@ public final class PocketModel {
   private var pushType: TrigerType {
     if repeats {
       if alarm.isWeekRepeat {
-        return .week(weeks: alarm.weekDays)
+        return .week(weeks: alarm.days)
       } else {
         return .day(days: alarm.days)
       }

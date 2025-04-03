@@ -345,11 +345,7 @@ private extension CreatePocketView {
   }
   
   var repeatLabel: String {
-    if pocket.alarm.isWeekRepeat {
-      PBFormatter.shared.label(isWeekDay: true, days: pocket.alarm.weekDays)
-    } else {
-      PBFormatter.shared.label(isWeekDay: false, days: pocket.alarm.days)
-    }
+    PBFormatter.shared.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
   }
 }
 
