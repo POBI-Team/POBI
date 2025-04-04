@@ -14,7 +14,9 @@ import LocalNotiService
 struct PocketMoreView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
-  @Binding var isPresentedCreate: Bool
+  @Binding private var isPresentedCreate: Bool
+  @State private var isPresentedDeleteAlert: Bool = false
+  @State private var isPresentedHiddenAlert: Bool = false
   private let pocket: PocketModel
   
   init(_ pokcet: PocketModel, isPresentedCreate: Binding<Bool>) {
@@ -52,6 +54,7 @@ struct PocketMoreView: View {
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 let newPocket = pocket.copy()
                 modelContext.insert(newPocket)
+                try? modelContext.save()
               }
             } label: {
               HStack(spacing: 8) {
@@ -67,9 +70,14 @@ struct PocketMoreView: View {
             .background(.white)
             
             Button {
-              dismiss()
-              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                pocket.isHidden.toggle()
+              if !pocket.isHidden {
+                isPresentedHiddenAlert.toggle()
+              } else {
+                dismiss()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                  pocket.isHidden.toggle()
+                  try? modelContext.save()
+                }
               }
             } label: {
               HStack(spacing: 8) {
@@ -89,11 +97,7 @@ struct PocketMoreView: View {
             .background(.white)
             
             Button {
-              dismiss()
-              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                pocket.deletePushAlarm()
-                modelContext.delete(pocket)
-              }
+              isPresentedDeleteAlert.toggle()
             } label: {
               HStack(spacing: 8) {
                 Group {
@@ -126,6 +130,21 @@ struct PocketMoreView: View {
         }
         .padding(.horizontal, 20)
         .padding(.top, 8)
+        .pbAlert(isPresented: $isPresentedDeleteAlert, type: .delete) {
+          dismiss()
+          DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            pocket.deletePushAlarm()
+            modelContext.delete(pocket)
+            try? modelContext.save()
+          }
+        }
+        .pbAlert(isPresented: $isPresentedHiddenAlert, type: .hidden) {
+          dismiss()
+          DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            pocket.isHidden.toggle()
+            try? modelContext.save()
+          }
+        }
       }
       .presentationDetents([.height(331)])
   }

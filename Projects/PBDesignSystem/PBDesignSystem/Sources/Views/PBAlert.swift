@@ -5,37 +5,61 @@
 //  Created by 이시원 on 3/29/25.
 //
 
+import UIKit
 import SwiftUI
 
 @MainActor
-public struct PBAlert {
-  public static func delete(_ action: @escaping () -> Void) -> PBAlertView {
-    return PBAlertView()
-      .image(PBImages.pobiAlert.image)
-      .title("포켓을 삭제할까요?")
-      .body("등록된 소지품이 모두 사라져요!")
-      .addButton(.cancel())
-      .addButton(.defalt("삭제", action))
-  }
+public enum PBAlertType {
+  case delete
+  case deleteAll
+  case offAlarm
+  case edit
+  case hidden
   
-  public static func edit(_ action: @escaping () -> Void) -> PBAlertView {
-    return PBAlertView()
-      .title("포켓을 수정할까요?")
-      .body("입력한 내용으로 변경돼요!")
-      .addButton(.cancel())
-      .addButton(.defalt("수정", action))
-  }
-  
-  public static func hidden(_ action: @escaping () -> Void) -> PBAlertView {
-    return PBAlertView()
-      .title("포켓을 숨길까요?")
-      .body("포켓 알림이 비활성화돼요!")
-      .addButton(.cancel())
-      .addButton(.defalt("숨기기", action))
+  func makeView(isPresented: Binding<Bool>, action: @escaping () -> Void, cancelAction: @escaping () -> Void) -> some View {
+    switch self {
+    case .delete:
+      return PBAlertView(isPresented: isPresented)
+        .image(PBImages.pobiAlert.image)
+        .title("포켓을 삭제할까요?")
+        .body("등록된 소지품이 모두 사라져요!")
+        .addButton(.cancel(cancelAction))
+        .addButton(.defalt("삭제", action))
+    case .deleteAll:
+      return PBAlertView(isPresented: isPresented)
+        .image(PBImages.pobiAlert.image)
+        .title("모든 포켓을 삭제할까요?")
+        .body("등록된 소지품이 모두 사라져요!")
+        .addButton(.cancel(cancelAction))
+        .addButton(.defalt("초기화", action))
+    case .offAlarm:
+      return PBAlertView(isPresented: isPresented)
+        .image(PBImages.warning.image)
+        .title("알림 설정이 꺼져있어요.")
+        .body("휴대폰 설정 > 알림 > 포비에서/n알림을 허용해 주세요!")
+        .addButton(.cancel(cancelAction))
+        .addButton(.defalt("알림 허용", action))
+    case .edit:
+      return PBAlertView(isPresented: isPresented)
+        .title("포켓을 수정할까요?")
+        .body("입력한 내용으로 변경돼요!")
+        .addButton(.cancel(cancelAction))
+        .addButton(.defalt("수정", action))
+    case .hidden:
+      return PBAlertView(isPresented: isPresented)
+        .title("포켓을 숨길까요?")
+        .body("포켓 알림이 비활성화돼요!")
+        .addButton(.cancel(cancelAction))
+        .addButton(.defalt("숨기기", action))
+    }
   }
 }
 
 public struct PBAlertView: View {
+  @Binding private var isPresented: Bool
+  @State private var scale: CGFloat = 1.05
+  @State private var color = Color.black.opacity(0.0)
+
   public enum PBAlertButtonType {
     case cancel((() -> Void)? = nil)
     case defalt(String, (() -> Void)? = nil)
@@ -46,8 +70,12 @@ public struct PBAlertView: View {
   private var content: String = ""
   private var buttons: [PBAlertButtonType] = []
   
+  init(isPresented: Binding<Bool>) {
+    self._isPresented = isPresented
+  }
+  
   public var body: some View {
-    Color.black.opacity(0.2)
+    color
       .ignoresSafeArea(.all)
       .overlay {
         VStack(spacing: 24) {
@@ -67,7 +95,10 @@ public struct PBAlertView: View {
               switch buttons[i] {
               case let .cancel(action):
                 PBRoundButton(8) {
-                  action?()
+                  isPresented.toggle()
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    action?()
+                  }
                 } label: {
                   Text("취소")
                     .foregroundStyle(PBColors.navy._500.color)
@@ -77,7 +108,10 @@ public struct PBAlertView: View {
                 .foregroundStyle(PBColors.navy._50.color)
               case let .defalt(label, action):
                 PBRoundButton(8) {
-                  action?()
+                  isPresented.toggle()
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    action?()
+                  }
                 } label: {
                   Text(label)
                     .foregroundStyle(.white)
@@ -93,8 +127,15 @@ public struct PBAlertView: View {
         .frame(width: 335)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 20))
+        .scaleEffect(scale)
+        .onAppear {
+          scale = 1
+          color = Color.black.opacity(0.2)
+        }
       }
-  }
+      .presentationBackground(.clear)
+      .animation(.default, value: scale)
+    }
 }
 
 extension PBAlertView {
@@ -123,14 +164,32 @@ extension PBAlertView {
   }
 }
 
-#Preview("delete") {
-  PBAlert.delete {}
+public struct PBAlert: ViewModifier {
+  @Binding private var isPresented: Bool
+  private let alert: PBAlertType
+  private let action: () -> Void
+  private let cancelAction: () -> Void
+  
+  public init(isPresented: Binding<Bool>, alert: PBAlertType, action: @escaping () -> Void, cancelAction: @escaping () -> Void) {
+    self._isPresented = isPresented
+    self.alert = alert
+    self.action = action
+    self.cancelAction = cancelAction
+  }
+  
+  public func body(content: Content) -> some View {
+    content
+      .fullScreenCover(isPresented: $isPresented) {
+        alert.makeView(isPresented: $isPresented, action: action, cancelAction: cancelAction)
+      }
+      .transaction { transaction in
+        transaction.disablesAnimations = true
+      }
+  }
 }
 
-#Preview("edit") {
-  PBAlert.edit {}
-}
-
-#Preview("hidden") {
-  PBAlert.hidden {}
+extension View {
+  public func pbAlert(isPresented: Binding<Bool>, type: PBAlertType, okAction: @escaping () -> Void, cancelAction: @escaping () -> Void = {}) -> some View {
+    return modifier(PBAlert(isPresented: isPresented, alert: type, action: okAction, cancelAction: cancelAction))
+  }
 }

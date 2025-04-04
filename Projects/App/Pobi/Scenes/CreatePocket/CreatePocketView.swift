@@ -11,6 +11,7 @@ import PBDesignSystem
 import PBStorage
 import PBStorageInterface
 import NetworkService
+import LocalNotiService
 
 struct CreatePocketView: View {
   enum Mode {
@@ -20,12 +21,14 @@ struct CreatePocketView: View {
   
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
-  
+  @State private var isAppear = false
   @State private var icons = [String]()
-  @State private var isSelectedDate: Bool = false
-  @State private var isSelectedTime: Bool = false
-  @State private var isDidTapDownButton: Bool = false
-  @State private var isPresentedDataSelectView: Bool = false
+  @State private var isSelectedDate = false
+  @State private var isSelectedTime = false
+  @State private var isDidTapDownButton = false
+  @State private var isPresentedDataSelectView = false
+  @State private var isPresentedEditAlert = false
+  @State private var isPresentedOffAlarmAlert = false
   
   private let colors = PBColors.list.colors
   private let mode: Mode
@@ -280,6 +283,7 @@ struct CreatePocketView: View {
               }
             })
             .onAppear {
+              guard !isAppear else { return }
               Task {
                 do {
                   icons = try await NetworkClient.shared.request(
@@ -292,18 +296,21 @@ struct CreatePocketView: View {
                 } catch {
                   #warning("에러 처리")
                 }
+                isAppear = true
               }
             }
             PBRoundButton(16) {
-              pocket.deletePushAlarm()
-              if pocket.onAlarm {
-                let nickName = ProfileStorage.shared.loadNickname()
-                pocket.registerPushAlarm(userNickname: nickName ?? "사용자")
-              }
               if mode == .create {
+                if pocket.onAlarm {
+                  let nickName = ProfileStorage.shared.loadNickname()
+                  pocket.registerPushAlarm(userNickname: nickName ?? "사용자")
+                }
                 modelContext.insert(pocket)
+                try? modelContext.save()
+                dismiss()
+              } else {
+                isPresentedEditAlert.toggle()
               }
-              dismiss()
             } label: {
               Text("저장")
                 .foregroundStyle(.white)
@@ -312,6 +319,31 @@ struct CreatePocketView: View {
             .foregroundStyle(PBColors.navy._900.color)
             .frame(height: 52)
             .padding([.horizontal, .bottom], 14)
+          }
+        }
+        .pbAlert(isPresented: $isPresentedEditAlert, type: .edit) {
+          pocket.deletePushAlarm()
+          if pocket.onAlarm {
+            let nickName = ProfileStorage.shared.loadNickname()
+            pocket.registerPushAlarm(userNickname: nickName ?? "사용자")
+          }
+          try? modelContext.save()
+          dismiss()
+        }
+        .pbAlert(isPresented: $isPresentedOffAlarmAlert, type: .offAlarm) {
+          if let url = URL(string: UIApplication.openSettingsURLString) {
+            if UIApplication.shared.canOpenURL(url) {
+              UIApplication.shared.open(url)
+            }
+          }
+        }
+        .onChange(of: pocket.onAlarm) { _, newValue in
+          if newValue {
+            Task {
+              let isOnAlarm = await LocalNotiCenter.shared.isOnAlarm()
+              isPresentedOffAlarmAlert = !isOnAlarm
+              pocket.onAlarm = isOnAlarm
+            }
           }
         }
     }
@@ -327,6 +359,7 @@ struct CreatePocketView: View {
     .leftItem {
       if mode == .edit {
         Button {
+          modelContext.rollback()
           dismiss()
         } label: {
           PBImages.left.image

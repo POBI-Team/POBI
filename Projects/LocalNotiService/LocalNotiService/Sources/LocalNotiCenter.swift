@@ -12,6 +12,14 @@ public final class LocalNotiCenter: Sendable {
   
   init() {}
   
+  public func isOnAlarm() async -> Bool {
+    return await withCheckedContinuation { continuation in
+      UNUserNotificationCenter.current().getNotificationSettings { settings in
+        continuation.resume(returning: settings.authorizationStatus == .authorized)
+      }
+    }
+  }
+  
   @discardableResult
   public func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool {
     return try await withCheckedThrowingContinuation { continuation in

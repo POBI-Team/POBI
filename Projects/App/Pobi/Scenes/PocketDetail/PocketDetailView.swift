@@ -11,6 +11,7 @@ import PBDesignSystem
 import PBStorageInterface
 
 struct PocketDetailView: View {
+  @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
   private let pocket: PocketModel
   private let colors = PBColors.list.colors
@@ -46,6 +47,9 @@ struct PocketDetailView: View {
         .background(colors[pocket.colorIndex]._03.color)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         
+      }
+      .onDisappear {
+        try? modelContext.save()
       }
       .padding(.vertical, 20)
       .padding(.horizontal, 20)

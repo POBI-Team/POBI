@@ -16,6 +16,7 @@ import LocalNotiService
 struct MyPageView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
+  @State private var isPresentAlert: Bool = false
 
   var body: some View {
     PBNavigationBar {
@@ -75,12 +76,7 @@ struct MyPageView: View {
 //                }
 //              }
               Button {
-                LocalNotiCenter.shared.removeAll()
-                try? modelContext.fetch(FetchDescriptor<PocketModel>())
-                  .forEach({ pocket in
-                    modelContext.delete(pocket)
-                  })
-                try? modelContext.save()
+                isPresentAlert.toggle()
               } label: {
                 HStack {
                   Group {
@@ -132,6 +128,14 @@ struct MyPageView: View {
       .padding(.top, 36)
       .padding(.horizontal, 20)
       .background(PBColors.navy._10.color)
+      .pbAlert(isPresented: $isPresentAlert, type: .deleteAll) {
+        LocalNotiCenter.shared.removeAll()
+        try? modelContext.fetch(FetchDescriptor<PocketModel>())
+          .forEach({ pocket in
+            modelContext.delete(pocket)
+          })
+        try? modelContext.save()
+      }
     }
     .title("마이페이지")
     .leftItem {

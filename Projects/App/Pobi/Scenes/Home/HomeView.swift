@@ -16,6 +16,7 @@ struct HomeView: View {
   @Environment(\.modelContext) private var modelContext
   @State private var seletedTabIndex: Int = 0
   @Binding private var isPresentedCreate: Bool
+  @State private var isAppear = false
   
   init(isPresentedCreate: Binding<Bool>) {
     self._isPresentedCreate = isPresentedCreate
@@ -71,8 +72,10 @@ struct HomeView: View {
       }
     }
     .onAppear {
+      guard !isAppear else { return }
       Task {
         try await LocalNotiCenter.shared.requestAuthorization(options: [.alert, .sound])
+        isAppear = true
       }
     }
   }
