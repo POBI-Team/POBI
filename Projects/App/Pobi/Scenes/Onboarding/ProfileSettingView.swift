@@ -41,11 +41,9 @@ struct ProfileSettingView: View {
         
       }
       .padding(.bottom, 36)
-      PBTitleTextField(
-        text: $nickname,
-        placeholder: "별명을 입력해주세요!"
-      )
-      .padding(.horizontal, 44)
+      TextField("별명을 입력해주세요!", text: $nickname)
+        .underLine(text: $nickname)
+        .padding(.horizontal, 44)
       Spacer()
       PBRoundButton(16) {
         ProfileStorage.shared.saveNotFirstEntry()

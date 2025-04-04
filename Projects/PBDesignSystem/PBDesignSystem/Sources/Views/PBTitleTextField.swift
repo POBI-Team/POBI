@@ -7,39 +7,27 @@
 
 import SwiftUI
 
-public struct PBTitleTextField: View {
-  struct DottedLine: Shape {
-    func path(in rect: CGRect) -> Path {
-      var path = Path()
-      path.move(to: CGPoint(x: rect.minX, y: rect.midY))
-      path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
-      return path
-    }
+struct DottedLine: Shape {
+  func path(in rect: CGRect) -> Path {
+    var path = Path()
+    path.move(to: CGPoint(x: rect.minX, y: rect.midY))
+    path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+    return path
   }
+}
+
+struct PBTextFieldModifier: ViewModifier {
+  @Binding private var text: String
   
-  @Binding public var text: String
-  @FocusState private var isFocused: Bool
-  private let placeholder: String
-  
-  public init(
-    text: Binding<String>,
-    placeholder: String
-  ) {
+  init(text: Binding<String>) {
     self._text = text
-    self.placeholder = placeholder
   }
   
-  public var body: some View {
+  func body(content: Content) -> some View {
     VStack(spacing: 8) {
-      TextField(placeholder, text: $text)
+      content
         .multilineTextAlignment(.center)
         .font(PBFonts.body._1.font)
-        .focused($isFocused)
-        .onAppear {
-          isFocused = true
-        }
-      //.padding(.bottom, 8)
-      
       DottedLine()
         .stroke(
           style: StrokeStyle(
@@ -53,6 +41,9 @@ public struct PBTitleTextField: View {
   }
 }
 
-#Preview {
-  PBTitleTextField(text: .constant(""), placeholder: "플레이스 홀더")
+extension View {
+  public func underLine(text: Binding<String>) -> some View {
+    modifier(PBTextFieldModifier(text: text))
+  }
 }
+

@@ -44,10 +44,8 @@ struct ProfileEditView: View {
         }
         .padding(.top, 32)
         .padding(.bottom, 36)
-        PBTitleTextField(
-          text: $nickname,
-          placeholder: "별명을 입력해주세요!"
-        )
+        TextField("별명을 입력해주세요!", text: $nickname)
+          .underLine(text: $nickname)
       }
       .padding(.horizontal, 44)
       
@@ -55,6 +53,7 @@ struct ProfileEditView: View {
       PBRoundButton(16) {
         ProfileStorage.shared.saveNickname(nickname)
         ProfileStorage.shared.saveProfileImageType(profileType ?? .first)
+        dismiss()
       } label: {
         Text("프로필 설정하기")
           .foregroundStyle(.white)

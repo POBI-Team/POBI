@@ -29,6 +29,7 @@ struct CreatePocketView: View {
   @State private var isPresentedDataSelectView = false
   @State private var isPresentedEditAlert = false
   @State private var isPresentedOffAlarmAlert = false
+  @FocusState private var isFocused: Bool
   
   private let colors = PBColors.list.colors
   private let mode: Mode
@@ -56,14 +57,18 @@ struct CreatePocketView: View {
                     PBCircleEmojiView(pocket.icon, size: .xlarge)
                       .foregroundStyle(colors[pocket.colorIndex]._01.color)
                   }
-                  PBTitleTextField(
+                  TextField(
+                    "포켓 이름을 입력해주세요!",
                     text: Binding(
                       get: { pocket.title },
                       set: { pocket.title = $0 }
-                    ),
-                    placeholder: "포켓 이름을 입력해주세요!"
+                    )
                   )
-                  
+                  .focused($isFocused)
+                  .underLine(text: Binding(
+                    get: { pocket.title },
+                    set: { pocket.title = $0 }
+                  ))
                   if isDidTapDownButton {
                     VStack {
                       ScrollView(.horizontal, showsIndicators: false) {
