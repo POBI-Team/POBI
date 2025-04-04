@@ -53,7 +53,7 @@ public struct PBCheckBoxTextField: View {
       VStack(spacing: 2) {
         TextField("소지품  입력", text: $title)
           .font(PBFonts.body._2.font)
-          .foregroundStyle(PBColors.navy._900.color)
+          .foregroundStyle(isChecked ? PBColors.navy._100.color : PBColors.navy._900.color)
           .autocorrectionDisabled(true)
           .focused($isFocused)
         if !memo.isEmpty || isFocused || checkBox(title: title, isChecked: isChecked) == .deactivate {
@@ -85,4 +85,6 @@ private extension PBCheckBoxTextField {
 
 #Preview {
   PBCheckBoxTextField(title: .constant(""), memo: .constant(""), isChecked: .constant(false))
+  
+  PBCheckBoxTextField(title: .constant("aaa"), memo: .constant(""), isChecked: .constant(true))
 }
