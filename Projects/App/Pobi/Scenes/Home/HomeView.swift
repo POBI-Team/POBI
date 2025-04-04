@@ -17,6 +17,8 @@ struct HomeView: View {
   @State private var seletedTabIndex: Int = 0
   @Binding private var isPresentedCreate: Bool
   @State private var isAppear = false
+  @State private var profileImageType: ProfileImageType = .first
+  @State private var nickname: String = ""
   
   init(isPresentedCreate: Binding<Bool>) {
     self._isPresentedCreate = isPresentedCreate
@@ -26,7 +28,7 @@ struct HomeView: View {
     VStack(alignment: .leading, spacing: 20) {
       VStack(alignment: .leading, spacing: 4) {
         HStack {
-          Text("\(ProfileStorage.shared.loadNickname() ?? "사용자")의 포켓")
+          Text("\(nickname)의 포켓")
             .font(PBFonts.headline._1.font)
             .padding(.top, 29)
             .padding(.bottom, 20)
@@ -36,15 +38,9 @@ struct HomeView: View {
               .modelContext(modelContext)
           } label: {
             ZStack(alignment: .bottomTrailing) {
-              if let image = ProfileStorage.shared.loadProfileImageType()?.profileImage {
-                image
-                  .resizable()
-                  .frame(width: 48, height: 48)
-              } else {
-                Circle()
-                  .fill(Color.gray)
-                  .frame(width: 48, height: 48)
-              }
+              profileImageType.profileImage
+                .resizable()
+                .frame(width: 48, height: 48)
              
               Circle()
                 .overlay {
@@ -70,6 +66,10 @@ struct HomeView: View {
       NavigationStack {
         CreatePocketView(.create, pocket: .init())
       }
+    }
+    .onAppear {
+      self.profileImageType = ProfileStorage.shared.loadProfileImageType() ?? .first
+      self.nickname = ProfileStorage.shared.loadNickname() ?? "사용자"
     }
     .onAppear {
       guard !isAppear else { return }
