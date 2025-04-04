@@ -38,6 +38,7 @@ public struct PBNavigationBar<Content: View>: View {
       }
       content()
     }
+    .background(.white)
     .toolbar(.hidden)
   }
 }
