@@ -49,6 +49,7 @@ public struct PBSegmentView: View {
           }
           .padding(.horizontal, 14)
           .padding(.vertical, 9)
+          .frame(height: 36)
           .background(selected == i ? seletedColor : unSelectedColor)
           .clipShape(Capsule())
         }

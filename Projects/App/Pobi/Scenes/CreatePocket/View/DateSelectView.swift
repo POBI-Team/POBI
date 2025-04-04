@@ -64,10 +64,6 @@ struct DateSelectView: View {
   
   var body: some View {
     VStack(spacing: 0) {
-      Capsule()
-        .frame(width: 36, height: 5)
-        .padding(.bottom, 27)
-        .foregroundStyle(PBColors.navy._50.color)
       PBSegmentView(selected: $selectedTabIndex, items: .init("매주"), .init("매월"))
       if selectedTabIndex == 1 {
         LazyVGrid(columns: gridColumns) {
@@ -154,8 +150,9 @@ struct DateSelectView: View {
       .foregroundStyle(PBColors.navy._900.color)
       .frame(height: 48)
     }
-    .padding(.top, 5)
+    .padding(.top, 24)
     .padding(.horizontal, 20)
+    .presentationCornerRadius(30)
     .presentationDetents([.medium])
   }
 }
@@ -169,5 +166,8 @@ extension DateSelectView {
 }
 
 #Preview {
-  DateSelectView(pocket: .init())
+  Color.white
+    .sheet(isPresented: .constant(true), content: { DateSelectView(pocket: .init())
+          
+    })
 }

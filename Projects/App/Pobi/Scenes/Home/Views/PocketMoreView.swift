@@ -29,9 +29,6 @@ struct PocketMoreView: View {
       .ignoresSafeArea(.all)
       .overlay {
         VStack(spacing: 0) {
-          Capsule()
-            .foregroundStyle(PBColors.navy._50.color)
-            .frame(width: 36, height: 5)
           VStack(spacing: 1) {
             Button {
               isPresentedCreate = true
@@ -114,7 +111,7 @@ struct PocketMoreView: View {
             .background(.white)
           }
           .clipShape(RoundedRectangle(cornerRadius: 16))
-          .padding(.top, 27)
+          .padding(.top, 24)
           
           PBRoundButton(16) {
             dismiss()
@@ -146,6 +143,7 @@ struct PocketMoreView: View {
           }
         }
       }
+      .presentationCornerRadius(30)
       .presentationDetents([.height(331)])
   }
 }

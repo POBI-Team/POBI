@@ -29,9 +29,9 @@ struct PocketDetailView: View {
             Text(pocket.title)
               .font(PBFonts.title._1.font)
               .foregroundStyle(PBColors.navy._900.color)
-            HStack(spacing: 8) {
+            HStack(spacing: 6) {
               PBImages.clock.image
-              Text(alarmLabel)
+              alarmLabel
                 .font(PBFonts.label._1.font)
                 .foregroundStyle(PBColors.navy._400.color)
                 .lineLimit(1)
@@ -98,17 +98,27 @@ struct PocketDetailView: View {
 }
 
 private extension PocketDetailView {
-  var alarmLabel: String {
+  var alarmLabel: some View {
     if pocket.onAlarm {
       let time = PBFormatter.shared.label(pocket.alarm.time, format: "a h:mm", locale: Locale(identifier: "ko_KR"))
       if pocket.repeats {
         let days = PBFormatter.shared.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
-        return "\(days) / \(time)"
+        return AnyView(
+          HStack(spacing: 0) {
+            Text("\(days)").frame(maxWidth: 112)
+            Text(" / ")
+            Text("\(time)")
+          })
       }
       let date = PBFormatter.shared.label(pocket.alarm.date, format: "M월 d일")
-      return "\(date) / \(time)"
+      return AnyView(
+        HStack(spacing: 0) {
+          Text("\(date)").frame(maxWidth: 112)
+          Text(" / ")
+          Text("\(time)")
+        })
     }
-    return "알람 없음"
+    return AnyView(Text("알람 없음"))
   }
 }
 
@@ -119,6 +129,19 @@ private extension PocketDetailView {
         title: "테스트",
         onAlarm: true,
         alarm: PocketAlarmModel(isWeekRepeat: true, days: [1,2], date: .now, time: .now)
+      )
+    )
+  }
+}
+
+#Preview {
+  NavigationStack {
+    PocketDetailView(
+      PocketModel(
+        title: "테스트",
+        onAlarm: true,
+        repeats: true,
+        alarm: PocketAlarmModel(isWeekRepeat: true, days: [1,2,3,4,5,6], date: .now, time: .now)
       )
     )
   }

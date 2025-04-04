@@ -23,21 +23,23 @@ struct PocketCell: View {
   }
   
   var body: some View {
-    VStack(alignment: .leading) {
+    VStack(alignment: .leading, spacing: 0) {
       Spacer()
         .frame(height: 16)
-      PBCircleEmojiView(pocket.icon, size: .small)
-        .foregroundStyle(colors[pocket.colorIndex]._01.color)
-        .frame(width: 32, height: 32)
-        .padding(.leading, 16)
-      Spacer()
-      VStack(alignment: .leading, spacing: 4) {
-        Text(pocket.title)
-          .font(PBFonts.title._2.font)
-          .foregroundStyle(PBColors.navy._900.color)
-        Text(alarmLabel)
-          .font(PBFonts.label._1.font)
-          .foregroundStyle(PBColors.navy._400.color)
+      VStack(alignment: .leading, spacing: 10) {
+        PBCircleEmojiView(pocket.icon, size: .small)
+          .foregroundStyle(.white)
+          .frame(width: 36, height: 36)
+        VStack(alignment: .leading, spacing: 6) {
+          Text(pocket.title)
+            .lineLimit(1)
+            .font(PBFonts.title._2.font)
+            .foregroundStyle(PBColors.navy._900.color)
+          Text(alarmLabel)
+            .font(PBFonts.label._1.font)
+            .lineLimit(1)
+            .foregroundStyle(PBColors.navy._400.color)
+        }
       }
       .padding(.horizontal, 16)
       Spacer()
@@ -94,7 +96,7 @@ private extension PocketCell {
 }
 
 #Preview("week") {
-  PocketCell(.init(id: .init(), title: "테스트", onAlarm: true, repeats: true, alarm: .init(isWeekRepeat: true, days: [1,2], date: .now, time: .now)))
+  PocketCell(.init(id: .init(), title: "테스트", onAlarm: true, repeats: true, alarm: .init(isWeekRepeat: true, days: [1,2,3,4,5,6], date: .now, time: .now)))
 }
 
 #Preview("day") {

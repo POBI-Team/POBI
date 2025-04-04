@@ -71,7 +71,7 @@ public enum Label {
 }
 
 public enum TossFace {
-  public static var small: UIFont { .custom(.tossFace, size: 22) }
+  public static var small: UIFont { .custom(.tossFace, size: 20) }
   public static var medium: UIFont { .custom(.tossFace, size: 23) }
   public static var large: UIFont { .custom(.tossFace, size: 35) }
   public static var xlarge: UIFont { .custom(.tossFace, size: 80) }

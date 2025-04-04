@@ -85,4 +85,5 @@ struct PocketList: View {
 
 #Preview {
   PocketList(seletedTabIndex: 0)
+    .environmentObject(NotificationManager())
 }

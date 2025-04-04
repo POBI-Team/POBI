@@ -51,7 +51,7 @@ public struct PBCheckBoxTextField: View {
       .buttonStyle(PlainButtonStyle())
       
       VStack(spacing: 2) {
-        TextField("소지품  입력", text: $title)
+        TextField("소지품", text: $title)
           .font(PBFonts.body._2.font)
           .foregroundStyle(isChecked ? PBColors.navy._100.color : PBColors.navy._900.color)
           .autocorrectionDisabled(true)
