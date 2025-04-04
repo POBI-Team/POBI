@@ -44,7 +44,12 @@ struct ProfileSettingView: View {
         
       }
       .padding(.bottom, 36)
-      TextField("별명을 입력해주세요!", text: $nickname)
+      TextField("별명을 입력해주세요! (7자 이내)", text: $nickname)
+        .onChange(of: nickname) { oldValue, newValue in
+          if newValue.count > 7 {
+            nickname = oldValue
+          }
+        }
         .focused($isFocused)
         .underLine(text: $nickname)
         .padding(.horizontal, 44)
@@ -59,6 +64,7 @@ struct ProfileSettingView: View {
           .foregroundStyle(.white)
           .font(PBFonts.button._1.font)
       }
+      .disabled(nickname.isEmpty)
       .frame(height: 52)
       .padding(.horizontal, 20)
       .padding(.bottom, 12)

@@ -44,13 +44,29 @@ struct CreatePocketView: View {
     PBNavigationBar {
       PBColors.navy._10.color
         .ignoresSafeArea(.all)
+        .pbAlert(isPresented: $isPresentedEditAlert, type: .edit) {
+          pocket.deletePushAlarm()
+          if pocket.onAlarm {
+            let nickName = ProfileStorage.shared.loadNickname()
+            pocket.registerPushAlarm(userNickname: nickName ?? "사용자")
+          }
+          try? modelContext.save()
+          dismiss()
+        }
+        .pbAlert(isPresented: $isPresentedOffAlarmAlert, type: .offAlarm) {
+          if let url = URL(string: UIApplication.openSettingsURLString) {
+            if UIApplication.shared.canOpenURL(url) {
+              UIApplication.shared.open(url)
+            }
+          }
+        }
         .overlay {
           VStack {
             ScrollView {
               VStack(spacing: 12) {
                 VStack(alignment: .center, spacing: 16) {
                   Button {
-                    withAnimation {
+                    withAnimation(.default.speed(1.5)) {
                       isDidTapDownButton.toggle()
                       isFocused = false
                       isSelectedDate = false
@@ -72,79 +88,80 @@ struct CreatePocketView: View {
                     get: { pocket.title },
                     set: { pocket.title = $0 }
                   ))
-                  if isDidTapDownButton {
-                    VStack {
-                      ScrollView(.horizontal, showsIndicators: false) {
+                  VStack {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                      LazyHGrid(
+                        rows: [GridItem(.flexible())],
+                        spacing: 12
+                      ) {
+                        ForEach(colors.indices, id: \.self) { i in
+                          Button {
+                            withAnimation {
+                              pocket.colorIndex = i
+                              isFocused = false
+                            }
+                          } label: {
+                            PBSelectableCircleView(isSelected: pocket.colorIndex == i) {
+                              Circle()
+                                .frame(width: 40, height: 40)
+                                .foregroundStyle(Color.clear)
+                                .overlay {
+                                  Circle()
+                                    .frame(width: 36, height: 36)
+                                    .foregroundStyle(colors[i]._01.color)
+                                }
+                            }
+                          }
+                        }
+                      }
+                      .padding(.horizontal, 24)
+                    }
+                    .frame(height: 72)
+                    .background(PBColors.navy._10.color)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                      if icons.isEmpty {
+                        ProgressView()
+                      } else {
                         LazyHGrid(
-                          rows: [GridItem(.flexible())],
+                          rows: [
+                            GridItem(.flexible()),
+                            GridItem(.flexible()),
+                            GridItem(.flexible()),
+                            GridItem(.flexible())
+                          ],
                           spacing: 12
                         ) {
-                          ForEach(colors.indices, id: \.self) { i in
+                          ForEach(icons.indices, id: \.self) { i in
                             Button {
                               withAnimation {
-                                pocket.colorIndex = i
+                                pocket.icon = icons[i]
                                 isFocused = false
                               }
                             } label: {
-                              PBSelectableCircleView(isSelected: pocket.colorIndex == i) {
-                                Circle()
-                                  .frame(width: 40, height: 40)
-                                  .foregroundStyle(Color.clear)
-                                  .overlay {
-                                    Circle()
-                                      .frame(width: 36, height: 36)
-                                      .foregroundStyle(colors[i]._01.color)
-                                  }
+                              PBSelectableCircleView(isSelected: pocket.icon == icons[i]) {
+                                PBCircleEmojiView(icons[i], size: .medium)
+                                  .foregroundStyle(Color.white)
                               }
                             }
                           }
                         }
+                        .padding(.vertical, 18)
                         .padding(.horizontal, 24)
                       }
-                      .frame(height: 72)
-                      .background(PBColors.navy._10.color)
-                      .clipShape(RoundedRectangle(cornerRadius: 8))
                       
-                      ScrollView(.horizontal, showsIndicators: false) {
-                        if icons.isEmpty {
-                          ProgressView()
-                        } else {
-                          LazyHGrid(
-                            rows: [
-                              GridItem(.flexible()),
-                              GridItem(.flexible()),
-                              GridItem(.flexible()),
-                              GridItem(.flexible())
-                            ],
-                            spacing: 12
-                          ) {
-                            ForEach(icons.indices, id: \.self) { i in
-                              Button {
-                                withAnimation(.easeIn.speed(2.5)) {
-                                  pocket.icon = icons[i]
-                                  isFocused = false
-                                }
-                              } label: {
-                                PBSelectableCircleView(isSelected: pocket.icon == icons[i]) {
-                                  PBCircleEmojiView(icons[i], size: .medium)
-                                    .foregroundStyle(Color.white)
-                                }
-                              }
-                            }
-                          }
-                          .padding(.vertical, 18)
-                          .padding(.horizontal, 24)
-                        }
-                        
-                      }
-                      .frame(height: 232)
-                      .background(PBColors.navy._10.color)
-                      .clipShape(RoundedRectangle(cornerRadius: 8))
                     }
+                    .frame(height: 232)
+                    .background(PBColors.navy._10.color)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
                   }
+                  .disabled(!isDidTapDownButton)
+                  .frame(height: isDidTapDownButton ? nil : 0, alignment: .top)
+                  .clipped()
                   
                   Button {
-                    withAnimation {
+                    withAnimation(.default.speed(1.5)) {
                       isDidTapDownButton.toggle()
                       isFocused = false
                       isSelectedDate = false
@@ -165,11 +182,12 @@ struct CreatePocketView: View {
                   Toggle(
                     isOn: Binding(
                       get: { pocket.onAlarm },
-                      set: { pocket.onAlarm = $0 }
+                      set: { setOnAlarm(valeu: $0) }
                     )
                   ) {
                     Text("알림")
                       .font(PBFonts.body._2.font)
+                      .foregroundStyle(PBColors.navy._900.color)
                   }
                   .tint(PBColors.yellow._500.color)
                 }
@@ -179,16 +197,18 @@ struct CreatePocketView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 20))
                 
                 if pocket.onAlarm {
-                  VStack(alignment: .center, spacing: 16) {
+                  VStack(alignment: .center, spacing: 0) {
                     PBAlarmSegmentControl(
                       isRepeated: Binding(
                         get: { pocket.repeats },
                         set: { pocket.repeats = $0 }
                       )
                     )
+                    .padding(.bottom, 20)
                     HStack {
                       Text(pocket.repeats ? "반복" : "날짜")
                         .font(PBFonts.body._2.font)
+                        .foregroundStyle(PBColors.navy._900.color)
                       Spacer()
                       if pocket.repeats {
                         Button {
@@ -207,7 +227,7 @@ struct CreatePocketView: View {
                         }
                       } else {
                         PBRoundButton(10) {
-                          withAnimation {
+                          withAnimation(.default.speed(1.5)) {
                             isSelectedDate.toggle()
                             isDidTapDownButton = false
                             isFocused = false
@@ -222,36 +242,44 @@ struct CreatePocketView: View {
                         .foregroundStyle(PBColors.navy._50.color)
                       }
                     }
+                    .padding(.bottom, 8)
                     
-                    if isSelectedDate {
-                      VStack {
+                    VStack(spacing: 0) {
+                      if isSelectedDate {
                         Divider()
-                        DatePicker(
-                          "",
-                          selection: Binding(get: {
-                            pocket.alarm.date
-                          }, set: {
-                            pocket.alarm.date = $0
-                          }),
-                          displayedComponents: .date
-                        )
-                        .tint(PBColors.yellow._500.color)
-                        .datePickerStyle(.graphical)
-                        .environment(\.locale, Locale(identifier: Locale.preferredLanguages[0]))
+                      }
+                     
+                      DatePicker(
+                        "",
+                        selection: Binding(get: {
+                          pocket.alarm.date
+                        }, set: {
+                          pocket.alarm.date = $0
+                        }),
+                        displayedComponents: .date
+                      )
+                      .frame(height: isSelectedDate ? nil : 0, alignment: .top)
+                      .tint(PBColors.yellow._500.color)
+                      .datePickerStyle(.graphical)
+                      .environment(\.locale, Locale(identifier: Locale.preferredLanguages[0]))
+                      if isSelectedDate {
                         Divider()
                       }
                     }
+                    .disabled(!isSelectedDate)
+                    .clipped()
                     
                     HStack {
                       Text("시간")
+                        .foregroundStyle(PBColors.navy._900.color)
                         .font(PBFonts.body._2.font)
                       Spacer()
                       PBRoundButton(10) {
-                        withAnimation {
+                        withAnimation(.default.speed(1.5)) {
                           isSelectedTime.toggle()
-                          isSelectedDate = false
                           isDidTapDownButton = false
                           isFocused = false
+                          isSelectedDate = false
                         }
                       } label: {
                         Text(timeLabel)
@@ -261,24 +289,28 @@ struct CreatePocketView: View {
                       .frame(width: 84, height: 34)
                       .foregroundStyle(PBColors.navy._50.color)
                     }
+                    .padding(.top, 8)
                     
-                    if isSelectedTime {
-                      VStack {
+                    VStack(spacing: 0) {
+                      if isSelectedTime {
                         Divider()
-                        DatePicker(
-                          "",
-                          selection: Binding(get: {
-                            pocket.alarm.time
-                          }, set: {
-                            pocket.alarm.time = $0
-                          }),
-                          displayedComponents: .hourAndMinute
-                        )
-                        .datePickerStyle(.wheel)
-                        .frame(width: 221)
-                        Divider()
+                          .padding(.top, 8)
                       }
+                      
+                      DatePicker(
+                        "",
+                        selection: Binding(get: {
+                          pocket.alarm.time
+                        }, set: {
+                          pocket.alarm.time = $0
+                        }),
+                        displayedComponents: .hourAndMinute
+                      )
+                      .datePickerStyle(.wheel)
+                      .frame(width: 221, height: isSelectedTime ? nil : 0, alignment: .top)
                     }
+                    .disabled(!isSelectedTime)
+                    .clipped()
                   }
                   .padding(.horizontal, 16)
                   .padding([.vertical], 16)
@@ -329,45 +361,19 @@ struct CreatePocketView: View {
                 isPresentedEditAlert.toggle()
               }
             } label: {
-              Text("저장")
+              Text("완료")
                 .foregroundStyle(.white)
-                .font(PBFonts.body._1.font)
+                .font(PBFonts.button._1.font)
             }
             .foregroundStyle(PBColors.navy._900.color)
             .frame(height: 52)
             .padding([.horizontal, .bottom], 14)
-          }
-          .onTapGesture {
-            isFocused = false
-          }
-        }
-        .pbAlert(isPresented: $isPresentedEditAlert, type: .edit) {
-          pocket.deletePushAlarm()
-          if pocket.onAlarm {
-            let nickName = ProfileStorage.shared.loadNickname()
-            pocket.registerPushAlarm(userNickname: nickName ?? "사용자")
-          }
-          try? modelContext.save()
-          dismiss()
-        }
-        .pbAlert(isPresented: $isPresentedOffAlarmAlert, type: .offAlarm) {
-          if let url = URL(string: UIApplication.openSettingsURLString) {
-            if UIApplication.shared.canOpenURL(url) {
-              UIApplication.shared.open(url)
-            }
           }
         }
         .onChange(of: pocket.onAlarm) { _, newValue in
           withAnimation {
             isFocused = false
             isDidTapDownButton = false
-          }
-          if newValue {
-            Task {
-              let isOnAlarm = await LocalNotiCenter.shared.isOnAlarm()
-              isPresentedOffAlarmAlert = !isOnAlarm
-              pocket.onAlarm = isOnAlarm
-            }
           }
         }
         .sheet(isPresented: $isPresentedDataSelectView) {
@@ -407,6 +413,21 @@ private extension CreatePocketView {
   
   var repeatLabel: String {
     PBFormatter.shared.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
+  }
+  
+  func setOnAlarm(valeu: Bool) {
+    if valeu {
+      Task {
+        if await LocalNotiCenter.shared.isOnAlarm() {
+          pocket.onAlarm = valeu
+        } else {
+          isPresentedOffAlarmAlert = true
+        }
+      }
+    } else {
+      pocket.onAlarm = valeu
+    }
+    
   }
 }
 

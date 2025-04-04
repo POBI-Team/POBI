@@ -81,7 +81,7 @@ struct MyPageView: View {
                 HStack {
                   Group {
                     PBImages.trash.image
-                    Text("모든 리스트 초기화")
+                    Text("모든 포켓 초기화")
                       .font(PBFonts.body._2.font)
                   }
                   .foregroundStyle(PBColors.red.color)
@@ -110,7 +110,7 @@ struct MyPageView: View {
                   .padding(.horizontal, 16)
                   .overlay {
                     Text("포비에게 카톡하기")
-                      .font(PBFonts.body._4.font)
+                      .font(PBFonts.label._1.font)
                       .foregroundStyle(PBColors.yellow._700.color)
                   }
               }

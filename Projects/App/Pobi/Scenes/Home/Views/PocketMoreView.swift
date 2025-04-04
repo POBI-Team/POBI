@@ -8,6 +8,7 @@
 import SwiftUI
 
 import PBDesignSystem
+import PBStorage
 import PBStorageInterface
 import LocalNotiService
 
@@ -30,46 +31,49 @@ struct PocketMoreView: View {
       .overlay {
         VStack(spacing: 0) {
           VStack(spacing: 1) {
-            Button {
-              isPresentedCreate = true
-              dismiss()
-            } label: {
-              HStack(spacing: 8) {
-                PBImages.edit.image
-                Text("수정하기")
-                  .foregroundStyle(PBColors.navy._900.color)
-                  .font(PBFonts.button._1.font)
-                Spacer()
+            if !pocket.isHidden {
+              Button {
+                isPresentedCreate = true
+                dismiss()
+              } label: {
+                HStack(spacing: 8) {
+                  PBImages.setting.image
+                  Text("설정하기")
+                    .foregroundStyle(PBColors.navy._900.color)
+                    .font(PBFonts.button._3.font)
+                  Spacer()
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 14)
               }
-              .padding(.horizontal, 20)
-              .padding(.vertical, 14)
+              .background(.white)
+              
+              Button {
+                dismiss()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                  let newPocket = pocket.copy()
+                  modelContext.insert(newPocket)
+                  try? modelContext.save()
+                }
+              } label: {
+                HStack(spacing: 8) {
+                  PBImages.copy.image
+                  Text("복제하기")
+                    .foregroundStyle(PBColors.navy._900.color)
+                    .font(PBFonts.button._3.font)
+                  Spacer()
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 14)
+              }
+              .background(.white)
             }
-            .background(.white)
-            
-            Button {
-              dismiss()
-              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                let newPocket = pocket.copy()
-                modelContext.insert(newPocket)
-                try? modelContext.save()
-              }
-            } label: {
-              HStack(spacing: 8) {
-                PBImages.copy.image
-                Text("복제하기")
-                  .foregroundStyle(PBColors.navy._900.color)
-                  .font(PBFonts.button._1.font)
-                Spacer()
-              }
-              .padding(.horizontal, 20)
-              .padding(.vertical, 14)
-            }
-            .background(.white)
             
             Button {
               if !pocket.isHidden {
                 isPresentedHiddenAlert.toggle()
               } else {
+                pocket.registerPushAlarm(userNickname: ProfileStorage.shared.loadNickname() ?? "사용자")
                 dismiss()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                   pocket.isHidden.toggle()
@@ -85,7 +89,7 @@ struct PocketMoreView: View {
                 }
                 Text(pocket.isHidden ? "포켓 숨기기 해제" : "포켓 숨기기")
                   .foregroundStyle(PBColors.navy._900.color)
-                  .font(PBFonts.button._1.font)
+                  .font(PBFonts.button._3.font)
                 Spacer()
               }
               .padding(.horizontal, 20)
@@ -100,7 +104,7 @@ struct PocketMoreView: View {
                 Group {
                   PBImages.trash.image
                   Text("삭제하기")
-                    .font(PBFonts.button._1.font)
+                    .font(PBFonts.button._3.font)
                 }
                 .foregroundStyle(PBColors.red.color)
                 Spacer()
@@ -118,7 +122,7 @@ struct PocketMoreView: View {
           } label: {
             Text("닫기")
               .foregroundStyle(PBColors.navy._900.color)
-              .font(PBFonts.button._1.font)
+              .font(PBFonts.button._3.font)
           }
           .frame(height: 52)
           .foregroundStyle(.white)
@@ -136,6 +140,7 @@ struct PocketMoreView: View {
           }
         }
         .pbAlert(isPresented: $isPresentedHiddenAlert, type: .hidden) {
+          pocket.deletePushAlarm()
           dismiss()
           DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             pocket.isHidden.toggle()
@@ -144,7 +149,7 @@ struct PocketMoreView: View {
         }
       }
       .presentationCornerRadius(30)
-      .presentationDetents([.height(331)])
+      .presentationDetents([.height(pocket.isHidden ? 227 : 331)])
   }
 }
 
@@ -154,5 +159,14 @@ struct PocketMoreView: View {
       isPresented: .constant(true),
       content: {
         PocketMoreView(.init(id: .init(), title: "테스트"), isPresentedCreate: .constant(false))
+      })
+}
+
+#Preview("숨김") {
+  Color.white
+    .sheet(
+      isPresented: .constant(true),
+      content: {
+        PocketMoreView(.init(id: .init(), title: "테스트", isHidden: true), isPresentedCreate: .constant(false))
       })
 }

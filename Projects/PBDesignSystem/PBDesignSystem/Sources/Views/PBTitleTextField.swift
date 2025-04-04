@@ -28,6 +28,7 @@ struct PBTextFieldModifier: ViewModifier {
       content
         .multilineTextAlignment(.center)
         .font(PBFonts.body._1.font)
+        .foregroundStyle(PBColors.navy._900.color)
       DottedLine()
         .stroke(
           style: StrokeStyle(

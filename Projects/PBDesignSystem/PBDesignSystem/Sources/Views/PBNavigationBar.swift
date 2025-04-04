@@ -33,6 +33,7 @@ public struct PBNavigationBar<Content: View>: View {
       .overlay {
         if let title {
           Text(title)
+            .foregroundStyle(PBColors.navy._900.color)
             .font(PBFonts.title._1.font)
         }
       }

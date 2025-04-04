@@ -43,14 +43,17 @@ public struct PBCheckBoxTextField: View {
   public var body: some View {
     HStack(alignment: .top) {
       Button {
-        isChecked.toggle()
+        withAnimation {
+          isChecked.toggle()
+        }
+        
       } label: {
         checkBox(title: title, isChecked: isChecked).checkBoxImage
       }
       .disabled(checkBox(title: title, isChecked: isChecked) == .deactivate)
       .buttonStyle(PlainButtonStyle())
       
-      VStack(spacing: 2) {
+      VStack(spacing: 4) {
         TextField("소지품", text: $title)
           .font(PBFonts.body._2.font)
           .foregroundStyle(isChecked ? PBColors.navy._100.color : PBColors.navy._900.color)

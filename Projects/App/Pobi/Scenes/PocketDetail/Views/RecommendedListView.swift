@@ -54,8 +54,8 @@ struct RecommendedListView: View {
                   .foregroundStyle(iconColor(items[i]))
                   .rotationEffect(.init(degrees: iconAngle(items[i])))
               }
+              .frame(height: 48)
               .padding(.horizontal, 20)
-              .padding(.vertical, 13)
               .background(cellBackgroundColor(items[i]))
               .clipShape(RoundedRectangle(cornerRadius: 12))
               .onTapGesture {

@@ -39,6 +39,7 @@ struct OnboardingView: View {
             .font(PBFonts.body._1.font)
             .foregroundStyle(PBColors.navy._200.color)
             .padding(.bottom, 69)
+            .multilineTextAlignment(.center)
           PBImages.onboardingFirst.image
         }
         .tag(0)
@@ -49,6 +50,7 @@ struct OnboardingView: View {
             .foregroundStyle(PBColors.navy._900.color)
             .padding(.bottom, 20)
           Text("여행, 출근, 운동 등 상황별 포켓을\n만들고 소지품을 추가하세요.")
+            .multilineTextAlignment(.center)
             .font(PBFonts.body._1.font)
             .foregroundStyle(PBColors.navy._200.color)
             .padding(.bottom, 35)
@@ -63,6 +65,7 @@ struct OnboardingView: View {
             .padding(.bottom, 20)
           Text("포비가 소지품을 챙기도록 알려주고,\n상황별 추천 리스트도 제공해요!")
             .font(PBFonts.body._1.font)
+            .multilineTextAlignment(.center)
             .foregroundStyle(PBColors.navy._200.color)
             .padding(.bottom, 35)
           PBImages.onboardingThird.image

@@ -47,14 +47,15 @@ struct HomeView: View {
                   PBImages.settingFill.image
                 }
                 .foregroundStyle(PBColors.navy._10.color)
-                .frame(width: 24, height: 24)
-                .padding([.bottom, .trailing], -8)
+                .frame(width: 28, height: 28)
+                .padding(.trailing, -8)
+                .padding(.bottom, -10)
             }
           }
           .buttonStyle(.plain)
         }
         PBSegmentView(
-          selected: $seletedTabIndex, items: .init("전체"), .init("숨긴 포켓")
+          selected: $seletedTabIndex, items: .init("내 포켓"), .init("숨긴 포켓")
         )
       }
       .padding(.leading, 4)
@@ -83,4 +84,5 @@ struct HomeView: View {
 
 #Preview {
   HomeView(isPresentedCreate: .constant(false))
+    .environmentObject(NotificationManager())
 }

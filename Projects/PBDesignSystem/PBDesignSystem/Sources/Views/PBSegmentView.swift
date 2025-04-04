@@ -47,9 +47,9 @@ public struct PBSegmentView: View {
             Text(items[i].title)
               .font(PBFonts.caption._1.font)
           }
-          .padding(.horizontal, 14)
-          .padding(.vertical, 9)
-          .frame(height: 36)
+          .padding(.horizontal, items[i].icon != nil ? 14 : 16)
+          .padding(.vertical, items[i].icon != nil ? 8 : 7)
+          .frame(height: items[i].icon != nil ? 40 : 36)
           .background(selected == i ? seletedColor : unSelectedColor)
           .clipShape(Capsule())
         }
@@ -77,7 +77,7 @@ public extension PBSegmentView {
 #Preview {
   PBSegmentView(
     selected: .constant(0),
-    items: .init("전체", icon: "✏️"), .init("숨김", icon: "✏️")
+    items: .init("전체"), .init("숨김", icon: "✏️")
   )
-  .unSelectedColor(.clear)
+  //.unSelectedColor(.clear)
 }
