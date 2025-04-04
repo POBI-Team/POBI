@@ -14,6 +14,7 @@ struct ProfileSettingView: View {
   @State private var nickname: String = ""
   @State private var profileTpye: ProfileImageType = .first
   @State private var isPresnetedComplete: Bool = false
+  @FocusState private var isFocused: Bool
   
   var body: some View {
     VStack {
@@ -24,6 +25,7 @@ struct ProfileSettingView: View {
         .padding(.bottom, 41)
       HStack(spacing: 20) {
         Button {
+          isFocused = false
           profileTpye = .first
         } label: {
           PBImages.profileFirst.image
@@ -32,6 +34,7 @@ struct ProfileSettingView: View {
         .buttonStyle(PlainButtonStyle())
         
         Button {
+          isFocused = false
           profileTpye = .second
         } label: {
           PBImages.profileSecond.image
@@ -42,6 +45,7 @@ struct ProfileSettingView: View {
       }
       .padding(.bottom, 36)
       TextField("별명을 입력해주세요!", text: $nickname)
+        .focused($isFocused)
         .underLine(text: $nickname)
         .padding(.horizontal, 44)
       Spacer()
@@ -62,6 +66,9 @@ struct ProfileSettingView: View {
       .navigationDestination(isPresented: $isPresnetedComplete) {
         CompleteView()
       }
+    }
+    .onTapGesture {
+      isFocused = false
     }
     .toolbar(.hidden)
   }

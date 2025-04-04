@@ -52,6 +52,9 @@ struct CreatePocketView: View {
                   Button {
                     withAnimation {
                       isDidTapDownButton.toggle()
+                      isFocused = false
+                      isSelectedDate = false
+                      isSelectedTime = false
                     }
                   } label: {
                     PBCircleEmojiView(pocket.icon, size: .xlarge)
@@ -80,6 +83,7 @@ struct CreatePocketView: View {
                             Button {
                               withAnimation {
                                 pocket.colorIndex = i
+                                isFocused = false
                               }
                             } label: {
                               PBSelectableCircleView(isSelected: pocket.colorIndex == i) {
@@ -118,6 +122,7 @@ struct CreatePocketView: View {
                               Button {
                                 withAnimation(.easeIn.speed(2.5)) {
                                   pocket.icon = icons[i]
+                                  isFocused = false
                                 }
                               } label: {
                                 PBSelectableCircleView(isSelected: pocket.icon == icons[i]) {
@@ -141,6 +146,9 @@ struct CreatePocketView: View {
                   Button {
                     withAnimation {
                       isDidTapDownButton.toggle()
+                      isFocused = false
+                      isSelectedDate = false
+                      isSelectedTime = false
                     }
                     
                   } label: {
@@ -201,6 +209,9 @@ struct CreatePocketView: View {
                         PBRoundButton(10) {
                           withAnimation {
                             isSelectedDate.toggle()
+                            isDidTapDownButton = false
+                            isFocused = false
+                            isSelectedTime = false
                           }
                         } label: {
                           Text(dateLabel)
@@ -238,6 +249,9 @@ struct CreatePocketView: View {
                       PBRoundButton(10) {
                         withAnimation {
                           isSelectedTime.toggle()
+                          isSelectedDate = false
+                          isDidTapDownButton = false
+                          isFocused = false
                         }
                       } label: {
                         Text(timeLabel)
@@ -277,11 +291,9 @@ struct CreatePocketView: View {
               .padding(.horizontal, 20)
               .padding(.top, 24)
             }
-            .scrollDismissesKeyboard(.interactively)
+            .scrollIndicators(.hidden)
+            .scrollDismissesKeyboard(.immediately)
             .animation(.easeInOut, value: pocket.onAlarm)
-            .sheet(isPresented: $isPresentedDataSelectView) {
-              DateSelectView(pocket: pocket)
-            }
             .onChange(of: pocket.repeats, { _, _ in
               withAnimation {
                 isSelectedDate = false
@@ -325,6 +337,9 @@ struct CreatePocketView: View {
             .frame(height: 52)
             .padding([.horizontal, .bottom], 14)
           }
+          .onTapGesture {
+            isFocused = false
+          }
         }
         .pbAlert(isPresented: $isPresentedEditAlert, type: .edit) {
           pocket.deletePushAlarm()
@@ -343,6 +358,10 @@ struct CreatePocketView: View {
           }
         }
         .onChange(of: pocket.onAlarm) { _, newValue in
+          withAnimation {
+            isFocused = false
+            isDidTapDownButton = false
+          }
           if newValue {
             Task {
               let isOnAlarm = await LocalNotiCenter.shared.isOnAlarm()
@@ -350,6 +369,9 @@ struct CreatePocketView: View {
               pocket.onAlarm = isOnAlarm
             }
           }
+        }
+        .sheet(isPresented: $isPresentedDataSelectView) {
+          DateSelectView(pocket: pocket)
         }
     }
     .rightItem {

@@ -26,6 +26,7 @@ struct ProfileEditView: View {
       VStack {
         HStack(spacing: 20) {
           Button {
+            isFocused = false
             profileType = .first
           } label: {
             PBImages.profileFirst.image
@@ -34,6 +35,7 @@ struct ProfileEditView: View {
           .buttonStyle(PlainButtonStyle())
           
           Button {
+            isFocused = false
             profileType = .second
           } label: {
             PBImages.profileSecond.image
@@ -45,9 +47,13 @@ struct ProfileEditView: View {
         .padding(.top, 32)
         .padding(.bottom, 36)
         TextField("별명을 입력해주세요!", text: $nickname)
+          .focused($isFocused)
           .underLine(text: $nickname)
       }
       .padding(.horizontal, 44)
+      .onTapGesture {
+        isFocused = false
+      }
       
       Spacer()
       PBRoundButton(16) {
