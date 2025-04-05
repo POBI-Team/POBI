@@ -220,9 +220,9 @@ struct CreatePocketView: View {
                               .font(PBFonts.caption._1.font)
                               .foregroundStyle(PBColors.navy._300.color)
                               .lineLimit(1)
+                              .frame(maxWidth: 150, alignment: .trailing)
                             PBImages.right.image
                           }
-                          .frame(maxWidth: 125)
                           .frame(height: 34)
                         }
                       } else {

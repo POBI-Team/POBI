@@ -32,6 +32,10 @@ struct PocketDetailView: View {
             HStack(spacing: 6) {
               if pocket.isHidden {
                 PBImages.eyeOff.image
+                  .renderingMode(.template)
+                  .resizable()
+                  .frame(width: 16, height: 16)
+                  .foregroundStyle(PBColors.navy._400.color)
               } else {
                 PBImages.clock.image
               }
@@ -97,7 +101,10 @@ struct PocketDetailView: View {
         CreatePocketView(.edit, pocket: pocket)
       } label: {
         PBImages.setting.image
+          .renderingMode(.template)
       }
+      .tint(PBColors.navy._900.color)
+      .disabled(pocket.isHidden)
     }
   }
 }

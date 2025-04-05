@@ -101,9 +101,7 @@ struct MyPageView: View {
                 .lineSpacing(7)
                 .font(PBFonts.body._4.font)
                 .padding(.horizontal, 20)
-              Button {
-                
-              } label: {
+              Link(destination: URL(string: "https://pf.kakao.com/_LHHxfn")!) {
                 Capsule()
                   .frame(width: 133, height: 40)
                   .foregroundStyle(PBColors.yellow._50.color)
@@ -114,7 +112,6 @@ struct MyPageView: View {
                       .foregroundStyle(PBColors.yellow._700.color)
                   }
               }
-              .buttonStyle(.plain)
             }
             Spacer()
             PBImages.pobiInquiry.image
