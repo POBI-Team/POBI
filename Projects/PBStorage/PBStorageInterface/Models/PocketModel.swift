@@ -57,16 +57,6 @@ public final class PocketModel {
     newPocket.items = self.items.map { $0.copy() }
     return newPocket
   }
-  
-  public func paste(_ pocket: PocketModel) {
-    self.title = pocket.title
-    self.onAlarm = pocket.onAlarm
-    self.repeats = pocket.repeats
-    self.colorIndex = pocket.colorIndex
-    self.icon = pocket.icon
-    self.isHidden = pocket.isHidden
-    self.alarm = pocket.alarm
-  }
     
   public func deleteItem(withId id: UUID) {
     if let index = items.firstIndex(where: { $0.id == id }) {
