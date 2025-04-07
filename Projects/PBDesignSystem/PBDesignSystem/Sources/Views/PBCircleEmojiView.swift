@@ -24,10 +24,18 @@ public struct PBCircleEmojiView: View {
   
   private var circleDiameter: CGFloat {
       switch size {
-      case .small: 32
+      case .small: 36
       case .medium: 40
       case .large: 60
       case .xlarge: 80
+      }
+  }
+  
+  private var emojiSize: CGFloat {
+      switch size {
+      case .small: 24
+      case .medium: 26
+      case .large, .xlarge: 40
       }
   }
   
@@ -46,6 +54,7 @@ public struct PBCircleEmojiView: View {
         if let emoji {
           Text(emoji)
             .font(emojiFont)
+            .frame(width: emojiSize, height: emojiSize)
         } else {
           ProgressView()
         }

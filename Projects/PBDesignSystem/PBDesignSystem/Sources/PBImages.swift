@@ -42,6 +42,8 @@ public struct PBImages {
   public static var profileSecond: UIImage { UIImage(named: "profile_second", in: .module, with: nil)! }
   public static var edit: UIImage { UIImage(named: "edit", in: .module, with: nil)! }
   public static var warning: UIImage { UIImage(named: "warning", in: .module, with: nil)! }
+  public static var warningCycle: UIImage { UIImage(named: "warning_cycle", in: .module, with: nil)! }
+  public static var pobiHiddenEmpty: UIImage { UIImage(named: "pobi_hidden_empty", in: .module, with: nil)! }
 }
 
 public extension UIImage {

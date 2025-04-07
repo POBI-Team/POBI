@@ -63,8 +63,13 @@ struct PocketList: View {
     }
     .overlay {
       if pockets.filter({ pockectFilter($0) }).isEmpty {
-        PocketListEmptyView()
-          .padding(.bottom, 70)
+        if seletedTabIndex == 0 {
+          PocketListEmptyView()
+            .padding(.bottom, 70)
+        } else {
+          PocketHiddenListEmptyView()
+            .padding(.bottom, 70)
+        }
       }
     }
     .fullScreenCover(isPresented: $isPresentedCreate) {

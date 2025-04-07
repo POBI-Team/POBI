@@ -29,7 +29,6 @@ struct PocketCell: View {
       VStack(alignment: .leading, spacing: 10) {
         PBCircleEmojiView(pocket.icon, size: .small)
           .foregroundStyle(.white)
-          .frame(width: 36, height: 36)
         VStack(alignment: .leading, spacing: 6) {
           Text(pocket.title)
             .lineLimit(1)

@@ -29,6 +29,7 @@ struct CreatePocketView: View {
   @State private var isPresentedDataSelectView = false
   @State private var isPresentedEditAlert = false
   @State private var isPresentedOffAlarmAlert = false
+  @State private var toastID: UUID? = nil
   @FocusState private var isFocused: Bool
   
   private let colors = PBColors.list.colors
@@ -74,7 +75,7 @@ struct CreatePocketView: View {
                     }
                   } label: {
                     PBCircleEmojiView(pocket.icon, size: .xlarge)
-                      .foregroundStyle(colors[pocket.colorIndex]._01.color)
+                      .foregroundStyle(colors[pocket.colorIndex]._03.color)
                   }
                   TextField(
                     "포켓 이름을 입력해주세요!",
@@ -128,7 +129,6 @@ struct CreatePocketView: View {
                           rows: [
                             GridItem(.flexible()),
                             GridItem(.flexible()),
-                            GridItem(.flexible()),
                             GridItem(.flexible())
                           ],
                           spacing: 12
@@ -152,7 +152,7 @@ struct CreatePocketView: View {
                       }
                       
                     }
-                    .frame(height: 232)
+                    .frame(height: 184)
                     .background(PBColors.navy._10.color)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                   }
@@ -248,7 +248,6 @@ struct CreatePocketView: View {
                       if isSelectedDate {
                         Divider()
                       }
-                     
                       DatePicker(
                         "",
                         selection: Binding(get: {
@@ -294,6 +293,7 @@ struct CreatePocketView: View {
                     VStack(spacing: 0) {
                       if isSelectedTime {
                         Divider()
+                          .transition(.opacity)
                           .padding(.top, 8)
                       }
                       
@@ -307,7 +307,7 @@ struct CreatePocketView: View {
                         displayedComponents: .hourAndMinute
                       )
                       .datePickerStyle(.wheel)
-                      .frame(width: 221, height: isSelectedTime ? nil : 0, alignment: .top)
+                      .frame(height: isSelectedTime ? nil : 0, alignment: .top)
                     }
                     .disabled(!isSelectedTime)
                     .clipped()
@@ -316,7 +316,6 @@ struct CreatePocketView: View {
                   .padding([.vertical], 16)
                   .background(.white)
                   .clipShape(RoundedRectangle(cornerRadius: 20))
-                  .animation(.default, value: pocket.onAlarm)
                 }
                 Spacer()
               }
@@ -349,6 +348,7 @@ struct CreatePocketView: View {
               }
             }
             PBRoundButton(16) {
+              guard !pocket.title.isEmpty else { toastID = .init(); return }
               if mode == .create {
                 if pocket.onAlarm {
                   let nickName = ProfileStorage.shared.loadNickname()
@@ -370,6 +370,7 @@ struct CreatePocketView: View {
             .padding([.horizontal, .bottom], 14)
           }
         }
+        .pbToast(toastID: $toastID, message: "포켓 이름을 입력해주세요!", height: 68)
         .onChange(of: pocket.onAlarm) { _, newValue in
           withAnimation {
             isFocused = false
@@ -379,6 +380,7 @@ struct CreatePocketView: View {
         .sheet(isPresented: $isPresentedDataSelectView) {
           DateSelectView(pocket: pocket)
         }
+        
     }
     .rightItem {
       if mode == .create {

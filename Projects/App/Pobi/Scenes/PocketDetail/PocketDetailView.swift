@@ -65,7 +65,7 @@ struct PocketDetailView: View {
         RecommendedListView(pocket: pocket)
       }
       ItemList(pocket: pocket)
-        .padding(.horizontal, 2)
+        .padding(.leading, 2)
         .scrollDismissesKeyboard(.interactively)
         .overlay(alignment: .bottomTrailing) {
           if !pocket.isHidden {

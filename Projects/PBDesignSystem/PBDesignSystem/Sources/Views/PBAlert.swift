@@ -79,9 +79,9 @@ public struct PBAlertView: View {
       .ignoresSafeArea(.all)
       .overlay {
         VStack(spacing: 24) {
-          VStack(spacing: 20) {
+          VStack(spacing: 16) {
             image
-            VStack(spacing: 4) {
+            VStack(spacing: 8) {
               Text(titie)
                 .foregroundStyle(PBColors.navy._900.color)
                 .font(PBFonts.title._1.font)
@@ -103,7 +103,7 @@ public struct PBAlertView: View {
                 } label: {
                   Text("취소")
                     .foregroundStyle(PBColors.navy._500.color)
-                    .font(PBFonts.title._1.font)
+                    .font(PBFonts.button._2.font)
                 }
                 .frame(height: 48)
                 .foregroundStyle(PBColors.navy._50.color)
@@ -116,7 +116,7 @@ public struct PBAlertView: View {
                 } label: {
                   Text(label)
                     .foregroundStyle(.white)
-                    .font(PBFonts.title._1.font)
+                    .font(PBFonts.button._2.font)
                 }
                 .frame(height: 48)
                 .foregroundStyle(PBColors.navy._900.color)
@@ -125,7 +125,7 @@ public struct PBAlertView: View {
           }
         }
         .padding(20)
-        .frame(width: 335)
+        .frame(width: 311)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .scaleEffect(scale)
@@ -193,4 +193,18 @@ extension View {
   public func pbAlert(isPresented: Binding<Bool>, type: PBAlertType, okAction: @escaping () -> Void, cancelAction: @escaping () -> Void = {}) -> some View {
     return modifier(PBAlert(isPresented: isPresented, alert: type, action: okAction, cancelAction: cancelAction))
   }
+}
+
+#Preview {
+  @Previewable @State var isPresented: Bool = false
+  Color.gray
+    .overlay {
+      Button {
+        isPresented = true
+      } label: {
+        Text("Backgroasdasd\nasdasd\nasdasdund")
+      }
+    }
+    .pbAlert(isPresented: $isPresented, type: .deleteAll, okAction: {})
+  
 }
