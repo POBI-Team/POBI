@@ -243,7 +243,6 @@ struct CreatePocketView: View {
             .padding([.horizontal, .bottom], 14)
           }
         }
-        .pbToast(toastID: $toastID, message: "포켓 이름을 입력해주세요!", height: 68)
         .onChange(of: pocket.onAlarm) { _, newValue in
           withAnimation {
             isFocused = false
@@ -269,6 +268,7 @@ struct CreatePocketView: View {
         }
       }
     }
+    .pbToast(toastID: $toastID, message: "포켓 이름을 입력해주세요!", height: 12)
   }
 }
 

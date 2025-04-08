@@ -81,11 +81,11 @@ public struct PBToast: ViewModifier {
         if toastID != nil {
           VStack {
             Spacer()
+              .frame(height: height)
             PBToastView(
               message: message
             )
             Spacer()
-              .frame(height: height)
           }
         }
       }
