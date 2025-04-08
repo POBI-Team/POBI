@@ -21,12 +21,30 @@ struct ItemList: View {
   }
   
   var body: some View {
+    HStack {
+      Text("\(pocket.items.count) items")
+        .font(PBFonts.body._1.font)
+        .foregroundStyle(PBColors.navy._100.color)
+      Spacer()
+      Button {
+        for i in pocket.items.indices {
+          pocket.items[i].isChecked = false
+        }
+      } label: {
+        HStack(alignment: .center, spacing: 6) {
+          Text("reset")
+            .font(PBFonts.caption._1.font)
+          PBImages.reset.image
+            .renderingMode(.template)
+        }
+        .frame(height: 16)
+      }
+      .tint(PBColors.red.color)
+    }
+    .padding(.horizontal, 28)
+    .padding(.bottom, 8)
     List {
       Section {
-        Text("\(pocket.items.count) items")
-          .font(PBFonts.body._1.font)
-          .foregroundStyle(PBColors.navy._100.color)
-          .padding(.leading, 8)
         ForEach(pocket.items.sorted(by: { $0.sortIndex < $1.sortIndex })) { item in
           HStack {
             PBCheckBoxTextField(
@@ -52,7 +70,6 @@ struct ItemList: View {
             PBImages.slide.image
           }
         }
- 
         .onMove { indexSet, index in
           pocket.items.move(fromOffsets: indexSet, toOffset: index)
           pocket.updateSortIndices()

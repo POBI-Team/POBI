@@ -67,28 +67,6 @@ struct PocketDetailView: View {
       ItemList(pocket: pocket)
         .padding(.leading, 2)
         .scrollDismissesKeyboard(.interactively)
-        .overlay(alignment: .bottomTrailing) {
-          if !pocket.isHidden {
-            Button {
-              isPresnetedRecommend = true
-            } label: {
-              HStack(spacing: 4) {
-                PBImages.lamp.image
-                Text("추천")
-                  .font(PBFonts.button._1.font)
-                  .foregroundStyle(.white)
-              }
-              .padding(.vertical, 9)
-              .padding(.leading, 16)
-              .padding(.trailing, 20)
-              .background(PBColors.navy._900.color)
-              .clipShape(Capsule())
-            }
-            .buttonStyle(.plain)
-            .padding(.trailing, 16)
-            .padding(.bottom, 20)
-          }
-        }
     }
     .leftItem {
       Button(action: {
@@ -106,6 +84,28 @@ struct PocketDetailView: View {
       }
       .tint(PBColors.navy._900.color)
       .disabled(pocket.isHidden)
+    }
+    .overlay(alignment: .bottomTrailing) {
+      if !pocket.isHidden {
+        Button {
+          isPresnetedRecommend = true
+        } label: {
+          HStack(spacing: 4) {
+            PBImages.lamp.image
+            Text("추천")
+              .font(PBFonts.button._1.font)
+              .foregroundStyle(.white)
+          }
+          .padding(.vertical, 9)
+          .padding(.leading, 16)
+          .padding(.trailing, 20)
+          .background(PBColors.navy._900.color)
+          .clipShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .padding(.trailing, 16)
+        .padding(.bottom, 20)
+      }
     }
   }
 }
