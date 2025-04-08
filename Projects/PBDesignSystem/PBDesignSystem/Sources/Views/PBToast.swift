@@ -66,6 +66,7 @@ public struct PBToast: ViewModifier {
   @Binding private var toastID: UUID?
   private let message: String
   private let height: CGFloat
+  private let notificationFeedback = UINotificationFeedbackGenerator()
   @State private var dismissTask: DispatchWorkItem?
   public init(toastID: Binding<UUID?>, message: String, height: CGFloat) {
     self._toastID = toastID
@@ -86,11 +87,11 @@ public struct PBToast: ViewModifier {
             Spacer()
               .frame(height: height)
           }
-          
         }
       }
       .onChange(of: toastID) { _, new in
         if new != nil {
+          notificationFeedback.notificationOccurred(.warning)
           dismissTask?.cancel()
           dismissTask = DispatchWorkItem {
             toastID = nil
