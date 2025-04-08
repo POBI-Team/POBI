@@ -25,6 +25,9 @@ struct OnboardingView: View {
             .foregroundStyle(PBColors.navy._100.color)
         }
       }
+      .padding(.top, 20)
+      .padding(.bottom, 47)
+
       
       Spacer()
       TabView(selection: $currentIndex) {
@@ -33,14 +36,13 @@ struct OnboardingView: View {
             .font(PBFonts.headline._1.font)
             .foregroundStyle(PBColors.navy._900.color)
             .padding(.bottom, 20)
-          
-          
           Text("포비가 당신의 포켓 비서가 되어\n소지품을 잊지 않도록 도와줄게요!")
             .font(PBFonts.body._1.font)
             .foregroundStyle(PBColors.navy._200.color)
             .padding(.bottom, 69)
             .multilineTextAlignment(.center)
           PBImages.onboardingFirst.image
+          Spacer()
         }
         .tag(0)
         
@@ -55,6 +57,7 @@ struct OnboardingView: View {
             .foregroundStyle(PBColors.navy._200.color)
             .padding(.bottom, 35)
           PBImages.onboardingSecond.image
+          Spacer()
         }
         .tag(1)
         
@@ -69,18 +72,13 @@ struct OnboardingView: View {
             .foregroundStyle(PBColors.navy._200.color)
             .padding(.bottom, 35)
           PBImages.onboardingThird.image
+          Spacer()
         }
         .tag(2)
       }
       .tabViewStyle(.page(indexDisplayMode: .never))
-      .overlay {
-        VStack(spacing: 0) {
-          Spacer()
-          TabIndicator(count: 3, currentIndex: $currentIndex)
-            .padding(.bottom, 62)
-        }
-      }
-
+      TabIndicator(count: 3, currentIndex: $currentIndex)
+        .padding(.bottom, 62)
       PBRoundButton(16) {
         if currentIndex == 2 {
           isPresentedProfileSetting = true

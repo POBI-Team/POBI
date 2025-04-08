@@ -79,7 +79,8 @@ struct PocketDetailView: View {
                   .foregroundStyle(.white)
               }
               .padding(.vertical, 9)
-              .padding(.horizontal, 20)
+              .padding(.leading, 16)
+              .padding(.trailing, 20)
               .background(PBColors.navy._900.color)
               .clipShape(Capsule())
             }

@@ -35,7 +35,7 @@ public enum PBAlertType {
     case .offAlarm:
       return PBAlertView(isPresented: isPresented)
         .image(PBImages.warning.image)
-        .title("알림 설정이 꺼져있어요.")
+        .title("알림 설정이 꺼져있어요")
         .body("휴대폰 설정 > 알림 > 포비에서\n알림을 허용해 주세요!")
         .addButton(.cancel(cancelAction))
         .addButton(.defalt("알림 허용", action))

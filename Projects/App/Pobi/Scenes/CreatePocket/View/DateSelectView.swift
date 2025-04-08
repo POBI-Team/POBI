@@ -116,12 +116,17 @@ struct DateSelectView: View {
                   }
               } else {
                 Circle()
-                  .stroke(PBColors.navy._100.color, lineWidth: 1)
+                  .foregroundStyle(PBColors.navy._100.color)
                   .frame(width: 40, height: 40)
                   .overlay {
-                    Text(weekDay.description)
-                      .font(PBFonts.body._4.font)
-                      .foregroundColor(PBColors.navy._100.color)
+                    ZStack {
+                      Circle()
+                        .foregroundStyle(.white)
+                        .frame(width: 38.5, height: 38.5)
+                      Text(weekDay.description)
+                        .font(PBFonts.body._4.font)
+                        .foregroundColor(PBColors.navy._100.color)
+                    }
                   }
               }
             }

@@ -33,8 +33,7 @@ public enum List {
     PBColors.list.mint.self,
     PBColors.list.blue.self,
     PBColors.list.purple.self,
-    PBColors.list.pink.self,
-    PBColors.list.gray.self
+    PBColors.list.pink.self
   ]
 }
 
