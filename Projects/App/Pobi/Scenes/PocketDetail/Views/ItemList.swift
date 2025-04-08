@@ -69,6 +69,7 @@ struct ItemList: View {
             Spacer()
             PBImages.slide.image
           }
+          .padding(.horizontal, 4)
         }
         .onMove { indexSet, index in
           pocket.items.move(fromOffsets: indexSet, toOffset: index)
@@ -87,6 +88,7 @@ struct ItemList: View {
             }
           }
         }
+        .padding(.horizontal, 4)
       }
       .listRowSeparator(.hidden)
     }

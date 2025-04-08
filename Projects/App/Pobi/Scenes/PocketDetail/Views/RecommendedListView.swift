@@ -97,6 +97,7 @@ struct RecommendedListView: View {
           index += 1
           return PocketItemModel(title: $0, sortIndex: index)
         }
+        FirebaseManager.shared.logEvent(event: .addRecommendedList)
       } label: {
         Text("추가")
           .font(PBFonts.button._1.font)

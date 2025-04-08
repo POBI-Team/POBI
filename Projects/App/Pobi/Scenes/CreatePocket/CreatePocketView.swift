@@ -50,6 +50,9 @@ struct CreatePocketView: View {
           if pocket.onAlarm {
             let nickName = ProfileStorage.shared.loadNickname()
             pocketModel?.registerPushAlarm(userNickname: nickName ?? "사용자")
+            FirebaseManager.shared.logEvent(event: .alarmActivation)
+          } else {
+            FirebaseManager.shared.logEvent(event: .alarmDisable)
           }
           dismiss()
         }
@@ -227,6 +230,9 @@ struct CreatePocketView: View {
                 if pocket.onAlarm {
                   let nickName = ProfileStorage.shared.loadNickname()
                   newPocketModel.registerPushAlarm(userNickname: nickName ?? "사용자")
+                  FirebaseManager.shared.logEvent(event: .alarmActivation)
+                } else {
+                  FirebaseManager.shared.logEvent(event: .alarmDisable)
                 }
                 modelContext.insert(newPocketModel)
                 dismiss()

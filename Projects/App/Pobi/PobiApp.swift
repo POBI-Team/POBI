@@ -32,9 +32,12 @@ class NotificationManager: ObservableObject {
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
   var notificationManager = NotificationManager()
-  func application(_ application: UIApplication,
-                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+  func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
+  ) -> Bool {
     UNUserNotificationCenter.current().delegate = self
+    FirebaseManager.shared.initSDK()
     return true
   }
   

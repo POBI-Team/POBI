@@ -17,6 +17,7 @@
 		9B61920A2D9BC41500DB18D1 /* Lottie-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 9B6192082D9BC41100DB18D1 /* Lottie-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9B626BB72D9A30F4001255F3 /* LocalNotiService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B626BB62D9A30F4001255F3 /* LocalNotiService.framework */; };
 		9B626BB82D9A30F4001255F3 /* LocalNotiService.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B626BB62D9A30F4001255F3 /* LocalNotiService.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9BA3F4E22DA528CD005BFBA5 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 9BA3F4E12DA528CD005BFBA5 /* FirebaseAnalytics */; };
 		9BAB70C72D8199E0004D52A1 /* PBStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BAB70C62D8199E0004D52A1 /* PBStorage.framework */; };
 		9BAB70C82D8199E0004D52A1 /* PBStorage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BAB70C62D8199E0004D52A1 /* PBStorage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9BD4B1A92D8D7F8C00CA86C4 /* NetworkService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD4B1A82D8D7F8C00CA86C4 /* NetworkService.framework */; };
@@ -68,6 +69,7 @@
 			files = (
 				9B6192092D9BC41100DB18D1 /* Lottie-Dynamic in Frameworks */,
 				9BD4B1A92D8D7F8C00CA86C4 /* NetworkService.framework in Frameworks */,
+				9BA3F4E22DA528CD005BFBA5 /* FirebaseAnalytics in Frameworks */,
 				9BAB70C72D8199E0004D52A1 /* PBStorage.framework in Frameworks */,
 				9B0928D62D9563AB002B96A8 /* PBStorageInterface.framework in Frameworks */,
 				9B01D38A2D64AD600060E8B7 /* PBDesignSystem.framework in Frameworks */,
@@ -131,6 +133,7 @@
 			name = Pobi;
 			packageProductDependencies = (
 				9B6192082D9BC41100DB18D1 /* Lottie-Dynamic */,
+				9BA3F4E12DA528CD005BFBA5 /* FirebaseAnalytics */,
 			);
 			productName = Pobi;
 			productReference = 9BE14C3C2D6043DF008A0E49 /* Pobi.app */;
@@ -162,6 +165,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				9B6192052D9BC3FE00DB18D1 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				9BA3F4E02DA528CD005BFBA5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9BE14C3D2D6043DF008A0E49 /* Products */;
@@ -419,6 +423,14 @@
 				minimumVersion = 4.5.1;
 			};
 		};
+		9BA3F4E02DA528CD005BFBA5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.11.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -426,6 +438,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9B6192052D9BC3FE00DB18D1 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = "Lottie-Dynamic";
+		};
+		9BA3F4E12DA528CD005BFBA5 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9BA3F4E02DA528CD005BFBA5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

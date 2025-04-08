@@ -75,6 +75,7 @@ struct PocketMoreView: View {
               } else {
                 pocket.registerPushAlarm(userNickname: ProfileStorage.shared.loadNickname() ?? "사용자")
                 dismiss()
+                FirebaseManager.shared.logEvent(event: .didTapPocketShown)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                   pocket.isHidden.toggle()
                   try? modelContext.save()
@@ -142,6 +143,7 @@ struct PocketMoreView: View {
         .pbAlert(isPresented: $isPresentedHiddenAlert, type: .hidden) {
           pocket.deletePushAlarm()
           dismiss()
+          FirebaseManager.shared.logEvent(event: .didTapPocketHidden)
           DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             pocket.isHidden.toggle()
             try? modelContext.save()
