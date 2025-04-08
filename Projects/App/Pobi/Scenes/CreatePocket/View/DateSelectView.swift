@@ -38,8 +38,7 @@ struct DateSelectView: View {
   @State private var selectedTabIndex: Int
   @State private var selectedWeekDays: Set<Weekday>
   @State private var selectedDays: Set<Int>
-    
-  private let pocket: PocketModel
+  @Binding private var alarm: Alarm
   private let gridColumns = [
     GridItem(spacing: 0),
     GridItem(spacing: 0),
@@ -50,14 +49,14 @@ struct DateSelectView: View {
     GridItem(spacing: 0)
   ]
   
-  init(pocket: PocketModel) {
-    self.pocket = pocket
-    self.selectedTabIndex = pocket.alarm.isWeekRepeat ? 0 : 1
-    if pocket.alarm.isWeekRepeat {
-      self.selectedWeekDays = Set(pocket.alarm.days.compactMap { Weekday(rawValue: $0) })
+  init(alarm: Binding<Alarm>) {
+    self._alarm = alarm
+    self.selectedTabIndex = alarm.wrappedValue.isWeekRepeat ? 0 : 1
+    if alarm.wrappedValue.isWeekRepeat {
+      self.selectedWeekDays = Set(alarm.wrappedValue.days.compactMap { Weekday(rawValue: $0) })
       self.selectedDays = []
     } else {
-      self.selectedDays = Set(pocket.alarm.days)
+      self.selectedDays = Set(alarm.wrappedValue.days)
       self.selectedWeekDays = []
     }
   }
@@ -134,11 +133,11 @@ struct DateSelectView: View {
       Spacer()
       PBRoundButton(16) {
         if selectedTabIndex == 1 {
-          pocket.alarm.isWeekRepeat = false
-          pocket.alarm.days = selectedDays.sorted(by: <)
+          alarm.isWeekRepeat = false
+          alarm.days = selectedDays.sorted(by: <)
         } else if selectedTabIndex == 0 {
-          pocket.alarm.isWeekRepeat = true
-          pocket.alarm.days = selectedWeekDays.map { $0.rawValue }.sorted(by: <)
+          alarm.isWeekRepeat = true
+          alarm.days = selectedWeekDays.map { $0.rawValue }.sorted(by: <)
         }
         dismiss()
       } label: {
@@ -167,7 +166,7 @@ extension DateSelectView {
 
 #Preview {
   Color.white
-    .sheet(isPresented: .constant(true), content: { DateSelectView(pocket: .init())
+    .sheet(isPresented: .constant(true), content: { DateSelectView(alarm: .constant(.init(isWeekRepeat: true, days: [1,2,3,4,5,6,7], date: .now, time: .now)))
           
     })
 }

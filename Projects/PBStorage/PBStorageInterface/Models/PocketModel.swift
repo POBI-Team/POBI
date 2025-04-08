@@ -7,8 +7,6 @@
 
 import SwiftData
 
-import LocalNotiService
-
 @Model
 public final class PocketModel {
   @Attribute(.unique) public var id: UUID
@@ -46,6 +44,17 @@ public final class PocketModel {
     self.createAt = createAt
   }
   
+  public convenience init(_ pocket: Pocket) {
+    self.init(
+      title: pocket.title,
+      onAlarm: pocket.onAlarm,
+      repeats: pocket.repeats,
+      colorIndex: pocket.colorIndex,
+      icon: pocket.icon,
+      alarm: .init(pocket.alarm)
+    )
+  }
+  
   public func copy() -> PocketModel {
     let newPocket = PocketModel(id: UUID(), title: self.title)
     newPocket.onAlarm = self.onAlarm
@@ -57,7 +66,27 @@ public final class PocketModel {
     newPocket.items = self.items.map { $0.copy() }
     return newPocket
   }
-    
+
+  public func temporary() -> Pocket {
+    return Pocket(
+      title: self.title,
+      onAlarm: self.onAlarm,
+      repeats: self.repeats,
+      colorIndex: self.colorIndex,
+      icon: self.icon,
+      alarm: self.alarm.temporary()
+    )
+  }
+  
+  public func paste(_ pocket: Pocket) {
+    self.title = pocket.title
+    self.onAlarm = pocket.onAlarm
+    self.repeats = pocket.repeats
+    self.colorIndex = pocket.colorIndex
+    self.icon = pocket.icon
+    self.alarm.paste(pocket.alarm)
+  }
+  
   public func deleteItem(withId id: UUID) {
     if let index = items.firstIndex(where: { $0.id == id }) {
       items.remove(at: index)
@@ -75,6 +104,29 @@ public final class PocketModel {
       item.sortIndex = index
     }
   }
+}
+
+public struct Pocket {
+  public var title: String
+  public var onAlarm: Bool
+  public var repeats: Bool
+  public var colorIndex: Int
+  public var icon: String?
+  public var alarm: Alarm
   
+  public init(
+    title: String = "",
+    onAlarm: Bool = false,
+    repeats: Bool = false,
+    colorIndex: Int = 0,
+    icon: String? = nil,
+    alarm: Alarm = .init(isWeekRepeat: true, days: [1,2,3,4,5,6,7], date: .now, time: .now)
+  ) {
+    self.title = title
+    self.onAlarm = onAlarm
+    self.repeats = repeats
+    self.colorIndex = colorIndex
+    self.icon = icon
+    self.alarm = alarm
   }
 }

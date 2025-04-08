@@ -30,15 +30,17 @@ struct CreatePocketView: View {
   @State private var isPresentedEditAlert = false
   @State private var isPresentedOffAlarmAlert = false
   @State private var toastID: UUID? = nil
+  @State private var pocket: Pocket
   @FocusState private var isFocused: Bool
   
   private let colors = PBColors.list.colors
   private let mode: Mode
-  private let pocket: PocketModel
+  private let pocketModel: PocketModel?
   
-  init(_ mode: Mode, pocket: PocketModel) {
+  init(_ mode: Mode, pocket: PocketModel?) {
     self.mode = mode
-    self.pocket = pocket
+    self.pocketModel = pocket
+    self.pocket = pocket?.temporary() ?? .init()
   }
   
   var body: some View {
@@ -46,12 +48,12 @@ struct CreatePocketView: View {
       PBColors.navy._10.color
         .ignoresSafeArea(.all)
         .pbAlert(isPresented: $isPresentedEditAlert, type: .edit) {
-          pocket.deletePushAlarm()
+          pocketModel?.deletePushAlarm()
+          pocketModel?.paste(pocket)
           if pocket.onAlarm {
             let nickName = ProfileStorage.shared.loadNickname()
-            pocket.registerPushAlarm(userNickname: nickName ?? "사용자")
+            pocketModel?.registerPushAlarm(userNickname: nickName ?? "사용자")
           }
-          try? modelContext.save()
           dismiss()
         }
         .pbAlert(isPresented: $isPresentedOffAlarmAlert, type: .offAlarm) {
@@ -177,6 +179,23 @@ struct CreatePocketView: View {
                 .padding(.bottom, 16)
                 .background(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
+                .onAppear {
+                  guard !isAppear else { return }
+                  Task {
+                    do {
+                      icons = try await NetworkClient.shared.request(
+                        target: FirebaseAPI.icons,
+                        of: [String].self
+                      )
+                      if pocket.icon == nil {
+                        pocket.icon = icons.first ?? ""
+                      }
+                    } catch {
+                      #warning("에러 처리")
+                    }
+                    isAppear = true
+                  }
+                }
                 
                 HStack {
                   Toggle(
@@ -230,7 +249,6 @@ struct CreatePocketView: View {
                           withAnimation(.default.speed(1.5)) {
                             isSelectedDate.toggle()
                             isDidTapDownButton = false
-                            isFocused = false
                             isSelectedTime = false
                           }
                         } label: {
@@ -330,32 +348,16 @@ struct CreatePocketView: View {
                 isSelectedDate = false
               }
             })
-            .onAppear {
-              guard !isAppear else { return }
-              Task {
-                do {
-                  icons = try await NetworkClient.shared.request(
-                    target: FirebaseAPI.icons,
-                    of: [String].self
-                  )
-                  if pocket.icon == nil {
-                    pocket.icon = icons.first ?? ""
-                  }
-                } catch {
-                  #warning("에러 처리")
-                }
-                isAppear = true
-              }
-            }
+
             PBRoundButton(16) {
               guard !pocket.title.isEmpty else { toastID = .init(); return }
               if mode == .create {
+                let newPocketModel = PocketModel(pocket)
                 if pocket.onAlarm {
                   let nickName = ProfileStorage.shared.loadNickname()
-                  pocket.registerPushAlarm(userNickname: nickName ?? "사용자")
+                  newPocketModel.registerPushAlarm(userNickname: nickName ?? "사용자")
                 }
-                modelContext.insert(pocket)
-                try? modelContext.save()
+                modelContext.insert(newPocketModel)
                 dismiss()
               } else {
                 isPresentedEditAlert.toggle()
@@ -378,9 +380,10 @@ struct CreatePocketView: View {
           }
         }
         .sheet(isPresented: $isPresentedDataSelectView) {
-          DateSelectView(pocket: pocket)
+          DateSelectView(
+            alarm: Binding(get: { pocket.alarm }, set: { pocket.alarm = $0 })
+          )
         }
-        
     }
     .rightItem {
       if mode == .create {
@@ -394,7 +397,6 @@ struct CreatePocketView: View {
     .leftItem {
       if mode == .edit {
         Button {
-          modelContext.rollback()
           dismiss()
         } label: {
           PBImages.left.image
