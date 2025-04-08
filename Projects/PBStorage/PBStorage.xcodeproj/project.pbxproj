@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9B9A22F22D9E56A000B54A52 /* LocalNotiService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B9A22F12D9E56A000B54A52 /* LocalNotiService.framework */; };
 		9BBC55CE2D6D941B006A30F7 /* PBStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBC55C32D6D941B006A30F7 /* PBStorage.framework */; };
 		9BBC560A2D6DCD54006A30F7 /* PBStorageInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BBC55ED2D6DCD0D006A30F7 /* PBStorageInterface.framework */; };
 /* End PBXBuildFile section */
@@ -99,7 +98,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B9A22F22D9E56A000B54A52 /* LocalNotiService.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
