@@ -14,11 +14,6 @@ import NetworkService
 import LocalNotiService
 
 struct CreatePocketView: View {
-  enum Mode {
-    case create
-    case edit
-  }
-  
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
   @State private var isAppear = false
@@ -31,11 +26,9 @@ struct CreatePocketView: View {
   @FocusState private var isFocused: Bool
   
   private let colors = PBColors.list.colors
-  private let mode: Mode
   private let pocketModel: PocketModel?
   
-  init(_ mode: Mode, pocket: PocketModel?) {
-    self.mode = mode
+  init(pocket: PocketModel?) {
     self.pocketModel = pocket
     self.pocket = pocket?.temporary() ?? .init()
   }
@@ -225,7 +218,7 @@ struct CreatePocketView: View {
 
             PBRoundButton(16) {
               guard !pocket.title.isEmpty else { toastID = .init(); return }
-              if mode == .create {
+              if pocketModel == nil {
                 let newPocketModel = PocketModel(pocket)
                 if pocket.onAlarm {
                   let nickName = ProfileStorage.shared.loadNickname()
@@ -257,7 +250,7 @@ struct CreatePocketView: View {
         }
     }
     .rightItem {
-      if mode == .create {
+      if pocketModel == nil {
         Button {
           dismiss()
         } label: {
@@ -266,7 +259,7 @@ struct CreatePocketView: View {
       }
     }
     .leftItem {
-      if mode == .edit {
+      if pocketModel != nil {
         Button {
           dismiss()
         } label: {
@@ -295,5 +288,5 @@ private extension CreatePocketView {
 }
 
 #Preview {
-  CreatePocketView(.create, pocket: .init(onAlarm: true))
+  CreatePocketView(pocket: .init(onAlarm: true))
 }

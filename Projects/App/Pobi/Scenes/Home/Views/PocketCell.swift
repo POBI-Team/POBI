@@ -77,7 +77,7 @@ struct PocketCell: View {
       .padding(.trailing, 12)
     }
     .navigationDestination(isPresented: $isPresentedCreate) {
-      CreatePocketView(.edit, pocket: pocket)
+      CreatePocketView(pocket: pocket)
     }
   }
 }

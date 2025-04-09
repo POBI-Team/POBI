@@ -65,7 +65,7 @@ struct HomeView: View {
     .padding(.horizontal, 24)
     .fullScreenCover(isPresented: $isPresentedCreate) {
       NavigationStack {
-        CreatePocketView(.create, pocket: .init())
+        CreatePocketView(pocket: nil)
       }
     }
     .onAppear {

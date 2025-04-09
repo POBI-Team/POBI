@@ -77,7 +77,7 @@ struct PocketDetailView: View {
     }
     .rightItem {
       NavigationLink {
-        CreatePocketView(.edit, pocket: pocket)
+        CreatePocketView(pocket: pocket)
       } label: {
         PBImages.setting.image
           .renderingMode(.template)
