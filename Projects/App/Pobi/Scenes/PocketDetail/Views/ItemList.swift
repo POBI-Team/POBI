@@ -14,21 +14,23 @@ struct ItemList: View {
   private let pocket: PocketModel
   @Environment(\.modelContext) private var modelContext
   @State private var newPocketItem: PocketItemModel
+  @State private var lists: [PocketItemModel]
   
   init(pocket: PocketModel) {
     self.pocket = pocket
+    self.lists = pocket.items.sorted(by: { $0.sortIndex < $1.sortIndex })
     self.newPocketItem = .init()
   }
   
   var body: some View {
     HStack {
-      Text("\(pocket.items.count) items")
+      Text("\(lists.count) items")
         .font(PBFonts.body._1.font)
         .foregroundStyle(PBColors.navy._100.color)
       Spacer()
       Button {
-        for i in pocket.items.indices {
-          pocket.items[i].isChecked = false
+        for i in lists.indices {
+          lists[i].isChecked = false
         }
       } label: {
         HStack(alignment: .center, spacing: 6) {
@@ -45,7 +47,7 @@ struct ItemList: View {
     .padding(.bottom, 8)
     List {
       Section {
-        ForEach(pocket.items.sorted(by: { $0.sortIndex < $1.sortIndex })) { item in
+        ForEach(lists) { item in
           HStack {
             PBCheckBoxTextField(
               title: Binding(get: { item.title }, set: { item.title = $0 }),
@@ -54,13 +56,13 @@ struct ItemList: View {
             ) { onEidting in
               if !onEidting, item.title.isEmpty {
                 withAnimation {
-                  pocket.deleteItem(withId: item.id)
+                  lists.removeAll(where: { $0.id == item.id })
                 }
               }
             }
             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
               Button(role: .destructive) {
-                pocket.deleteItem(withId: item.id)
+                lists.removeAll(where: { $0.id == item.id })
               } label: {
                 Text("삭제")
                   .font(PBFonts.button._3.font)
@@ -72,8 +74,7 @@ struct ItemList: View {
           .padding(.horizontal, 4)
         }
         .onMove { indexSet, index in
-          pocket.items.move(fromOffsets: indexSet, toOffset: index)
-          pocket.updateSortIndices()
+          lists.move(fromOffsets: indexSet, toOffset: index)
         }
         PBCheckBoxTextField(
           title: Binding(get: { newPocketItem.title }, set: { newPocketItem.title = $0 }),
@@ -82,9 +83,8 @@ struct ItemList: View {
         ) { isEidting in
           if !isEidting {
             if !newPocketItem.title.isEmpty {
-              withAnimation {
-                pocket.appendItem(newPocketItem)
-              }
+              lists.append(newPocketItem)
+              newPocketItem = PocketItemModel(sortIndex: lists.count)
             }
           }
         }
@@ -92,9 +92,15 @@ struct ItemList: View {
       }
       .listRowSeparator(.hidden)
     }
+    .animation(.default, value: lists)
     .listStyle(PlainListStyle())
-    .onChange(of: pocket.items) { oldValue, newValue in
-      newPocketItem = PocketItemModel()
+    .onChange(of: lists) { old, new in
+      if old.count >= new.count {
+        for (index, item) in lists.enumerated() {
+          item.sortIndex = index
+        }
+      }
+      pocket.items = lists
     }
   }
 }
