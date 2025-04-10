@@ -157,7 +157,7 @@ struct DateSelectView: View {
     .padding(.top, 24)
     .padding(.horizontal, 20)
     .presentationCornerRadius(30)
-    .presentationDetents([.medium])
+    .presentationDetents([.height(450)])
   }
 }
 

@@ -26,8 +26,6 @@ struct OnboardingView: View {
         }
       }
       .padding(.top, 20)
-      .padding(.bottom, 47)
-
       
       Spacer()
       TabView(selection: $currentIndex) {
@@ -77,8 +75,9 @@ struct OnboardingView: View {
         .tag(2)
       }
       .tabViewStyle(.page(indexDisplayMode: .never))
+      .frame(height: 500)
       TabIndicator(count: 3, currentIndex: $currentIndex)
-        .padding(.bottom, 62)
+      Spacer()
       PBRoundButton(16) {
         if currentIndex == 2 {
           isPresentedProfileSetting = true

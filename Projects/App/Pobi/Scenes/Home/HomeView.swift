@@ -30,6 +30,7 @@ struct HomeView: View {
         HStack {
           Text("\(nickname)의 포켓")
             .font(PBFonts.headline._1.font)
+            .foregroundStyle(PBColors.navy._900.color)
             .padding(.top, 29)
             .padding(.bottom, 20)
           Spacer()
