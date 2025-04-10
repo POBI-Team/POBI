@@ -43,7 +43,7 @@ struct PocketCell: View {
       .padding(.horizontal, 16)
       Spacer()
       HStack {
-        Text("\(pocket.items.count) itmes")
+        Text("\(pocket.items.count) items")
           .font(PBFonts.caption._2.font)
           .foregroundStyle(PBColors.navy._900.color)
         Spacer()
