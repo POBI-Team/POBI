@@ -51,30 +51,26 @@ struct MyPageView: View {
         Group {
           VStack(spacing: 24) {
             Group {
-//              Button {
-//                
-//              } label: {
-//                HStack {
-//                  PBImages.like.image
-//                  Text("친구에게 포비 추천하기")
-//                    .font(PBFonts.body._2.font)
-//                    .foregroundStyle(PBColors.navy._900.color)
-//                  Spacer()
-//                  PBImages.right.image
-//                }
-//              }
-//              Button {
-//                
-//              } label: {
-//                HStack {
-//                  PBImages.mail.image
-//                  Text("앱스토어 리뷰 쓰기")
-//                    .font(PBFonts.body._2.font)
-//                    .foregroundStyle(PBColors.navy._900.color)
-//                  Spacer()
-//                  PBImages.right.image
-//                }
-//              }
+              ShareLink(item: URL(string: "https://apps.apple.com/app/id6744066403")!) {
+                HStack {
+                  PBImages.like.image
+                  Text("친구에게 포비 추천하기")
+                    .font(PBFonts.body._2.font)
+                    .foregroundStyle(PBColors.navy._900.color)
+                  Spacer()
+                  PBImages.right.image
+                }
+              }
+              Link(destination: URL(string: "itms-apps://itunes.apple.com/app/6744066403")!) {
+                HStack {
+                  PBImages.mail.image
+                  Text("앱스토어 리뷰 쓰기")
+                    .font(PBFonts.body._2.font)
+                    .foregroundStyle(PBColors.navy._900.color)
+                  Spacer()
+                  PBImages.right.image
+                }
+              }
               Button {
                 isPresentAlert.toggle()
               } label: {
