@@ -96,9 +96,7 @@ struct ItemList: View {
     .listStyle(PlainListStyle())
     .onChange(of: lists) { old, new in
       if old.count >= new.count {
-        for (index, item) in lists.enumerated() {
-          item.sortIndex = index
-        }
+        lists.updateSortIndices()
       }
       pocket.items = lists
     }

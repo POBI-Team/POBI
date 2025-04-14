@@ -86,24 +86,6 @@ public final class PocketModel {
     self.icon = pocket.icon
     self.alarm.paste(pocket.alarm)
   }
-  
-  public func deleteItem(withId id: UUID) {
-    if let index = items.firstIndex(where: { $0.id == id }) {
-      items.remove(at: index)
-      updateSortIndices()
-    }
-  }
-  
-  public func appendItem(_ item: PocketItemModel) {
-    item.sortIndex = items.count
-    items.append(item)
-  }
-  
-  public func updateSortIndices() {
-    for (index, item) in items.enumerated() {
-      item.sortIndex = index
-    }
-  }
 }
 
 public struct Pocket {

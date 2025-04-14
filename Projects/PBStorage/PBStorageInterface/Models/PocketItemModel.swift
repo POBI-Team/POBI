@@ -38,3 +38,11 @@ public final class PocketItemModel {
     )
   }
 }
+
+extension Array where Element: PocketItemModel {
+  public func updateSortIndices() {
+    for (index, item) in self.enumerated() {
+      item.sortIndex = index
+    }
+  }
+}
