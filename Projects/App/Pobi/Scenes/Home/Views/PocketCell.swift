@@ -52,13 +52,13 @@ struct PocketCell: View {
       .padding(.leading, 16)
       .padding(.trailing, 12)
       .frame(height: 40)
-      .background(colors[pocket.colorIndex]._02.color)
+      .background((pocket.isHidden ? PBColors.list.gray.self : colors[pocket.colorIndex])._02.color)
       .clipShape(RoundedRectangle(cornerRadius: 20))
     }
     .sheet(isPresented: $isPresentedPocketMore) {
       PocketMoreView(pocket, isPresentedCreate: $isPresentedCreate)
     }
-    .background(colors[pocket.colorIndex]._03.color)
+    .background((pocket.isHidden ? PBColors.list.gray.self : colors[pocket.colorIndex])._03.color)
     .clipShape(RoundedRectangle(cornerRadius: 20))
     .aspectRatio(1, contentMode: .fit)
     .overlay(alignment: .top) {
@@ -103,5 +103,5 @@ private extension PocketCell {
 }
 
 #Preview("date") {
-  PocketCell(.init(id: .init(), title: "테스트", onAlarm: true, alarm: .init(isWeekRepeat: true, days: [1,2], date: .now, time: .now)))
+  PocketCell(.init(id: .init(), title: "테스트", onAlarm: true, isHidden: true, alarm: .init(isWeekRepeat: true, days: [1,2], date: .now, time: .now)))
 }

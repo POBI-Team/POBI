@@ -52,7 +52,7 @@ struct PocketDetailView: View {
         }
         .padding(.vertical, 20)
         .padding(.horizontal, 24)
-        .background(colors[pocket.colorIndex]._03.color)
+        .background((pocket.isHidden ? PBColors.list.gray.self : colors[pocket.colorIndex])._03.color)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         
       }
