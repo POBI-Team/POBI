@@ -15,6 +15,7 @@ struct ItemList: View {
   @Environment(\.modelContext) private var modelContext
   @State private var newPocketItem: PocketItemModel
   @State private var lists: [PocketItemModel]
+  @FocusState private var focusIndex: Int?
   
   init(pocket: PocketModel) {
     self.pocket = pocket
@@ -45,61 +46,82 @@ struct ItemList: View {
     }
     .padding(.horizontal, 28)
     .padding(.bottom, 8)
-    List {
-      Section {
-        ForEach(lists) { item in
-          HStack {
-            PBCheckBoxTextField(
-              title: Binding(get: { item.title }, set: { item.title = $0 }),
-              memo: Binding(get: { item.memo }, set: { item.memo = $0 }),
-              isChecked: Binding(get: { item.isChecked }, set: { item.isChecked = $0 })
-            ) { onEidting in
-              if !onEidting, item.title.isEmpty {
-                withAnimation {
-                  lists.removeAll(where: { $0.id == item.id })
+    ScrollViewReader { proxy in
+      List {
+        Section {
+          ForEach(lists.indices, id:\.self) { i in
+            HStack {
+              TextField("", text: Binding(get: { lists[i].title }, set: { lists[i].title = $0 }), axis: .vertical)
+                .focused($focusIndex, equals: i)
+                .checkBoxAndMemoField(
+                  title: Binding(get: { lists[i].title }, set: { lists[i].title = $0 }),
+                  memo: Binding(get: { lists[i].memo }, set: { lists[i].memo = $0 }),
+                  isChecked: Binding(get: { lists[i].isChecked }, set: { lists[i].isChecked = $0 })
+                ) {
+                  if lists[i].title.isEmpty {
+                    lists.removeAll(where: { $0.id == lists[i].id })
+                  } else {
+                    if focusIndex == lists.count - 1 {
+                      focusIndex = -1
+                    } else {
+                      focusIndex! += 1
+                    }
+                  }
+                }
+              .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                Button(role: .destructive) {
+                  lists.removeAll(where: { $0.id == lists[i].id })
+                } label: {
+                  Text("삭제")
+                    .font(PBFonts.button._3.font)
                 }
               }
+              Spacer()
+              PBImages.slide.image
             }
-            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-              Button(role: .destructive) {
-                lists.removeAll(where: { $0.id == item.id })
-              } label: {
-                Text("삭제")
-                  .font(PBFonts.button._3.font)
+            .padding(.horizontal, 4)
+          }
+          .onMove { indexSet, index in
+            lists.move(fromOffsets: indexSet, toOffset: index)
+          }
+          TextField("소지품", text: $newPocketItem.title, axis: .vertical)
+            .onChange(of: focusIndex) { _, newValue in
+              if newValue != -1, !newPocketItem.title.isEmpty {
+                addItem()
               }
             }
-            Spacer()
-            PBImages.slide.image
-          }
-          .padding(.horizontal, 4)
-        }
-        .onMove { indexSet, index in
-          lists.move(fromOffsets: indexSet, toOffset: index)
-        }
-        PBCheckBoxTextField(
-          title: Binding(get: { newPocketItem.title }, set: { newPocketItem.title = $0 }),
-          memo: Binding(get: { newPocketItem.memo }, set: { newPocketItem.memo = $0 }),
-          isChecked: .constant(false)
-        ) { isEidting in
-          if !isEidting {
-            if !newPocketItem.title.isEmpty {
-              lists.append(newPocketItem)
-              newPocketItem = PocketItemModel(sortIndex: lists.count)
+            .checkBoxAndMemoField(title: $newPocketItem.title, memo: $newPocketItem.memo, isChecked: .constant(false)) {
+              if !newPocketItem.title.isEmpty {
+                addItem()
+                withAnimation {
+                  proxy.scrollTo(-1, anchor: .bottom)
+                }
+              } else {
+                focusIndex = nil
+              }
             }
-          }
+            .focused($focusIndex, equals: -1)
+            .padding(.horizontal, 4)
+            .id(-1)
         }
-        .padding(.horizontal, 4)
+        .listRowSeparator(.hidden)
       }
-      .listRowSeparator(.hidden)
-    }
-    .animation(.default, value: lists)
-    .listStyle(PlainListStyle())
-    .onChange(of: lists) { old, new in
-      if old.count >= new.count {
-        lists.updateSortIndices()
+      .animation(.default, value: lists)
+      .listStyle(PlainListStyle())
+      .onChange(of: lists) { old, new in
+        if old.count >= new.count {
+          lists.updateSortIndices()
+        }
+        pocket.items = lists
       }
-      pocket.items = lists
     }
+  }
+}
+
+private extension ItemList {
+  func addItem() {
+    lists.append(newPocketItem)
+    newPocketItem = PocketItemModel(sortIndex: lists.count)
   }
 }
 

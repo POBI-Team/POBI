@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct PBCheckBoxTextField: View {
+public struct PBCheckBoxTextFieldModifier: ViewModifier {
   enum CheckBoxState {
     case deactivate
     case unchecked
@@ -26,21 +26,21 @@ public struct PBCheckBoxTextField: View {
   @Binding public var memo: String
   @Binding public var isChecked: Bool
   @FocusState private var isFocused: Bool
-  private var onEditingChanged: (Bool) -> Void
+  private var onSubmitAction: () -> Void = {}
   
   public init(
     title: Binding<String>,
     memo: Binding<String>,
     isChecked: Binding<Bool>,
-    onEditingChanged: @escaping (Bool) -> Void  = { _ in }
+    onSubmitAction: @escaping () -> Void = {}
   ) {
     self._title = title
     self._memo = memo
     self._isChecked = isChecked
-    self.onEditingChanged = onEditingChanged
+    self.onSubmitAction = onSubmitAction
   }
   
-  public var body: some View {
+  public func body(content: Content) -> some View {
     HStack(alignment: .top) {
       Button {
         withAnimation {
@@ -54,11 +54,16 @@ public struct PBCheckBoxTextField: View {
       .buttonStyle(PlainButtonStyle())
       
       VStack(spacing: 4) {
-        TextField("소지품", text: $title)
+       content
           .font(PBFonts.body._2.font)
           .foregroundStyle(isChecked ? PBColors.navy._100.color : PBColors.navy._900.color)
           .autocorrectionDisabled(true)
           .focused($isFocused)
+          .onChange(of: title) { _, newValue in
+            guard newValue.contains("\n") else { return }
+            title = newValue.replacing("\n", with: "")
+            onSubmitAction()
+          }
         if !memo.isEmpty || isFocused || checkBox(title: title, isChecked: isChecked) == .deactivate {
           TextField("메모", text: $memo)
             .focused($isFocused)
@@ -67,18 +72,16 @@ public struct PBCheckBoxTextField: View {
             .foregroundStyle(PBColors.navy._200.color)
         }
       }
-      .onChange(of: isFocused) { _, newValue in
-        onEditingChanged(newValue)
-      }
     }
+    .padding(.vertical, 0)
   }
 }
 
-private extension PBCheckBoxTextField {
+private extension PBCheckBoxTextFieldModifier {
   func checkBox(title: String, isChecked: Bool) -> CheckBoxState {
     if isChecked {
       return .checked
-    } else if title.isEmpty {
+    } else if title.isEmpty || title == "\n" {
       return .deactivate
     } else {
       return .unchecked
@@ -86,8 +89,8 @@ private extension PBCheckBoxTextField {
   }
 }
 
-#Preview {
-  PBCheckBoxTextField(title: .constant(""), memo: .constant(""), isChecked: .constant(false))
-  
-  PBCheckBoxTextField(title: .constant("aaa"), memo: .constant(""), isChecked: .constant(true))
+extension View {
+  public func checkBoxAndMemoField(title: Binding<String>, memo: Binding<String>, isChecked: Binding<Bool>, onSubmitAction: @escaping () -> Void) -> some View {
+    modifier(PBCheckBoxTextFieldModifier(title: title, memo: memo, isChecked: isChecked, onSubmitAction: onSubmitAction))
+  }
 }
