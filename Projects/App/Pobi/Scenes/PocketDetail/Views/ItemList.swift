@@ -51,23 +51,32 @@ struct ItemList: View {
         Section {
           ForEach(lists.indices, id:\.self) { i in
             HStack {
-              TextField("", text: Binding(get: { lists[i].title }, set: { lists[i].title = $0 }), axis: .vertical)
-                .focused($focusIndex, equals: i)
-                .checkBoxAndMemoField(
-                  title: Binding(get: { lists[i].title }, set: { lists[i].title = $0 }),
-                  memo: Binding(get: { lists[i].memo }, set: { lists[i].memo = $0 }),
-                  isChecked: Binding(get: { lists[i].isChecked }, set: { lists[i].isChecked = $0 })
-                ) {
-                  if lists[i].title.isEmpty {
-                    lists.removeAll(where: { $0.id == lists[i].id })
+              TextField(
+                "",
+                text: Binding(get: { lists[i].title }, set: { lists[i].title = $0 }),
+                axis: .vertical
+              )
+              .focused($focusIndex, equals: i)
+              .checkBoxAndMemoField(
+                title: Binding(get: { lists[i].title }, set: { lists[i].title = $0 }),
+                memo: Binding(get: { lists[i].memo }, set: { lists[i].memo = $0 }),
+                isChecked: Binding(get: { lists[i].isChecked }, set: { lists[i].isChecked = $0 })
+              ) {
+                if lists[i].title.isEmpty {
+                  lists.removeAll(where: { $0.id == lists[i].id })
+                } else {
+                  if focusIndex == lists.count - 1 {
+                    focusIndex = -1
                   } else {
-                    if focusIndex == lists.count - 1 {
-                      focusIndex = -1
-                    } else {
-                      focusIndex! += 1
-                    }
+                    focusIndex! += 1
                   }
                 }
+              }
+              .onChange(of: focusIndex) { _, newValue in
+                if newValue != i, lists[i].title.isEmpty {
+                  lists.removeAll(where: { $0.id == lists[i].id })
+                }
+              }
               .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                 Button(role: .destructive) {
                   lists.removeAll(where: { $0.id == lists[i].id })
