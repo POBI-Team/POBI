@@ -35,6 +35,7 @@ struct SplashView: View {
             Text("나의 포켓비서")
               .font(PBFonts.title._1.font)
               .foregroundStyle(PBColors.navy._200.color)
+              .padding(.bottom, 12)
             PBImages.logo.image
               .padding(.bottom, 100)
             LottieView(animation: .named("pobi_splash"))
