@@ -18,10 +18,10 @@ struct RecommendedListView: View {
   @State private var items: [String] = []
   @State private var seletedItems: [String] = []
   
-  private let pocket: PocketModel
+  @Binding private var pocketItems: [PocketItemModel]
   
-  init(pocket: PocketModel) {
-    self.pocket = pocket
+  init(pocketItems: Binding<[PocketItemModel]>) {
+    self._pocketItems = pocketItems
   }
   
   var body: some View {
@@ -92,8 +92,8 @@ struct RecommendedListView: View {
     .rightItem {
       Button {
         dismiss()
-        var index = pocket.items.count - 1
-        pocket.items += seletedItems.map {
+        var index = pocketItems.count - 1
+        pocketItems += seletedItems.map {
           index += 1
           return PocketItemModel(title: $0, sortIndex: index)
         }
@@ -152,5 +152,5 @@ private extension RecommendedListView {
 }
 
 #Preview {
-  RecommendedListView(pocket: .init())
+  RecommendedListView(pocketItems: .constant([]))
 }

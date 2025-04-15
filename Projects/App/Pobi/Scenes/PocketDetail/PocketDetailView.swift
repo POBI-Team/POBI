@@ -15,7 +15,6 @@ struct PocketDetailView: View {
   @Environment(\.dismiss) private var dismiss
   private let pocket: PocketModel
   private let colors = PBColors.list.colors
-  @State private var isPresnetedRecommend: Bool = false
   
   init(_ pocket: PocketModel) {
     self.pocket = pocket
@@ -61,9 +60,6 @@ struct PocketDetailView: View {
       }
       .padding(.vertical, 20)
       .padding(.horizontal, 20)
-      .fullScreenCover(isPresented: $isPresnetedRecommend) {
-        RecommendedListView(pocket: pocket)
-      }
       ItemList(pocket: pocket)
         .padding(.leading, 2)
         .scrollDismissesKeyboard(.interactively)
@@ -84,28 +80,6 @@ struct PocketDetailView: View {
       }
       .tint(PBColors.navy._900.color)
       .disabled(pocket.isHidden)
-    }
-    .overlay(alignment: .bottomTrailing) {
-      if !pocket.isHidden {
-        Button {
-          isPresnetedRecommend = true
-        } label: {
-          HStack(spacing: 4) {
-            PBImages.lamp.image
-            Text("추천")
-              .font(PBFonts.button._1.font)
-              .foregroundStyle(.white)
-          }
-          .padding(.vertical, 9)
-          .padding(.leading, 16)
-          .padding(.trailing, 20)
-          .background(PBColors.navy._900.color)
-          .clipShape(Capsule())
-        }
-        .buttonStyle(.plain)
-        .padding(.trailing, 16)
-        .padding(.bottom, 20)
-      }
     }
   }
 }

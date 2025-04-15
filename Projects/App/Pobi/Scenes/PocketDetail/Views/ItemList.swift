@@ -15,6 +15,7 @@ struct ItemList: View {
   @Environment(\.modelContext) private var modelContext
   @State private var newPocketItem: PocketItemModel
   @State private var lists: [PocketItemModel]
+  @State private var isPresnetedRecommend: Bool = false
   @FocusState private var focusIndex: Int?
   
   init(pocket: PocketModel) {
@@ -122,6 +123,31 @@ struct ItemList: View {
           lists.updateSortIndices()
         }
         pocket.items = lists
+      }
+    }
+    .fullScreenCover(isPresented: $isPresnetedRecommend) {
+      RecommendedListView(pocketItems: $lists)
+    }
+    .overlay(alignment: .bottomTrailing) {
+      if !pocket.isHidden {
+        Button {
+          isPresnetedRecommend = true
+        } label: {
+          HStack(spacing: 4) {
+            PBImages.lamp.image
+            Text("추천")
+              .font(PBFonts.button._1.font)
+              .foregroundStyle(.white)
+          }
+          .padding(.vertical, 9)
+          .padding(.leading, 16)
+          .padding(.trailing, 20)
+          .background(PBColors.navy._900.color)
+          .clipShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .padding(.trailing, 16)
+        .padding(.bottom, 20)
       }
     }
   }
