@@ -50,21 +50,21 @@ struct ItemList: View {
     ScrollViewReader { proxy in
       List {
         Section {
-          ForEach(lists.indices, id:\.self) { i in
+          ForEach(Array(lists.enumerated()), id: \.element) { i, item in
             HStack {
               TextField(
-                "",
-                text: Binding(get: { lists[i].title }, set: { lists[i].title = $0 }),
+                "소지품",
+                text: Binding(get: { item.title }, set: { item.title = $0 }),
                 axis: .vertical
               )
               .focused($focusIndex, equals: i)
               .checkBoxAndMemoField(
-                title: Binding(get: { lists[i].title }, set: { lists[i].title = $0 }),
-                memo: Binding(get: { lists[i].memo }, set: { lists[i].memo = $0 }),
-                isChecked: Binding(get: { lists[i].isChecked }, set: { lists[i].isChecked = $0 })
+                title: Binding(get: { item.title }, set: { item.title = $0 }),
+                memo: Binding(get: { item.memo }, set: { item.memo = $0 }),
+                isChecked: Binding(get: { item.isChecked }, set: { item.isChecked = $0 })
               ) {
-                if lists[i].title.isEmpty {
-                  lists.removeAll(where: { $0.id == lists[i].id })
+                if item.title.isEmpty {
+                  lists.removeAll(where: { $0.id == item.id })
                 } else {
                   if focusIndex == lists.count - 1 {
                     focusIndex = -1
@@ -74,13 +74,13 @@ struct ItemList: View {
                 }
               }
               .onChange(of: focusIndex) { _, newValue in
-                if newValue != i, lists[i].title.isEmpty {
-                  lists.removeAll(where: { $0.id == lists[i].id })
+                if newValue != i, item.title.isEmpty {
+                  lists.removeAll(where: { $0.id == item.id })
                 }
               }
               .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                 Button(role: .destructive) {
-                  lists.removeAll(where: { $0.id == lists[i].id })
+                  lists.removeAll(where: { $0.id == item.id })
                 } label: {
                   Text("삭제")
                     .font(PBFonts.button._3.font)
