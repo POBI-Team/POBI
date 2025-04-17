@@ -59,6 +59,7 @@ public enum ButtonFont {
   public static var _1: UIFont { .custom(.semiBold, size: 18) }
   public static var _2: UIFont { .custom(.semiBold, size: 16) }
   public static var _3: UIFont { .custom(.medium, size: 16) }
+  public static var _4: UIFont { .custom(.medium, size: 12) }
 }
 
 public enum Caption {
@@ -68,9 +69,11 @@ public enum Caption {
 
 public enum Label {
   public static var _1: UIFont { .custom(.semiBold, size: 14) }
+  public static var _2: UIFont { .custom(.medium, size: 12) }
 }
 
 public enum TossFace {
+  public static var xsmall: UIFont { .custom(.tossFace, size: 15) }
   public static var small: UIFont { .custom(.tossFace, size: 20) }
   public static var medium: UIFont { .custom(.tossFace, size: 23) }
   public static var large: UIFont { .custom(.tossFace, size: 35) }

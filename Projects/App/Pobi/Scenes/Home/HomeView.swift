@@ -55,6 +55,37 @@ struct HomeView: View {
           }
           .buttonStyle(.plain)
         }
+        Link(destination: URL(string: "https://forms.gle/3jtXR98eGkbmpdpT8")!) {
+          HStack {
+            VStack(alignment: .leading, spacing: 3) {
+              HStack(spacing: 4) {
+                Text("📢")
+                  .font(PBFonts.tossFace.xsmall.font)
+                Text("소지품 리셋 어떻게 쓰고 계세요?")
+                  .font(PBFonts.label._1.font)
+                  .foregroundStyle(PBColors.navy._900.color)
+              }
+              Text("포비를 위해 설문에 참여해주세요!")
+                .font(PBFonts.label._2.font)
+                .foregroundStyle(PBColors.navy._200.color)
+            }
+            Spacer()
+            Text("참여하기")
+              .font(PBFonts.button._4.font)
+              .foregroundStyle(.white)
+              .frame(width: 62, height: 28)
+              .background(PBColors.navy._300.color)
+              .clipShape(RoundedRectangle(cornerRadius: 8))
+              
+          }
+          .padding(.horizontal, 20)
+          .frame(height: 68)
+          .background(PBColors.navy._10.color)
+          .clipShape(RoundedRectangle(cornerRadius: 16))
+        }
+        .padding(.top, 4)
+        .padding(.bottom, 20)
+        .buttonStyle(.plain)
         PBSegmentView(
           selected: $seletedTabIndex, items: .init("내 포켓"), .init("숨긴 포켓")
         )

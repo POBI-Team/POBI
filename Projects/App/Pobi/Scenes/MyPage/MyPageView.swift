@@ -55,7 +55,7 @@ struct MyPageView: View {
                 HStack {
                   PBImages.like.image
                   Text("친구에게 포비 추천하기")
-                    .font(PBFonts.body._2.font)
+                    .font(PBFonts.button._3.font)
                     .foregroundStyle(PBColors.navy._900.color)
                   Spacer()
                   PBImages.right.image
@@ -65,7 +65,7 @@ struct MyPageView: View {
                 HStack {
                   PBImages.mail.image
                   Text("앱스토어 리뷰 쓰기")
-                    .font(PBFonts.body._2.font)
+                    .font(PBFonts.button._3.font)
                     .foregroundStyle(PBColors.navy._900.color)
                   Spacer()
                   PBImages.right.image
@@ -78,7 +78,7 @@ struct MyPageView: View {
                   Group {
                     PBImages.trash.image
                     Text("모든 포켓 초기화")
-                      .font(PBFonts.body._2.font)
+                      .font(PBFonts.button._3.font)
                   }
                   .foregroundStyle(PBColors.red.color)
                   Spacer()
@@ -94,8 +94,9 @@ struct MyPageView: View {
           HStack {
             VStack(alignment: .leading, spacing: 12) {
               Text("포비에게 궁금한 게 있다면\n언제든 연락주세요!")
-                .lineSpacing(7)
+                .lineSpacing(3)
                 .font(PBFonts.body._4.font)
+                .foregroundStyle(PBColors.navy._900.color)
                 .padding(.horizontal, 20)
               Link(destination: URL(string: "https://pf.kakao.com/_LHHxfn")!) {
                 Capsule()
