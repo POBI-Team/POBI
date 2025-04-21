@@ -52,6 +52,7 @@ struct SplashView: View {
          NavigationStack {
            HomeView(isPresentedCreate: $isPresnetedCreate)
              .modelContext(modelContext)
+             .id(notificationManager.seletedPocketID)
         }
          .transition(.move(edge: .trailing))
       } else {
