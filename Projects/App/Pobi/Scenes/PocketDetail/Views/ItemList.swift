@@ -26,8 +26,8 @@ struct ItemList: View {
   
   var body: some View {
     HStack {
-      Text("\(lists.count) items")
-        .font(PBFonts.body._1.font)
+      Text("소지품 \(lists.count)개")
+        .font(PBFonts.caption._2.font)
         .foregroundStyle(PBColors.navy._100.color)
       Spacer()
       Button {
@@ -36,8 +36,8 @@ struct ItemList: View {
         }
       } label: {
         HStack(alignment: .center, spacing: 6) {
-          Text("reset")
-            .font(PBFonts.caption._1.font)
+          Text("리셋")
+            .font(PBFonts.label._1.font)
           PBImages.reset.image
             .renderingMode(.template)
         }
