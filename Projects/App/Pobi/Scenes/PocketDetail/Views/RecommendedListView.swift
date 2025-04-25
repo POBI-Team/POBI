@@ -16,12 +16,14 @@ struct RecommendedListView: View {
   @State private var seletedCategoryIndex: Int = 0
   @State private var recommendedItem: PBRecommendedItem? = nil
   @State private var items: [String] = []
-  @State private var seletedItems: [String] = []
-  
+  @State private var seletedItemTitles: Set<String>
+  @State private var seletedItems: [PocketItem]
   @Binding private var pocketItems: [PocketItemModel]
   
   init(pocketItems: Binding<[PocketItemModel]>) {
     self._pocketItems = pocketItems
+    self.seletedItems = pocketItems.wrappedValue.map { PocketItem(model: $0) }
+    self.seletedItemTitles = Set(pocketItems.wrappedValue.map(\.title))
   }
   
   var body: some View {
@@ -60,10 +62,12 @@ struct RecommendedListView: View {
               .clipShape(RoundedRectangle(cornerRadius: 12))
               .onTapGesture {
                 withAnimation {
-                  if seletedItems.contains(items[i]) {
-                    seletedItems.removeAll { $0 == items[i] }
+                  if seletedItemTitles.contains(items[i]) {
+                    seletedItemTitles.remove(items[i])
+                    seletedItems.removeAll { $0.title == items[i] }
                   } else {
-                    seletedItems.append(items[i])
+                    seletedItemTitles.insert(items[i])
+                    seletedItems.append(PocketItem(title: items[i]))
                   }
                 }
               }
@@ -92,11 +96,8 @@ struct RecommendedListView: View {
     .rightItem {
       Button {
         dismiss()
-        var index = pocketItems.count - 1
-        pocketItems += seletedItems.map {
-          index += 1
-          return PocketItemModel(title: $0, sortIndex: index)
-        }
+        pocketItems = seletedItems.map { $0.toModel() }
+        pocketItems.updateSortIndices()
         FirebaseManager.shared.logEvent(event: .addRecommendedList)
       } label: {
         Text("추가")
@@ -139,15 +140,15 @@ struct RecommendedListView: View {
 
 private extension RecommendedListView {
   func cellBackgroundColor(_ item: String) -> Color {
-    seletedItems.contains(item) ? PBColors.yellow._200.color : PBColors.navy._10.color
+    seletedItemTitles.contains(item) ? PBColors.yellow._200.color : PBColors.navy._10.color
   }
   
   func iconAngle(_ item: String) -> Double {
-    seletedItems.contains(item) ? 45.0 : 0
+    seletedItemTitles.contains(item) ? 45.0 : 0
   }
   
   func iconColor(_ item: String) -> Color {
-    seletedItems.contains(item) ? PBColors.yellow._600.color : PBColors.navy._100.color
+    seletedItemTitles.contains(item) ? PBColors.yellow._600.color : PBColors.navy._100.color
   }
 }
 
