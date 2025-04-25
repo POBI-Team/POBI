@@ -129,6 +129,7 @@ struct MyPageView: View {
             modelContext.delete(pocket)
           })
         try? modelContext.save()
+        dismiss()
       }
     }
     .title("마이페이지")
