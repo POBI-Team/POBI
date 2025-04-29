@@ -51,8 +51,8 @@ struct RecommendedListView: View {
                   .font(PBFonts.body._3.font)
                   .foregroundStyle(PBColors.navy._900.color)
                 Spacer()
-                PBImages.plus16.image
-                  .renderingMode(.template)
+                PBShapes.plus()
+                  .frame(width: 14, height: 14)
                   .foregroundStyle(iconColor(items[i]))
                   .rotationEffect(.init(degrees: iconAngle(items[i])))
               }
