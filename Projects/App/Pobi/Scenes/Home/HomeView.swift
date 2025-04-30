@@ -12,7 +12,6 @@ import PBStorage
 import LocalNotiService
 
 struct HomeView: View {
-  @Environment(\.modelContext) private var modelContext
   @State private var seletedTabIndex: Int = 0
   @Binding private var isPresentedCreate: Bool
   @State private var isAppear = false
@@ -35,7 +34,6 @@ struct HomeView: View {
           Spacer()
           NavigationLink {
             MyPageView()
-              .modelContext(modelContext)
           } label: {
             ZStack(alignment: .bottomTrailing) {
               profileImageType.profileImage
