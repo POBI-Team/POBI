@@ -65,6 +65,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 struct PobiApp: App {
   @StateObject var notificationManager = NotificationManager()
   @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+  private let formatter = PBFormatter()
   
   init() {
     PBFonts.registerFont()
@@ -74,6 +75,7 @@ struct PobiApp: App {
     WindowGroup {
       SplashView()
         .environmentObject(appDelegate.notificationManager)
+        .environmentObject(formatter)
         .modelContainer(for: [PocketModel.self, PocketItemModel.self, PocketAlarmModel.self])
     }
   }

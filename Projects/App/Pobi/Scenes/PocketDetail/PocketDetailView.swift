@@ -13,6 +13,7 @@ import PBStorageInterface
 struct PocketDetailView: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
+  @EnvironmentObject private var formatter: PBFormatter
   private let pocket: PocketModel
   private let colors = PBColors.list.colors
   
@@ -88,9 +89,9 @@ private extension PocketDetailView {
   var alarmLabel: some View {
     if pocket.isHidden { return AnyView(Text("숨긴 포켓")) }
     if pocket.onAlarm {
-      let time = PBFormatter.shared.label(pocket.alarm.time, format: "a h:mm", locale: Locale(identifier: "ko_KR"))
+      let time = formatter.label(pocket.alarm.time, format: "a h:mm", locale: Locale(identifier: "ko_KR"))
       if pocket.repeats {
-        let days = PBFormatter.shared.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
+        let days = formatter.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
         return AnyView(
           HStack(spacing: 0) {
             Text("\(days)")
@@ -100,7 +101,7 @@ private extension PocketDetailView {
             Text("\(time)")
           })
       }
-      let date = PBFormatter.shared.label(pocket.alarm.date, format: "M월 d일")
+      let date = formatter.label(pocket.alarm.date, format: "M월 d일")
       return AnyView(
         HStack(spacing: 0) {
           Text("\(date)")

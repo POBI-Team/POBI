@@ -17,6 +17,7 @@ struct SettingAlarmView: View {
   @Binding private var pocket: Pocket
   @Binding private var isDidTapDownButton: Bool
   @FocusState private var isFocused: Bool
+  @EnvironmentObject private var formatter: PBFormatter
   
   init(
     pocket: Binding<Pocket>,
@@ -162,15 +163,15 @@ struct SettingAlarmView: View {
 
 private extension SettingAlarmView {
   var repeatLabel: String {
-    PBFormatter.shared.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
+    formatter.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
   }
   
   var timeLabel: String {
-    PBFormatter.shared.label(pocket.alarm.time, format: "h:mm a")
+    formatter.label(pocket.alarm.time, format: "h:mm a")
   }
   
   var dateLabel: String {
-    PBFormatter.shared.label(pocket.alarm.date, format: "M월 d일")
+    formatter.label(pocket.alarm.date, format: "M월 d일")
   }
 }
 

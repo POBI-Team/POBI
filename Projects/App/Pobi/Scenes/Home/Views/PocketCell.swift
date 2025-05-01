@@ -15,6 +15,7 @@ struct PocketCell: View {
   private let colors = PBColors.list.colors
   @State private var isPresentedPocketMore = false
   @State private var isPresentedCreate = false
+  @EnvironmentObject private var formatter: PBFormatter
   
   init (
     _ pocket: PocketModel
@@ -86,9 +87,9 @@ private extension PocketCell {
   var alarmLabel: String {
     if pocket.onAlarm {
       if pocket.repeats {
-        return PBFormatter.shared.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
+        return formatter.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
       }
-      return PBFormatter.shared.label(pocket.alarm.date, format: "M월 d일")
+      return formatter.label(pocket.alarm.date, format: "M월 d일")
     }
     return ""
   }
