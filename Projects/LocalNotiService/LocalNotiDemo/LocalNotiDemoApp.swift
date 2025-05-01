@@ -1,6 +1,6 @@
 //
-//  LocalNotiDemoAppApp.swift
-//  LocalNotiDemoApp
+//  LocalNotiDemoApp.swift
+//  LocalNotiDemo
 //
 //  Created by 이시원 on 3/23/25.
 //
@@ -10,7 +10,7 @@ import SwiftUI
 import LocalNotiService
 
 @main
-struct LocalNotiDemoAppApp: App {
+struct LocalNotiDemoApp: App {
   var body: some Scene {
     WindowGroup {
       ContentView()

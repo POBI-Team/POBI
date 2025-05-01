@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  LocalNotiDemoApp
+//  LocalNotiDemo
 //
 //  Created by 이시원 on 3/23/25.
 //
