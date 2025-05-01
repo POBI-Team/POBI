@@ -5,6 +5,9 @@
       location = "group:Projects"
       name = "Projects">
       <FileRef
+         location = "group:PBCalender/PBCalender.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:LocalNotiService/LocalNotiService.xcodeproj">
       </FileRef>
       <FileRef

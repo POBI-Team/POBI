@@ -22,6 +22,8 @@
 		9BAB70C82D8199E0004D52A1 /* PBStorage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BAB70C62D8199E0004D52A1 /* PBStorage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9BD4B1A92D8D7F8C00CA86C4 /* NetworkService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD4B1A82D8D7F8C00CA86C4 /* NetworkService.framework */; };
 		9BD4B1AA2D8D7F8C00CA86C4 /* NetworkService.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD4B1A82D8D7F8C00CA86C4 /* NetworkService.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9BF8D2E32DC3632400ACED78 /* PBCalender.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF8D2E22DC3632400ACED78 /* PBCalender.framework */; };
+		9BF8D2E42DC3632400ACED78 /* PBCalender.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF8D2E22DC3632400ACED78 /* PBCalender.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +33,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				9BF8D2E42DC3632400ACED78 /* PBCalender.framework in Embed Frameworks */,
 				9B61920A2D9BC41500DB18D1 /* Lottie-Dynamic in Embed Frameworks */,
 				9BD4B1AA2D8D7F8C00CA86C4 /* NetworkService.framework in Embed Frameworks */,
 				9BAB70C82D8199E0004D52A1 /* PBStorage.framework in Embed Frameworks */,
@@ -52,6 +55,7 @@
 		9BAB70C62D8199E0004D52A1 /* PBStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PBStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BD4B1A82D8D7F8C00CA86C4 /* NetworkService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = NetworkService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BE14C3C2D6043DF008A0E49 /* Pobi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pobi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BF8D2E22DC3632400ACED78 /* PBCalender.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PBCalender.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -67,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BF8D2E32DC3632400ACED78 /* PBCalender.framework in Frameworks */,
 				9B6192092D9BC41100DB18D1 /* Lottie-Dynamic in Frameworks */,
 				9BD4B1A92D8D7F8C00CA86C4 /* NetworkService.framework in Frameworks */,
 				9BA3F4E22DA528CD005BFBA5 /* FirebaseAnalytics in Frameworks */,
@@ -84,6 +89,7 @@
 		9B01D2632D647CBE0060E8B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9BF8D2E22DC3632400ACED78 /* PBCalender.framework */,
 				9B626BB62D9A30F4001255F3 /* LocalNotiService.framework */,
 				9B0928D52D9563AB002B96A8 /* PBStorageInterface.framework */,
 				9B0928D22D956389002B96A8 /* NetworkServiceInterface.framework */,
