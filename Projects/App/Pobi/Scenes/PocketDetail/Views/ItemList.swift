@@ -5,6 +5,7 @@
 //  Created by 이시원 on 2/21/25.
 //
 
+import Foundation
 import SwiftUI
 
 import PBDesignSystem
@@ -25,130 +26,137 @@ struct ItemList: View {
   }
   
   var body: some View {
-    HStack {
-      Text("소지품 \(lists.count)개")
-        .font(PBFonts.caption._2.font)
-        .foregroundStyle(PBColors.navy._100.color)
-      Spacer()
-      Button {
-        for i in lists.indices {
-          lists[i].isChecked = false
+    Group {
+      HStack {
+        Text("소지품 \(lists.count)개")
+          .font(PBFonts.caption._2.font)
+          .foregroundStyle(PBColors.navy._100.color)
+        Spacer()
+        Button {
+          for i in lists.indices {
+            lists[i].isChecked = false
+          }
+        } label: {
+          HStack(alignment: .center, spacing: 6) {
+            Text("리셋")
+              .font(PBFonts.label._1.font)
+            PBImages.reset.image
+              .renderingMode(.template)
+          }
+          .frame(height: 16)
         }
-      } label: {
-        HStack(alignment: .center, spacing: 6) {
-          Text("리셋")
-            .font(PBFonts.label._1.font)
-          PBImages.reset.image
-            .renderingMode(.template)
-        }
-        .frame(height: 16)
+        .tint(PBColors.red.color)
       }
-      .tint(PBColors.red.color)
-    }
-    .padding(.horizontal, 28)
-    .padding(.bottom, 8)
-    ScrollViewReader { proxy in
-      List {
-        Section {
-          ForEach(Array(lists.enumerated()), id: \.element) { i, item in
-            HStack {
-              TextField(
-                "소지품",
-                text: Binding(get: { item.title }, set: { item.title = $0 }),
-                axis: .vertical
-              )
-              .focused($focusIndex, equals: i)
-              .checkBoxAndMemoField(
-                title: Binding(get: { item.title }, set: { item.title = $0 }),
-                memo: Binding(get: { item.memo }, set: { item.memo = $0 }),
-                isChecked: Binding(get: { item.isChecked }, set: { item.isChecked = $0 })
-              ) {
-                if item.title.isEmpty {
-                  lists.removeAll(where: { $0.id == item.id })
-                } else {
-                  if focusIndex == lists.count - 1 {
-                    focusIndex = -1
+      .padding(.horizontal, 28)
+      .padding(.bottom, 8)
+      ScrollViewReader { proxy in
+        List {
+          Section {
+            ForEach(Array(lists.enumerated()), id: \.element) { i, item in
+              HStack {
+                TextField(
+                  "소지품",
+                  text: Binding(get: { item.title }, set: { item.title = $0 }),
+                  axis: .vertical
+                )
+                .focused($focusIndex, equals: i)
+                .checkBoxAndMemoField(
+                  title: Binding(get: { item.title }, set: { item.title = $0 }),
+                  memo: Binding(get: { item.memo }, set: { item.memo = $0 }),
+                  isChecked: Binding(get: { item.isChecked }, set: { item.isChecked = $0 })
+                ) {
+                  if item.title.isEmpty {
+                    lists.removeAll(where: { $0.id == item.id })
                   } else {
-                    focusIndex! += 1
+                    if focusIndex == lists.count - 1 {
+                      focusIndex = -1
+                    } else {
+                      focusIndex! += 1
+                    }
                   }
                 }
+                .onChange(of: focusIndex) { _, newValue in
+                  if newValue != i, item.title.isEmpty {
+                    lists.removeAll(where: { $0.id == item.id })
+                  }
+                }
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                  Button(role: .destructive) {
+                    lists.removeAll(where: { $0.id == item.id })
+                  } label: {
+                    Text("삭제")
+                      .font(PBFonts.button._3.font)
+                  }
+                }
+                Spacer()
+                PBImages.slide.image
               }
+              .padding(.horizontal, 4)
+            }
+            .onMove { indexSet, index in
+              lists.move(fromOffsets: indexSet, toOffset: index)
+            }
+            TextField("소지품", text: $newPocketItem.title, axis: .vertical)
               .onChange(of: focusIndex) { _, newValue in
-                if newValue != i, item.title.isEmpty {
-                  lists.removeAll(where: { $0.id == item.id })
+                if newValue != -1, !newPocketItem.title.isEmpty {
+                  addItem()
                 }
               }
-              .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                Button(role: .destructive) {
-                  lists.removeAll(where: { $0.id == item.id })
-                } label: {
-                  Text("삭제")
-                    .font(PBFonts.button._3.font)
+              .checkBoxAndMemoField(title: $newPocketItem.title, memo: $newPocketItem.memo, isChecked: .constant(false)) {
+                if !newPocketItem.title.isEmpty {
+                  addItem()
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    withAnimation {
+                      proxy.scrollTo(-1, anchor: .bottom)
+                    }
+                  }
+                } else {
+                  focusIndex = nil
                 }
               }
-              Spacer()
-              PBImages.slide.image
-            }
-            .padding(.horizontal, 4)
+              .focused($focusIndex, equals: -1)
+              .padding(.horizontal, 4)
+              .id(-1)
           }
-          .onMove { indexSet, index in
-            lists.move(fromOffsets: indexSet, toOffset: index)
-          }
-          TextField("소지품", text: $newPocketItem.title, axis: .vertical)
-            .onChange(of: focusIndex) { _, newValue in
-              if newValue != -1, !newPocketItem.title.isEmpty {
-                addItem()
-              }
-            }
-            .checkBoxAndMemoField(title: $newPocketItem.title, memo: $newPocketItem.memo, isChecked: .constant(false)) {
-              if !newPocketItem.title.isEmpty {
-                addItem()
-                withAnimation {
-                  proxy.scrollTo(-1, anchor: .bottom)
-                }
-              } else {
-                focusIndex = nil
-              }
-            }
-            .focused($focusIndex, equals: -1)
-            .padding(.horizontal, 4)
-            .id(-1)
+          .listRowSeparator(.hidden)
         }
-        .listRowSeparator(.hidden)
+        .animation(.default, value: lists)
+        .listStyle(PlainListStyle())
+        .onChange(of: lists) { old, new in
+          if old.count >= new.count {
+            lists.updateSortIndices()
+          }
+          pocket.items = lists
+        }
       }
-      .animation(.default, value: lists)
-      .listStyle(PlainListStyle())
-      .onChange(of: lists) { old, new in
-        if old.count >= new.count {
-          lists.updateSortIndices()
+      .fullScreenCover(isPresented: $isPresnetedRecommend) {
+        RecommendedListView(pocketItems: $lists)
+      }
+      .overlay(alignment: .bottomTrailing) {
+        if !pocket.isHidden {
+          Button {
+            isPresnetedRecommend = true
+          } label: {
+            HStack(spacing: 4) {
+              PBImages.lamp.image
+              Text("추천")
+                .font(PBFonts.button._1.font)
+                .foregroundStyle(.white)
+            }
+            .padding(.vertical, 9)
+            .padding(.leading, 16)
+            .padding(.trailing, 20)
+            .background(PBColors.navy._900.color)
+            .clipShape(Capsule())
+          }
+          .buttonStyle(.plain)
+          .padding(.trailing, 16)
+          .padding(.bottom, 20)
         }
-        pocket.items = lists
       }
     }
-    .fullScreenCover(isPresented: $isPresnetedRecommend) {
-      RecommendedListView(pocketItems: $lists)
-    }
-    .overlay(alignment: .bottomTrailing) {
-      if !pocket.isHidden {
-        Button {
-          isPresnetedRecommend = true
-        } label: {
-          HStack(spacing: 4) {
-            PBImages.lamp.image
-            Text("추천")
-              .font(PBFonts.button._1.font)
-              .foregroundStyle(.white)
-          }
-          .padding(.vertical, 9)
-          .padding(.leading, 16)
-          .padding(.trailing, 20)
-          .background(PBColors.navy._900.color)
-          .clipShape(Capsule())
-        }
-        .buttonStyle(.plain)
-        .padding(.trailing, 16)
-        .padding(.bottom, 20)
-      }
+    .onTapGesture {
+      focusIndex = nil
     }
   }
 }
