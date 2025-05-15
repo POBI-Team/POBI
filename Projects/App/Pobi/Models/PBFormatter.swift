@@ -33,7 +33,7 @@ final class PBFormatter: Sendable, ObservableObject {
     }
   }
   
-  private func weekDay(_ day: Int) -> String? {
+  func weekDay(_ day: Int) -> String? {
     switch day {
     case 1: "일"
     case 2: "월"
