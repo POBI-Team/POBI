@@ -39,6 +39,21 @@ public final class PBCalendarManager: Sendable, ObservableObject {
         }
       }
   }
+  
+  public func date(of item: PBCalendarItem, in date: Date) -> Date {
+    var components = calendar.dateComponents([.year, .month], from: date)
+    components.day = item.day
+    let date = calendar.date(from: components)!
+    if item.isInCurrentMonth {
+      return date
+    } else {
+      if item.day > 15 {
+        return calendar.date(byAdding: .month, value: -1, to: date)!
+      } else {
+        return calendar.date(byAdding: .month, value: 1, to: date)!
+      }
+    }
+  }
 }
 
 private extension PBCalendarManager {
@@ -67,8 +82,6 @@ private extension PBCalendarManager {
   func previousMonth(at date: Date) -> Date {
     let components = calendar.dateComponents([.year, .month], from: date)
     let firstDayOfMonth = calendar.date(from: components)!
-    let previousMonth = calendar.date(byAdding: .month, value: -1, to: firstDayOfMonth)!
-    
-    return previousMonth
+    return calendar.date(byAdding: .month, value: -1, to: firstDayOfMonth)!
   }
 }
