@@ -1,18 +1,18 @@
 //
-//  PBCalenderTests.swift
-//  PBCalenderTests
+//  PBCalendarTests.swift
+//  PBCalendarTests
 //
 //  Created by 이시원 on 5/1/25.
 //
 
 import XCTest
-@testable import PBCalender
+@testable import PBCalendar
 
-final class PBCalenderTests: XCTestCase {
-  private var sut: PBCalenderManager!
+final class PBCalendarTests: XCTestCase {
+  private var sut: PBCalendarManager!
   
   override func setUp() {
-    sut = PBCalenderManager()
+    sut = PBCalendarManager()
   }
   
   override func tearDown() {
@@ -23,7 +23,7 @@ final class PBCalenderTests: XCTestCase {
     // Arrange
     var calendar = Calendar.current
     calendar.firstWeekday = 2
-    sut = PBCalenderManager(caledar: calendar)
+    sut = PBCalendarManager(caledar: calendar)
     // Act
     let output = sut.weekdays
     // Assert
@@ -44,7 +44,7 @@ final class PBCalenderTests: XCTestCase {
     let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
     var calendar = Calendar.current
     calendar.firstWeekday = 3
-    sut = PBCalenderManager(caledar: calendar)
+    sut = PBCalendarManager(caledar: calendar)
     // Act
     let output = sut.days(in: date)
     // Assert

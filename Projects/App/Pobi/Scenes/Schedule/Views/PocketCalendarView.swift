@@ -1,5 +1,5 @@
 //
-//  PocketCalenderView.swift
+//  PocketCalendarView.swift
 //  Pobi
 //
 //  Created by 이시원 on 4/30/25.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-import PBCalender
+import PBCalendar
 import PBDesignSystem
 
-struct PocketCalenderView: View {
+struct PocketCalendarView: View {
   @EnvironmentObject private var formatter: PBFormatter
-  @EnvironmentObject private var calender: PBCalenderManager
+  @EnvironmentObject private var calender: PBCalendarManager
   @State private var selectedDate: Date
   
   init(seletedDate: Date) {
@@ -60,8 +60,8 @@ struct PocketCalenderView: View {
   }
 }
 
-extension PocketCalenderView {
-  func dayLabelColor(week: Int, item: PBCalenderItem) -> Color {
+extension PocketCalendarView {
+  func dayLabelColor(week: Int, item: PBCalendarItem) -> Color {
     if item.isToday { return .white }
     if week == 1 {
       return PBColors.red.color
@@ -74,7 +74,7 @@ extension PocketCalenderView {
 }
 
 #Preview {
-  PocketCalenderView(seletedDate: Calendar.current.date(from: DateComponents(year: 2025, month: 5))!)
-    .environmentObject(PBCalenderManager())
+  PocketCalendarView(seletedDate: Calendar.current.date(from: DateComponents(year: 2025, month: 5))!)
+    .environmentObject(PBCalendarManager())
     .environmentObject(PBFormatter())
 }

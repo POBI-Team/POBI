@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9BF8D2DC2DC35E8A00ACED78 /* PBCalender.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF8D2C72DC35A2A00ACED78 /* PBCalender.framework */; };
+		9BF8D2DC2DC35E8A00ACED78 /* PBCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF8D2C72DC35A2A00ACED78 /* PBCalendar.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -21,19 +21,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9BF8D2C72DC35A2A00ACED78 /* PBCalender.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PBCalender.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9BF8D2D82DC35E8A00ACED78 /* PBCalenderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PBCalenderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BF8D2C72DC35A2A00ACED78 /* PBCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PBCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9BF8D2D82DC35E8A00ACED78 /* PBCalendarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PBCalendarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		9BF8D2C92DC35A2A00ACED78 /* PBCalender */ = {
+		9BF8D2C92DC35A2A00ACED78 /* PBCalendar */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = PBCalender;
+			path = PBCalendar;
 			sourceTree = "<group>";
 		};
-		9BF8D2D92DC35E8A00ACED78 /* PBCalenderTests */ = {
+		9BF8D2D92DC35E8A00ACED78 /* PBCalendarTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = PBCalenderTests;
+			path = PBCalendarTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -50,7 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BF8D2DC2DC35E8A00ACED78 /* PBCalender.framework in Frameworks */,
+				9BF8D2DC2DC35E8A00ACED78 /* PBCalendar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,8 +60,8 @@
 		9BF8D2BD2DC35A2A00ACED78 = {
 			isa = PBXGroup;
 			children = (
-				9BF8D2C92DC35A2A00ACED78 /* PBCalender */,
-				9BF8D2D92DC35E8A00ACED78 /* PBCalenderTests */,
+				9BF8D2C92DC35A2A00ACED78 /* PBCalendar */,
+				9BF8D2D92DC35E8A00ACED78 /* PBCalendarTests */,
 				9BF8D2C82DC35A2A00ACED78 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -69,8 +69,8 @@
 		9BF8D2C82DC35A2A00ACED78 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9BF8D2C72DC35A2A00ACED78 /* PBCalender.framework */,
-				9BF8D2D82DC35E8A00ACED78 /* PBCalenderTests.xctest */,
+				9BF8D2C72DC35A2A00ACED78 /* PBCalendar.framework */,
+				9BF8D2D82DC35E8A00ACED78 /* PBCalendarTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -88,9 +88,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		9BF8D2C62DC35A2A00ACED78 /* PBCalender */ = {
+		9BF8D2C62DC35A2A00ACED78 /* PBCalendar */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9BF8D2D02DC35A2A00ACED78 /* Build configuration list for PBXNativeTarget "PBCalender" */;
+			buildConfigurationList = 9BF8D2D02DC35A2A00ACED78 /* Build configuration list for PBXNativeTarget "PBCalendar" */;
 			buildPhases = (
 				9BF8D2C22DC35A2A00ACED78 /* Headers */,
 				9BF8D2C32DC35A2A00ACED78 /* Sources */,
@@ -102,18 +102,18 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				9BF8D2C92DC35A2A00ACED78 /* PBCalender */,
+				9BF8D2C92DC35A2A00ACED78 /* PBCalendar */,
 			);
-			name = PBCalender;
+			name = PBCalendar;
 			packageProductDependencies = (
 			);
 			productName = PBCalender;
-			productReference = 9BF8D2C72DC35A2A00ACED78 /* PBCalender.framework */;
+			productReference = 9BF8D2C72DC35A2A00ACED78 /* PBCalendar.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		9BF8D2D72DC35E8A00ACED78 /* PBCalenderTests */ = {
+		9BF8D2D72DC35E8A00ACED78 /* PBCalendarTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9BF8D2DF2DC35E8A00ACED78 /* Build configuration list for PBXNativeTarget "PBCalenderTests" */;
+			buildConfigurationList = 9BF8D2DF2DC35E8A00ACED78 /* Build configuration list for PBXNativeTarget "PBCalendarTests" */;
 			buildPhases = (
 				9BF8D2D42DC35E8A00ACED78 /* Sources */,
 				9BF8D2D52DC35E8A00ACED78 /* Frameworks */,
@@ -125,13 +125,13 @@
 				9BF8D2DE2DC35E8A00ACED78 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				9BF8D2D92DC35E8A00ACED78 /* PBCalenderTests */,
+				9BF8D2D92DC35E8A00ACED78 /* PBCalendarTests */,
 			);
-			name = PBCalenderTests;
+			name = PBCalendarTests;
 			packageProductDependencies = (
 			);
 			productName = PBCalenderTests;
-			productReference = 9BF8D2D82DC35E8A00ACED78 /* PBCalenderTests.xctest */;
+			productReference = 9BF8D2D82DC35E8A00ACED78 /* PBCalendarTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -152,7 +152,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 9BF8D2C12DC35A2A00ACED78 /* Build configuration list for PBXProject "PBCalender" */;
+			buildConfigurationList = 9BF8D2C12DC35A2A00ACED78 /* Build configuration list for PBXProject "PBCalendar" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -166,8 +166,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9BF8D2C62DC35A2A00ACED78 /* PBCalender */,
-				9BF8D2D72DC35E8A00ACED78 /* PBCalenderTests */,
+				9BF8D2C62DC35A2A00ACED78 /* PBCalendar */,
+				9BF8D2D72DC35E8A00ACED78 /* PBCalendarTests */,
 			);
 		};
 /* End PBXProject section */
@@ -209,7 +209,7 @@
 /* Begin PBXTargetDependency section */
 		9BF8D2DE2DC35E8A00ACED78 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 9BF8D2C62DC35A2A00ACED78 /* PBCalender */;
+			target = 9BF8D2C62DC35A2A00ACED78 /* PBCalendar */;
 			targetProxy = 9BF8D2DD2DC35E8A00ACED78 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -445,7 +445,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9BF8D2C12DC35A2A00ACED78 /* Build configuration list for PBXProject "PBCalender" */ = {
+		9BF8D2C12DC35A2A00ACED78 /* Build configuration list for PBXProject "PBCalendar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9BF8D2CE2DC35A2A00ACED78 /* Debug */,
@@ -454,7 +454,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9BF8D2D02DC35A2A00ACED78 /* Build configuration list for PBXNativeTarget "PBCalender" */ = {
+		9BF8D2D02DC35A2A00ACED78 /* Build configuration list for PBXNativeTarget "PBCalendar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9BF8D2D12DC35A2A00ACED78 /* Debug */,
@@ -463,7 +463,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9BF8D2DF2DC35E8A00ACED78 /* Build configuration list for PBXNativeTarget "PBCalenderTests" */ = {
+		9BF8D2DF2DC35E8A00ACED78 /* Build configuration list for PBXNativeTarget "PBCalendarTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9BF8D2E02DC35E8A00ACED78 /* Debug */,

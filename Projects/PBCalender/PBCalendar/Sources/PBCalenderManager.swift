@@ -1,6 +1,6 @@
 //
-//  PBCalender.swift
-//  PBCalender
+//  PBCalendarManager.swift
+//  PBCalendar
 //
 //  Created by 이시원 on 5/1/25.
 //
@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-public final class PBCalenderManager: Sendable, ObservableObject {
+public final class PBCalendarManager: Sendable, ObservableObject {
   private let calendar: Calendar
   public init(caledar: Calendar = .current) {
     self.calendar = caledar
@@ -21,27 +21,27 @@ public final class PBCalenderManager: Sendable, ObservableObject {
     }
   }
   
-  public func days(in date: Date) -> [PBCalenderItem] {
+  public func days(in date: Date) -> [PBCalendarItem] {
     let startfirstWeekdayIndex = firstWeekdayOfMonth(in: date) - calendar.firstWeekday // 사용자의 캘린더 시작 날짜에 따라 첫일이 시작하는 시점
     let lastDay = numberOfDays(in: date)
     let lastDayOfMonthBefore = numberOfDays(in: previousMonth(at: date))
     let rowCount = ceil((Double(lastDay + startfirstWeekdayIndex) / 7))
     let visibleDaysCountOfNextMonth = Int(rowCount) * 7 - (lastDay + startfirstWeekdayIndex)
     return Array(-startfirstWeekdayIndex..<lastDay + visibleDaysCountOfNextMonth)
-      .map { i -> PBCalenderItem in
+      .map { i -> PBCalendarItem in
         if i > -1 && i < lastDay { // 현재 달
           let day = i + 1
-          return PBCalenderItem(day: day, isToday: isToday(date: date, day: day), isInCurrentMonth: true)
+          return PBCalendarItem(day: day, isToday: isToday(date: date, day: day), isInCurrentMonth: true)
         } else if i >= lastDay { // 이후 달
-          return PBCalenderItem(day: i - lastDay + 1, isToday: false, isInCurrentMonth: false)
+          return PBCalendarItem(day: i - lastDay + 1, isToday: false, isInCurrentMonth: false)
         } else { // 이전 달
-          return PBCalenderItem(day: lastDayOfMonthBefore + i + 1, isToday: false, isInCurrentMonth: false)
+          return PBCalendarItem(day: lastDayOfMonthBefore + i + 1, isToday: false, isInCurrentMonth: false)
         }
       }
   }
 }
 
-private extension PBCalenderManager {
+private extension PBCalendarManager {
   func isToday(date: Date, day: Int) -> Bool {
     calendar.date(
       .now,

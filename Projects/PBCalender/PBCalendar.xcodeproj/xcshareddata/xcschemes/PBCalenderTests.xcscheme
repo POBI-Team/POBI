@@ -20,9 +20,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "9BF8D2D72DC35E8A00ACED78"
-               BuildableName = "PBCalenderTests.xctest"
-               BlueprintName = "PBCalenderTests"
-               ReferencedContainer = "container:PBCalender.xcodeproj">
+               BuildableName = "PBCalendarTests.xctest"
+               BlueprintName = "PBCalendarTests"
+               ReferencedContainer = "container:PBCalendar.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>

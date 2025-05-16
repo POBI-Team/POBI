@@ -10,7 +10,7 @@ import SwiftUI
 
 import PBDesignSystem
 import PBStorageInterface
-import PBCalender
+import PBCalendar
 
 extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
   open override func viewDidLoad() {
@@ -76,7 +76,7 @@ struct PobiApp: App {
       SplashView()
         .environmentObject(appDelegate.notificationManager)
         .environmentObject(PBFormatter())
-        .environmentObject(PBCalenderManager())
+        .environmentObject(PBCalendarManager())
         .modelContainer(for: [PocketModel.self, PocketItemModel.self, PocketAlarmModel.self])
     }
   }
