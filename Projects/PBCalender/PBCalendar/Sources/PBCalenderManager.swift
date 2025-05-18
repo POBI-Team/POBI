@@ -8,6 +8,8 @@
 import Foundation
 import Combine
 
+import PBStorageInterface
+
 public final class PBCalendarManager: Sendable, ObservableObject {
   private let calendar: Calendar
   public init(caledar: Calendar = .current) {
@@ -21,42 +23,76 @@ public final class PBCalendarManager: Sendable, ObservableObject {
     }
   }
   
-  public func days(in date: Date) -> [PBCalendarItem] {
+  public func days(in date: Date, with pockets: [PocketModel] = []) -> [PBCalendarItem] {
     let startfirstWeekdayIndex = firstWeekdayOfMonth(in: date) - calendar.firstWeekday // 사용자의 캘린더 시작 날짜에 따라 첫일이 시작하는 시점
     let lastDay = numberOfDays(in: date)
     let lastDayOfMonthBefore = numberOfDays(in: previousMonth(at: date))
     let rowCount = ceil((Double(lastDay + startfirstWeekdayIndex) / 7))
     let visibleDaysCountOfNextMonth = Int(rowCount) * 7 - (lastDay + startfirstWeekdayIndex)
-    return Array(-startfirstWeekdayIndex..<lastDay + visibleDaysCountOfNextMonth)
-      .map { i -> PBCalendarItem in
-        if i > -1 && i < lastDay { // 현재 달
-          let day = i + 1
-          return PBCalendarItem(day: day, isToday: isToday(date: date, day: day), isInCurrentMonth: true)
-        } else if i >= lastDay { // 이후 달
-          return PBCalendarItem(day: i - lastDay + 1, isToday: false, isInCurrentMonth: false)
+    let weekdays = weekdays
+    let items = Array(-startfirstWeekdayIndex..<lastDay + visibleDaysCountOfNextMonth)
+      .enumerated()
+      .map { i, e -> PBCalendarItem in
+        let day: Int
+        let isToday: Bool
+        let isInCurrentMonth: Bool
+        let weekday = weekdays[i%7]
+        var targetPockets: [PocketModel] = []
+        
+        if e > -1 && e < lastDay { // 현재 달
+          day = e + 1
+          isToday = self.isToday(date: date, day: e + 1)
+          isInCurrentMonth = true
+        } else if e >= lastDay { // 이후 달
+          day = e - lastDay + 1
+          isToday = false
+          isInCurrentMonth = false
         } else { // 이전 달
-          return PBCalendarItem(day: lastDayOfMonthBefore + i + 1, isToday: false, isInCurrentMonth: false)
+          day = lastDayOfMonthBefore + e + 1
+          isToday = false
+          isInCurrentMonth = false
         }
+        
+        pockets.forEach { pocket in
+          if pocket.repeats {
+            if pocket.alarm.isWeekRepeat {
+              if pocket.alarm.days.contains(weekday) {
+                targetPockets.append(pocket)
+              }
+            } else {
+              if pocket.alarm.days.contains(day) {
+                targetPockets.append(pocket)
+              }
+            }
+          } else {
+            if pocket.alarm.date == self.date(of: day, in: date, isInCurrentMonth: isInCurrentMonth) {
+              targetPockets.append(pocket)
+            }
+          }
+        }
+        
+        return PBCalendarItem(day: day, weekday: weekday, isToday: isToday, isInCurrentMonth: isInCurrentMonth, pockets: targetPockets)
       }
+    return items
   }
-  
-  public func date(of item: PBCalendarItem, in date: Date) -> Date {
+}
+
+private extension PBCalendarManager {
+  func date(of day: Int, in date: Date, isInCurrentMonth: Bool) -> Date {
     var components = calendar.dateComponents([.year, .month], from: date)
-    components.day = item.day
+    components.day = day
     let date = calendar.date(from: components)!
-    if item.isInCurrentMonth {
+    if isInCurrentMonth {
       return date
     } else {
-      if item.day > 15 {
+      if day > 15 {
         return calendar.date(byAdding: .month, value: -1, to: date)!
       } else {
         return calendar.date(byAdding: .month, value: 1, to: date)!
       }
     }
   }
-}
-
-private extension PBCalendarManager {
+  
   func isToday(date: Date, day: Int) -> Bool {
     calendar.date(
       .now,

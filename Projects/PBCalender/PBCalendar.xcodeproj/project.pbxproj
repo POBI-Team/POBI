@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9BC52C6F2DD9AC4D0089AA6C /* PBStorageInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BC52C6E2DD9AC4D0089AA6C /* PBStorageInterface.framework */; };
+		9BC52C702DD9AC4D0089AA6C /* PBStorageInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BC52C6E2DD9AC4D0089AA6C /* PBStorageInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9BF8D2DC2DC35E8A00ACED78 /* PBCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BF8D2C72DC35A2A00ACED78 /* PBCalendar.framework */; };
 /* End PBXBuildFile section */
 
@@ -20,7 +22,22 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		9BC52C712DD9AC4D0089AA6C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				9BC52C702DD9AC4D0089AA6C /* PBStorageInterface.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		9BC52C6E2DD9AC4D0089AA6C /* PBStorageInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PBStorageInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BF8D2C72DC35A2A00ACED78 /* PBCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PBCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BF8D2D82DC35E8A00ACED78 /* PBCalendarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PBCalendarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -43,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BC52C6F2DD9AC4D0089AA6C /* PBStorageInterface.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,11 +75,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9BC52C6D2DD9AC4D0089AA6C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9BC52C6E2DD9AC4D0089AA6C /* PBStorageInterface.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		9BF8D2BD2DC35A2A00ACED78 = {
 			isa = PBXGroup;
 			children = (
 				9BF8D2C92DC35A2A00ACED78 /* PBCalendar */,
 				9BF8D2D92DC35E8A00ACED78 /* PBCalendarTests */,
+				9BC52C6D2DD9AC4D0089AA6C /* Frameworks */,
 				9BF8D2C82DC35A2A00ACED78 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -96,6 +123,7 @@
 				9BF8D2C32DC35A2A00ACED78 /* Sources */,
 				9BF8D2C42DC35A2A00ACED78 /* Frameworks */,
 				9BF8D2C52DC35A2A00ACED78 /* Resources */,
+				9BC52C712DD9AC4D0089AA6C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

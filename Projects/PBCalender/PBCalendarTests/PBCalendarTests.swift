@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import PBStorageInterface
 @testable import PBCalendar
 
 final class PBCalendarTests: XCTestCase {
@@ -51,36 +52,123 @@ final class PBCalendarTests: XCTestCase {
     XCTAssertEqual([25, 26, 27, 28, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], output.map(\.day))
   }
   
-  func test_date_호출_시_입력한_날짜가_16일이면서_해당_월에_포함되어_있는_경우_해당_월에_16일() {
+  func test_days_호출_시_10일에_포켓이_등록되어_있을_경우_10일에_표시() {
     // Arrange
     let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
+    let pockets: [PocketModel] = [
+      PocketModel(
+        title: "10일 하루",
+        repeats: false,
+        alarm: PocketAlarmModel(
+          isWeekRepeat: false,
+          days: [],
+          date: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 10))!,
+          time: .now
+        )
+      )
+    ]
     // Act
-    let item = PBCalendarItem(day: 16, isToday: false, isInCurrentMonth: true)
-    let output = sut.date(of: item, in: date)
+    let output = sut.days(in: date, with: pockets)
+      .filter { item in
+        !item.pockets.isEmpty
+      }
+      .map { item in
+        item.pockets.map {
+          "\(item.day), \($0.title)"
+        }
+      }
     // Assert
-    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 16))!
-    XCTAssertEqual(result, output)
+    XCTAssertEqual([["10, 10일 하루"]], output)
   }
   
-  func test_date_호출_시_입력한_날짜가_28일이면서_해당_월에_포함되어_있는_않는_경우_이전_월에_28일() {
+  func test_days_호출_시_일요일_반복_포켓이_등록되어_있을_경우_매주_일요일에_표시() {
     // Arrange
     let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
+    let pockets: [PocketModel] = [
+      PocketModel(
+        title: "일요일마다",
+        repeats: true,
+        alarm: PocketAlarmModel(
+          isWeekRepeat: true,
+          days: [1],
+          date: .now,
+          time: .now
+        )
+      )
+    ]
     // Act
-    let item = PBCalendarItem(day: 28, isToday: false, isInCurrentMonth: false)
-    let output = sut.date(of: item, in: date)
+    let output = sut.days(in: date, with: pockets)
+      .filter { item in
+        !item.pockets.isEmpty
+      }
+      .map { item in
+        item.pockets.map {
+          "\(item.day), \($0.title)"
+        }
+      }
     // Assert
-    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 2, day: 28))!
-    XCTAssertEqual(result, output)
+    XCTAssertEqual([["23, 일요일마다"], ["2, 일요일마다"], ["9, 일요일마다"], ["16, 일요일마다"], ["23, 일요일마다"], ["30, 일요일마다"]], output)
   }
   
-  func test_date_호출_시_입력한_날짜가_2일이면서_해당_월에_포함되어_있는_않는_경우_다음_월에_2일() {
+  func test_days_호출_시_24일_반복_포켓이_등록되어_있을_경우_매달_24일에_표시() {
     // Arrange
     let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
+    let pockets: [PocketModel] = [
+      PocketModel(
+        title: "24일 마다",
+        repeats: true,
+        alarm: PocketAlarmModel(
+          isWeekRepeat: false,
+          days: [24],
+          date: .now,
+          time: .now
+        )
+      )
+    ]
     // Act
-    let item = PBCalendarItem(day: 2, isToday: false, isInCurrentMonth: false)
-    let output = sut.date(of: item, in: date)
+    let output = sut.days(in: date, with: pockets)
+      .filter { item in
+        !item.pockets.isEmpty
+      }
+      .map { item in
+        item.pockets.map {
+          "\(item.day), \($0.title)"
+        }
+      }
     // Assert
-    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 2))!
-    XCTAssertEqual(result, output)
+    XCTAssertEqual([["24, 24일 마다"], ["24, 24일 마다"]], output)
   }
+  
+//  func test_date_호출_시_입력한_날짜가_16일이면서_해당_월에_포함되어_있는_경우_해당_월에_16일() {
+//    // Arrange
+//    let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
+//    // Act
+//    let item = PBCalendarItem(day: 16, isToday: false, isInCurrentMonth: true)
+//    let output = sut.date(of: item, in: date)
+//    // Assert
+//    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 16))!
+//    XCTAssertEqual(result, output)
+//  }
+//  
+//  func test_date_호출_시_입력한_날짜가_28일이면서_해당_월에_포함되어_있는_않는_경우_이전_월에_28일() {
+//    // Arrange
+//    let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
+//    // Act
+//    let item = PBCalendarItem(day: 28, isToday: false, isInCurrentMonth: false)
+//    let output = sut.date(of: item, in: date)
+//    // Assert
+//    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 2, day: 28))!
+//    XCTAssertEqual(result, output)
+//  }
+//  
+//  func test_date_호출_시_입력한_날짜가_2일이면서_해당_월에_포함되어_있는_않는_경우_다음_월에_2일() {
+//    // Arrange
+//    let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
+//    // Act
+//    let item = PBCalendarItem(day: 2, isToday: false, isInCurrentMonth: false)
+//    let output = sut.date(of: item, in: date)
+//    // Assert
+//    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 2))!
+//    XCTAssertEqual(result, output)
+//  }
 }

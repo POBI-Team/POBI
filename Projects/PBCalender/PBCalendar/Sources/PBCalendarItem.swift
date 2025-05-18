@@ -5,14 +5,20 @@
 //  Created by 이시원 on 5/13/25.
 //
 
-public struct PBCalendarItem: Sendable {
+import PBStorageInterface
+
+public struct PBCalendarItem: @unchecked Sendable {
   public let day: Int
+  public let weekday: Int
   public let isToday: Bool
   public let isInCurrentMonth: Bool
+  public let pockets: [PocketModel]
   
-  init(day: Int, isToday: Bool, isInCurrentMonth: Bool) {
+  init(day: Int, weekday: Int, isToday: Bool, isInCurrentMonth: Bool, pockets: [PocketModel]) {
     self.day = day
+    self.weekday = weekday
     self.isToday = isToday
     self.isInCurrentMonth = isInCurrentMonth
+    self.pockets = pockets
   }
 }

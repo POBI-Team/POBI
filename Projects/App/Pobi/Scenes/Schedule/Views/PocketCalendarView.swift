@@ -45,7 +45,7 @@ struct PocketCalendarView: View {
               VStack {
                 Text("\(days[i].day)")
                   .font(PBFonts.label._1.font)
-                  .foregroundStyle(dayLabelColor(week: calender.weekdays[i%7], item: days[i]))
+                  .foregroundStyle(dayLabelColor(item: days[i]))
                 Spacer()
               }
               .padding(.vertical, 8)
@@ -61,9 +61,9 @@ struct PocketCalendarView: View {
 }
 
 extension PocketCalendarView {
-  func dayLabelColor(week: Int, item: PBCalendarItem) -> Color {
+  func dayLabelColor(item: PBCalendarItem) -> Color {
     if item.isToday { return .white }
-    if week == 1 {
+    if item.weekday == 1 {
       return PBColors.red.color
         .opacity(item.isInCurrentMonth ? 1 : 0.3)
     } else {
