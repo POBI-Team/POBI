@@ -19,17 +19,32 @@ struct CalendarTag: View {
   }
   
   var body: some View {
-    HStack {
-      Text(pocket.title)
-        .lineLimit(1)
-        .font(PBFonts.label._2.font)
-        .foregroundStyle(PBColors.navy._900.color)
-      Spacer()
-    }
-    .padding(.vertical, 2)
-    .padding(.horizontal, 6)
-    .background(PBColors.list.colors[pocket.colorIndex]._02.color)
-    .clipShape(RoundedRectangle(cornerRadius: 4))
+    RoundedRectangle(cornerRadius: 4)
+      .overlay(alignment: .leading) {
+        HStack {
+          ClippedLabel(text: pocket.title)
+        }
+        .padding(2)
+      }
+      .frame(height: 17)
+      .foregroundStyle(PBColors.list.colors[pocket.colorIndex]._02.color)
+      .clipped()
+  }
+}
+
+private struct ClippedLabel: UIViewRepresentable {
+  let text: String
+  
+  func makeUIView(context: Context) -> UILabel {
+    let label = UILabel()
+    label.numberOfLines = 1
+    label.lineBreakMode = .byClipping
+    label.font = PBFonts.label._3
+    return label
+  }
+  
+  func updateUIView(_ uiView: UILabel, context: Context) {
+    uiView.text = text
   }
 }
 
