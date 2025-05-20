@@ -16,6 +16,7 @@ public final class PocketModel {
   public var colorIndex: Int
   public var icon: String?
   public var isHidden: Bool
+  public var isCalendar: Bool
   @Relationship(deleteRule: .cascade) public var alarm: PocketAlarmModel
   @Relationship(deleteRule: .cascade) public var items: [PocketItemModel]
   public var createAt: Date
@@ -28,6 +29,7 @@ public final class PocketModel {
     colorIndex: Int = 0,
     icon: String? = nil,
     isHidden: Bool = false,
+    isCalendar: Bool = false,
     alarm: PocketAlarmModel = .init(isWeekRepeat: true, days: [1,2,3,4,5,6,7], date: .now, time: .now),
     items: [PocketItemModel] = [],
     createAt: Date = .now
@@ -39,6 +41,7 @@ public final class PocketModel {
     self.colorIndex = colorIndex
     self.icon = icon
     self.isHidden = isHidden
+    self.isCalendar = isCalendar
     self.alarm = alarm
     self.items = items
     self.createAt = createAt
