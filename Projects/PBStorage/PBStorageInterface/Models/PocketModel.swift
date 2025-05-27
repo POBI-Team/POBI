@@ -54,6 +54,7 @@ public final class PocketModel {
       repeats: pocket.repeats,
       colorIndex: pocket.colorIndex,
       icon: pocket.icon,
+      isCalendar: pocket.isCalendar,
       alarm: .init(pocket.alarm)
     )
   }
@@ -95,6 +96,7 @@ public struct Pocket {
   public var title: String
   public var onAlarm: Bool
   public var repeats: Bool
+  public var isCalendar: Bool
   public var colorIndex: Int
   public var icon: String?
   public var alarm: Alarm
@@ -103,6 +105,7 @@ public struct Pocket {
     title: String = "",
     onAlarm: Bool = false,
     repeats: Bool = false,
+    isCalendar: Bool = false,
     colorIndex: Int = 0,
     icon: String? = nil,
     alarm: Alarm = .init(isWeekRepeat: true, days: [1,2,3,4,5,6,7], date: .now, time: .now)
@@ -110,6 +113,7 @@ public struct Pocket {
     self.title = title
     self.onAlarm = onAlarm
     self.repeats = repeats
+    self.isCalendar = isCalendar
     self.colorIndex = colorIndex
     self.icon = icon
     self.alarm = alarm

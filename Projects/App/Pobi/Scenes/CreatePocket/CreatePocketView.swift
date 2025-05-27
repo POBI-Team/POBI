@@ -185,28 +185,42 @@ struct CreatePocketView: View {
                     isAppear = true
                   }
                 }
-                // MARK: Alarm Toggle
-                HStack {
-                  Toggle(
-                    isOn: Binding(
-                      get: { pocket.onAlarm },
-                      set: { setOnAlarm(valeu: $0) }
-                    )
-                  ) {
-                    Text("알림")
-                      .font(PBFonts.body._2.font)
-                      .foregroundStyle(PBColors.navy._900.color)
+                // MARK: SettingAlarmView
+                SettingAlarmView(pocket: $pocket, isFocused: _isFocused, isDidTapDownButton: $isDidTapDownButton)
+                // MARK: Alarm & Calendar Toggle
+                VStack(spacing: 16) {
+                  HStack {
+                    Toggle(
+                      isOn: Binding(
+                        get: { pocket.onAlarm },
+                        set: { setOnAlarm(valeu: $0) }
+                      )
+                    ) {
+                      Text("알림")
+                        .font(PBFonts.body._2.font)
+                        .foregroundStyle(PBColors.navy._900.color)
+                    }
+                    .tint(PBColors.yellow._500.color)
                   }
-                  .tint(PBColors.yellow._500.color)
+                  
+                  HStack {
+                    Toggle(
+                      isOn: Binding(
+                        get: { pocket.isCalendar },
+                        set: { pocket.isCalendar = $0 }
+                      )
+                    ) {
+                      Text("캘린더에 표시")
+                        .font(PBFonts.body._2.font)
+                        .foregroundStyle(PBColors.navy._900.color)
+                    }
+                    .tint(PBColors.yellow._500.color)
+                  }
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 16)
                 .background(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                // MARK: SettingAlarmView
-                if pocket.onAlarm {
-                  SettingAlarmView(pocket: $pocket, isFocused: _isFocused, isDidTapDownButton: $isDidTapDownButton)
-                }
                 Spacer()
               }
               .padding(.horizontal, 20)
@@ -289,4 +303,5 @@ private extension CreatePocketView {
 
 #Preview {
   CreatePocketView(pocket: .init(onAlarm: true))
+    .environmentObject(PBFormatter())
 }
