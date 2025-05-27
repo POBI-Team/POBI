@@ -62,7 +62,7 @@ struct PocketDetailView: View {
       .padding(.horizontal, 20)
       ItemList(pocket: pocket)
         .padding(.leading, 2)
-        .scrollDismissesKeyboard(.interactively)
+        .scrollDismissesKeyboard(.immediately)
     }
     .leftItem {
       Button(action: {
