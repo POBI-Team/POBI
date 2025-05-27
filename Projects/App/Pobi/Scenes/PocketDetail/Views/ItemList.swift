@@ -5,6 +5,7 @@
 //  Created by 이시원 on 2/21/25.
 //
 
+import Foundation
 import SwiftUI
 
 import PBDesignSystem
@@ -103,8 +104,10 @@ struct ItemList: View {
             .checkBoxAndMemoField(title: $newPocketItem.title, memo: $newPocketItem.memo, isChecked: .constant(false)) {
               if !newPocketItem.title.isEmpty {
                 addItem()
-                withAnimation {
-                  proxy.scrollTo(-1, anchor: .bottom)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                  withAnimation {
+                    proxy.scrollTo(-1, anchor: .bottom)
+                  }
                 }
               } else {
                 focusIndex = nil
@@ -152,6 +155,7 @@ struct ItemList: View {
     }
   }
 }
+
 
 private extension ItemList {
   func addItem() {
