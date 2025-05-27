@@ -7,7 +7,8 @@
 
 import PBStorageInterface
 
-public struct PBCalendarItem: @unchecked Sendable {
+public struct PBCalendarItem: @unchecked Sendable, Identifiable {
+  public let id = UUID()
   public let day: Int
   public let weekday: Int
   public let isToday: Bool

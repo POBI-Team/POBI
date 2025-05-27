@@ -6,7 +6,9 @@
 //
 
 import SwiftUI
+import SwiftData
 
+import PBStorageInterface
 import PBCalendar
 import PBDesignSystem
 
@@ -14,7 +16,12 @@ struct PocketCalendarView: View {
   @EnvironmentObject private var formatter: PBFormatter
   @EnvironmentObject private var calender: PBCalendarManager
   @State private var selectedDate: Date
-  
+  @Query(
+    filter: #Predicate<PocketModel> { $0.isCalendar },
+    sort: \.alarm.time.secondsSinceStartOfDay
+  )
+  private var pockets: [PocketModel]
+
   init(seletedDate: Date) {
     self.selectedDate = seletedDate
   }
@@ -36,21 +43,36 @@ struct PocketCalendarView: View {
           columns: Array(repeating: GridItem(spacing: 0), count: 7),
           spacing: 0
         ) {
-          let days = calender.days(in: selectedDate)
-          ForEach(0..<days.count, id: \.self) { i in
+          let days = calender.days(in: selectedDate, with: pockets)
+          ForEach(days) { item in
             ZStack {
-              if days[i].isToday {
+              if item.isToday {
                 RoundedRectangle(cornerRadius: 8)
               }
-              VStack {
-                Text("\(days[i].day)")
+              VStack(spacing: 4) {
+                Text("\(item.day)")
                   .font(PBFonts.label._1.font)
-                  .foregroundStyle(dayLabelColor(item: days[i]))
-                Spacer()
+                  .foregroundStyle(dayLabelColor(item: item))
+                GeometryReader { geometry in
+                  let rowCount = rowCount(height: geometry.size.height, count: item.pockets.count)
+                  VStack(alignment: .leading, spacing: 6) { 
+                    VStack(spacing: 4) {
+                      ForEach(0..<rowCount, id: \.self) { j in
+                        let pocket = item.pockets[j]
+                        CalendarTag(pocket: pocket)
+                      }
+                    }
+                    if rowCount < item.pockets.count {
+                      Text("+\(item.pockets.count - rowCount)")
+                        .font(PBFonts.label._3.font)
+                        .foregroundStyle(PBColors.navy._50.color)
+                    }
+                  }
+                }
               }
               .padding(.vertical, 8)
+              .padding(.horizontal, 4)
             }
-            .padding(.horizontal, 4)
             .frame(maxWidth: .infinity)
             .frame(height: geometry.size.height / CGFloat(days.count / 7))
           }
@@ -60,7 +82,7 @@ struct PocketCalendarView: View {
   }
 }
 
-extension PocketCalendarView {
+private extension PocketCalendarView {
   func dayLabelColor(item: PBCalendarItem) -> Color {
     if item.isToday { return .white }
     if item.weekday == 1 {
@@ -70,6 +92,18 @@ extension PocketCalendarView {
       return PBColors.navy._900.color
         .opacity(item.isInCurrentMonth ? 1 : 0.3)
     }
+  }
+  
+  func rowCount(height: Double, count: Int) -> Int {
+    let c = Int(height / 21)
+    if c < count { return c - 1 }
+    else { return min(c, count) }
+  }
+}
+
+public extension Date {
+  var secondsSinceStartOfDay: TimeInterval {
+    return timeIntervalSince(Calendar.current.startOfDay(for: self))
   }
 }
 
