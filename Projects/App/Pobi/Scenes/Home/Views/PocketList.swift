@@ -53,13 +53,13 @@ struct PocketList: View {
     }
     .scrollIndicators(.hidden)
     .overlay(alignment: .bottom) {
-      if seletedTabIndex == 0 {
+      HStack {
+        Spacer()
         PBPlusButton {
           isPresentedCreate.toggle()
         }
         .padding(.bottom, 10)
       }
-     
     }
     .overlay {
       if pockets.filter({ pockectFilter($0) }).isEmpty {
