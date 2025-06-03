@@ -15,7 +15,7 @@ public struct PBCalendarItem: @unchecked Sendable, Identifiable {
   public let isInCurrentMonth: Bool
   public let pockets: [PocketModel]
   
-  init(day: Int, weekday: Int, isToday: Bool, isInCurrentMonth: Bool, pockets: [PocketModel]) {
+  public init(day: Int, weekday: Int, isToday: Bool, isInCurrentMonth: Bool, pockets: [PocketModel]) {
     self.day = day
     self.weekday = weekday
     self.isToday = isToday
