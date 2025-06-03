@@ -43,7 +43,7 @@ struct ScheduleView: View {
       .sheet(isPresented: $isPresentedDatePicker) {
         YearAndMonthPickerView(seletedDate: $currentDate)
       }
-    PocketCalendarView(seletedDate: currentDate)
+    PocketCalendarView(seletedDate: $currentDate)
       .padding(.horizontal, 9)
   }
 }
