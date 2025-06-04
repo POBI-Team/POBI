@@ -71,7 +71,7 @@ public final class PBCalendarManager: Sendable, ObservableObject {
           }
         }
         
-        return PBCalendarItem(day: day, weekday: weekday, isToday: isToday, isInCurrentMonth: isInCurrentMonth, pockets: targetPockets)
+        return PBCalendarItem(id: makeComponents(for: date, day: day).description, day: day, weekday: weekday, isToday: isToday, isInCurrentMonth: isInCurrentMonth, pockets: targetPockets)
       }
     return items
   }
@@ -96,11 +96,15 @@ private extension PBCalendarManager {
   func isToday(date: Date, day: Int) -> Bool {
     calendar.date(
       .now,
-      matchesComponents: DateComponents(
-        year: calendar.component(.year, from: date),
-        month: calendar.component(.month, from: date),
-        day: day
-      )
+      matchesComponents: makeComponents(for: date, day: day)
+    )
+  }
+  
+  func makeComponents(for date: Date, day: Int) -> DateComponents {
+    return DateComponents(
+      year: calendar.component(.year, from: date),
+      month: calendar.component(.month, from: date),
+      day: day
     )
   }
   
