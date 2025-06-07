@@ -30,7 +30,7 @@ public final class PBCalendarManager: Sendable, ObservableObject {
     let rowCount = ceil((Double(lastDay + startfirstWeekdayIndex) / 7))
     let visibleDaysCountOfNextMonth = Int(rowCount) * 7 - (lastDay + startfirstWeekdayIndex)
     let weekdays = weekdays
-    let items = Array(-startfirstWeekdayIndex..<lastDay + visibleDaysCountOfNextMonth)
+    return Array(-startfirstWeekdayIndex..<lastDay + visibleDaysCountOfNextMonth)
       .enumerated()
       .map { i, e -> PBCalendarItem in
         let day: Int
@@ -73,7 +73,6 @@ public final class PBCalendarManager: Sendable, ObservableObject {
         
         return PBCalendarItem(id: makeComponents(for: date, day: day).description, day: day, weekday: weekday, isToday: isToday, isInCurrentMonth: isInCurrentMonth, pockets: targetPockets)
       }
-    return items
   }
 }
 
