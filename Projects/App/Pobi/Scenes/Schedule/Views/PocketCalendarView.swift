@@ -17,17 +17,78 @@ struct PocketCalendarView: View {
   @EnvironmentObject private var calender: PBCalendarManager
   @Binding private var selectedDate: Date
   @State private var selectedItem: PBCalendarItem?
-  @Query(
-    filter: #Predicate<PocketModel> { $0.isCalendar },
-    sort: \.alarm.time.secondsSinceStartOfDay
-  )
-  private var pockets: [PocketModel]
-  
   @State private var currentPage = 0
   @State private var totalHeight: CGFloat = 0
   @State private var sheetHeight: CGFloat = 0
   @State private var calendarMinHeight: CGFloat = 0
   
+  @State private var rowHeight: CGFloat?
+  @State private var columnWidth: CGFloat?
+  
+  #if DEBUG
+  private var pockets: [PocketModel] = [
+    PocketModel(
+      title: "test1",
+      alarm: .init(
+        isWeekRepeat: false,
+        days: [],
+        date: Calendar.current.date(from: DateComponents(year: 2025, month: 6, day: 4))!,
+        time: .now
+      )
+    ),
+    PocketModel(
+      title: "test2",
+      alarm: .init(
+        isWeekRepeat: false,
+        days: [],
+        date: Calendar.current.date(from: DateComponents(year: 2025, month: 6, day: 4))!,
+        time: .now
+      )
+    ),
+    PocketModel(
+      title: "test3",
+      alarm: .init(
+        isWeekRepeat: false,
+        days: [],
+        date: Calendar.current.date(from: DateComponents(year: 2025, month: 6, day: 4))!,
+        time: .now
+      )
+    ),
+    PocketModel(
+      title: "test4",
+      alarm: .init(
+        isWeekRepeat: false,
+        days: [],
+        date: Calendar.current.date(from: DateComponents(year: 2025, month: 6, day: 4))!,
+        time: .now
+      )
+    ),
+    PocketModel(
+      title: "test5",
+      alarm: .init(
+        isWeekRepeat: false,
+        days: [],
+        date: Calendar.current.date(from: DateComponents(year: 2025, month: 6, day: 4))!,
+        time: .now
+      )
+    ),
+    PocketModel(
+      title: "test6",
+      alarm: .init(
+        isWeekRepeat: false,
+        days: [],
+        date: Calendar.current.date(from: DateComponents(year: 2025, month: 6, day: 4))!,
+        time: .now
+      )
+    )
+  ]
+  #else
+  @Query(
+    filter: #Predicate<PocketModel> { $0.isCalendar },
+    sort: \.alarm.time.secondsSinceStartOfDay
+  )
+  private var pockets: [PocketModel]
+  #endif
   init(seletedDate: Binding<Date>) {
     self._selectedDate = seletedDate
   }
@@ -62,29 +123,45 @@ struct PocketCalendarView: View {
                       ZStack {
                         RoundedRectangle(cornerRadius: 8)
                           .foregroundStyle(rectangleColor(item: item))
-                        VStack(spacing: 4) {
+                        VStack(spacing: 0) {
                           Text("\(item.day)")
                             .font(PBFonts.label._1.font)
                             .foregroundStyle(dayLabelColor(item: item))
                           GeometryReader { thirdGeometry in
-                            let rowCount = rowCount(height: thirdGeometry.size.height, count: item.pockets.count)
-                            VStack(alignment: .leading, spacing: 6) {
-                              VStack(spacing: 4) {
-                                ForEach(0..<rowCount, id: \.self) { j in
-                                  let pocket = item.pockets[j]
-                                  CalendarTag(pocket: pocket)
-                                }
+                            ZStack(alignment: .top) {
+                              DotsView(
+                                width: columnWidth,
+                                pockets: item.pockets
+                              )
+                              .frame(height: thirdGeometry.size.height)
+                              .opacity(sheetHeight/(totalHeight/2))
+                              
+                              PocketTagList(
+                                height: rowHeight,
+                                item: item,
+                                selectedItem: selectedItem
+                              )
+                              .padding(.top, 4)
+                              .opacity(1.0 - (sheetHeight/(totalHeight/2)))
+                            }
+                            .onAppear {
+                              if rowHeight == nil {
+                                rowHeight = thirdGeometry.size.height
                               }
-                              if rowCount < item.pockets.count {
-                                Text("+\(item.pockets.count - rowCount)")
-                                  .font(PBFonts.label._3.font)
-                                  .foregroundStyle(PBColors.navy._50.color)
+                              
+                              if columnWidth == nil {
+                                columnWidth = thirdGeometry.size.width
                               }
                             }
                           }
                         }
                         .padding(.vertical, 8)
                         .padding(.horizontal, 4)
+                      }
+                      .onAppear {
+                        if selectedItem == nil, item.isToday {
+                          selectedItem = item
+                        }
                       }
                       .onTapGesture {
                         selectedItem = item
@@ -120,7 +197,7 @@ struct PocketCalendarView: View {
             item: $selectedItem,
             totalHeight: fristGeometry.size.height
           )
-          .frame(height: sheetHeight, alignment: .top)
+          .frame(height: max(0, sheetHeight), alignment: .top)
           .background(.white)
           .clipped()
         }
@@ -146,12 +223,6 @@ private extension PocketCalendarView {
     }
   }
   
-  func rowCount(height: Double, count: Int) -> Int {
-    let c = Int(height / 21)
-    if c < count { return c - 1 }
-    else { return min(c, count) }
-  }
-  
   func rectangleColor(item: PBCalendarItem) -> Color {
     if let selectedItem, item.id == selectedItem.id { return PBColors.navy._900.color }
     else if item.isToday { return PBColors.yellow._50.color }
@@ -170,7 +241,7 @@ private extension Date {
 }
 
 #Preview {
-  @Previewable @State var date = Calendar.current.date(from: DateComponents(year: 2025, month: 5))!
+  @Previewable @State var date = Calendar.current.date(from: DateComponents(year: 2025, month: 6))!
   
   PocketCalendarView(seletedDate: $date)
     .environmentObject(PBCalendarManager())
