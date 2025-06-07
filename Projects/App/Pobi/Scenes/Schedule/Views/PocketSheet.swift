@@ -13,22 +13,15 @@ import PBStorageInterface
 
 struct PocketSheet: View {
   @EnvironmentObject private var formatter: PBFormatter
-  @Binding private var height: CGFloat
   @Binding private var item: PBCalendarItem?
-  @GestureState private var offset: CGFloat = 0
-  
   let date: Date
-  let totalHeight: CGFloat
+  
   init(
     date: Date,
-    height: Binding<CGFloat>,
-    item: Binding<PBCalendarItem?>,
-    totalHeight: CGFloat
+    item: Binding<PBCalendarItem?>
   ) {
     self._item = item
-    self._height = height
     self.date = date
-    self.totalHeight = totalHeight
   }
   
   var body: some View {
@@ -54,33 +47,9 @@ struct PocketSheet: View {
             .tint(PBColors.navy._900.color)
           }
         }
-        .onChange(of: offset) { oldValue, newValue in
-          height -= newValue
-        }
         .contentShape(Rectangle())
-        .gesture(
-          DragGesture()
-            .updating($offset) { value, state, _ in
-              state = value.translation.height
-            }
-            .onEnded { _ in
-              if height < totalHeight * 0.25 {
-                withAnimation {
-                  height = 0
-                }
-              } else if height > totalHeight * 0.75 {
-                withAnimation {
-                  height = totalHeight
-                }
-              } else {
-                withAnimation {
-                  height = totalHeight / 2
-                }
-              }
-            }
-        )
-        
         .padding(.bottom, 24)
+        
         ScrollView {
           LazyVStack(spacing: 12) {
             ForEach(item?.pockets ?? [], id: \.id) { pocket in
@@ -158,24 +127,8 @@ extension PocketSheet {
       PocketModel(title: "Test3", colorIndex: 2, icon: "❤️")
     ]
   )
-  @Previewable @State var height: CGFloat = 300
   
-  GeometryReader { geometry in
-    VStack(spacing: 0) {
-      TabView {
-        Text("1")
-        Text("2")
-        Text("3")
-      }
-      .background(Color.red)
-      .tabViewStyle(.page(indexDisplayMode: .never))
-      if height != 0 {
-        PocketSheet(date: .now, height: $height, item: $item, totalHeight: geometry.size.height)
-          .environmentObject(PBFormatter())
-          .frame(height: height, alignment: .top)
-          .clipped()
-      }
-    }
-  }
+  PocketSheet(date: .now, item: $item)
+    .environmentObject(PBFormatter())
 }
 #endif

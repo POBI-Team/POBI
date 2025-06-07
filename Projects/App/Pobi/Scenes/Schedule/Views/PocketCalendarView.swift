@@ -14,16 +14,18 @@ import PBDesignSystem
 
 struct PocketCalendarView: View {
   @EnvironmentObject private var formatter: PBFormatter
-  @EnvironmentObject private var calender: PBCalendarManager
+  @EnvironmentObject private var calenderManager: PBCalendarManager
   @Binding private var selectedDate: Date
   @State private var selectedItem: PBCalendarItem?
   @State private var currentPage = 0
+  
   @State private var totalHeight: CGFloat = 0
   @State private var sheetHeight: CGFloat = 0
-  @State private var calendarMinHeight: CGFloat = 0
   
   @State private var rowHeight: CGFloat?
   @State private var columnWidth: CGFloat?
+  
+  @GestureState private var dragOffset: CGFloat = .zero
   
   #if DEBUG
   private var pockets: [PocketModel] = [
@@ -104,7 +106,7 @@ struct PocketCalendarView: View {
               let targetDate = selectedDate.moveMonth(by: i)!
               VStack {
                 HStack {
-                  ForEach(calender.weekdays, id: \.self) { weekday in
+                  ForEach(calenderManager.weekdays, id: \.self) { weekday in
                     Text(formatter.weekDay(weekday) ?? "")
                       .font(PBFonts.body._4.font)
                       .foregroundStyle(weekday == 1 ? PBColors.red.color : PBColors.navy._100.color)
@@ -118,7 +120,7 @@ struct PocketCalendarView: View {
                     columns: Array(repeating: GridItem(spacing: 0), count: 7),
                     spacing: 0
                   ) {
-                    let days = calender.days(in: targetDate, with: pockets)
+                    let days = calenderManager.days(in: targetDate, with: pockets)
                     ForEach(days) { item in
                       ZStack {
                         RoundedRectangle(cornerRadius: 8)
@@ -182,10 +184,12 @@ struct PocketCalendarView: View {
                   currentPage = 0
                 }
               }
+              
             }
           }
           .tabViewStyle(.page(indexDisplayMode: .never))
-          .frame(height: max(calendarMinHeight, totalHeight - sheetHeight), alignment: .top)
+          .frame(maxHeight: totalHeight)
+          .frame(height: max(totalHeight/2, totalHeight - sheetHeight), alignment: .top)
           
           Spacer()
         }
@@ -193,9 +197,7 @@ struct PocketCalendarView: View {
           Spacer()
           PocketSheet(
             date: selectedDate,
-            height: $sheetHeight,
-            item: $selectedItem,
-            totalHeight: fristGeometry.size.height
+            item: $selectedItem
           )
           .frame(height: max(0, sheetHeight), alignment: .top)
           .background(.white)
@@ -203,10 +205,37 @@ struct PocketCalendarView: View {
         }
       }
       .onAppear {
-        totalHeight = fristGeometry.size.height
-        calendarMinHeight = fristGeometry.size.height / 2
+        if totalHeight == 0 {
+          totalHeight = fristGeometry.size.height
+        }
       }
     }
+    .onChange(of: dragOffset) { oldValue, newValue in
+      if abs(newValue) > abs(oldValue) {
+        sheetHeight -= (newValue - oldValue)
+      }
+    }
+    .gesture(
+      DragGesture()
+        .updating($dragOffset) { value, state, _ in
+          state = value.translation.height
+        }
+        .onEnded { _ in
+          if sheetHeight < totalHeight * 0.25 {
+            withAnimation {
+              sheetHeight = 0
+            }
+          } else if sheetHeight > totalHeight * 0.75 {
+            withAnimation {
+              sheetHeight = totalHeight
+            }
+          } else {
+            withAnimation {
+              sheetHeight = totalHeight / 2
+            }
+          }
+        }
+    )
   }
 }
 
