@@ -77,7 +77,7 @@ struct PobiApp: App {
         .environmentObject(appDelegate.notificationManager)
         .environmentObject(PBFormatter())
         .environmentObject(PBCalendarManager())
-        .modelContainer(for: [PocketModel.self, PocketItemModel.self, PocketAlarmModel.self])
+        .modelContainer(for: [PocketModel.self, PocketItemModel.self, PocketAlarmModel.self, TemplateModel.self])
     }
   }
 }
