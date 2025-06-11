@@ -209,7 +209,8 @@ struct PocketCalendarView: View {
           Spacer()
           PocketSheet(
             date: selectedDate,
-            item: $selectedItem
+            item: $selectedItem,
+            minHeight: totalHeight/2
           )
           .frame(height: max(0, sheetHeight), alignment: .top)
           .background(.white)

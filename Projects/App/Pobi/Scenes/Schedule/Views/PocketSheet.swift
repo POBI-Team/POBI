@@ -12,16 +12,24 @@ import PBDesignSystem
 import PBStorageInterface
 
 struct PocketSheet: View {
+  @Environment(\.modelContext) private var modelContext
   @EnvironmentObject private var formatter: PBFormatter
   @Binding private var item: PBCalendarItem?
   let date: Date
+  let minHeight: CGFloat
   
+  @State private var isEditMode: Bool = false
+  @State private var isPresentedDeleteAlert: Bool = false
+  @State private var deletePocket: PocketModel?
+
   init(
     date: Date,
-    item: Binding<PBCalendarItem?>
+    item: Binding<PBCalendarItem?>,
+    minHeight: CGFloat
   ) {
     self._item = item
     self.date = date
+    self.minHeight = minHeight
   }
   
   var body: some View {
@@ -39,9 +47,9 @@ struct PocketSheet: View {
               .foregroundStyle(PBColors.navy._900.color)
             Spacer()
             Button {
-              
+              isEditMode.toggle()
             } label: {
-              Text("편집")
+              Text(isEditMode ? "완료" : "편집")
                 .font(PBFonts.button._2.font)
             }
             .tint(PBColors.navy._900.color)
@@ -53,34 +61,67 @@ struct PocketSheet: View {
         ScrollView {
           LazyVStack(spacing: 12) {
             ForEach(item?.pockets ?? [], id: \.id) { pocket in
-              NavigationLink {
-                PocketDetailView(pocket)
-              } label: {
-                HStack(spacing: 0) {
-                  if let icon = pocket.icon {
-                    Text(icon)
-                      .font(PBFonts.tossFace.xsmall.font)
-                      .padding(.trailing, 8)
+              HStack(spacing: 8) {
+                NavigationLink {
+                  if isEditMode {
+                    CreatePocketView(pocket: pocket)
+                      .environmentObject(formatter)
+                  } else {
+                    PocketDetailView(pocket)
                   }
-                  Text(pocket.title)
-                    .font(PBFonts.body._2.font)
-                    .foregroundStyle(PBColors.navy._900.color)
-                    .padding(.trailing, 12)
-                  Text(timeLabel(time: pocket.alarm.time))
-                    .font(PBFonts.label._2.font)
-                    .foregroundStyle(PBColors.navy._900.color)
-                  Spacer()
-                  PBShapes.arrow(direction: .right)
-                    .frame(width: 14, height: 7)
-                    .foregroundStyle(PBColors.navy._900.color)
+                } label: {
+                  HStack(spacing: 0) {
+                    if let icon = pocket.icon, !isEditMode {
+                      Text(icon)
+                        .font(PBFonts.tossFace.xsmall.font)
+                        .frame(width: 24, height: 24)
+                        .padding(.trailing, 8)
+                    }
+                    
+                    if isEditMode {
+                      PBImages.setting.image
+                      .frame(width: 24, height: 24)
+                      .padding(.trailing, 8)
+                    }
+                    
+                    Text(pocket.title)
+                      .font(PBFonts.body._2.font)
+                      .foregroundStyle(PBColors.navy._900.color)
+                      .padding(.trailing, 12)
+                    Text(timeLabel(time: pocket.alarm.time))
+                      .font(PBFonts.label._2.font)
+                      .foregroundStyle(PBColors.navy._900.color)
+                    Spacer()
+                    PBShapes.arrow(direction: .right)
+                      .frame(width: 14, height: 7)
+                      .foregroundStyle(PBColors.navy._900.color)
+                  }
+                  .frame(height: 48)
+                  .padding(.horizontal, 16)
+                  .background(PBColors.list.colors[pocket.colorIndex]._03.color)
+                  .clipShape(RoundedRectangle(cornerRadius: 12))
+                  
                 }
-                .padding(16)
-                .background(PBColors.list.colors[pocket.colorIndex]._03.color)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                if isEditMode {
+                  Button {
+                    isPresentedDeleteAlert = true
+                    deletePocket = pocket
+                  } label: {
+                    RoundedRectangle(cornerRadius: 12)
+                      .overlay {
+                        PBImages.trash.image
+                          .renderingMode(.template)
+                          .foregroundStyle(.white)
+                      }
+                  }
+                  .frame(width: 48, height: 48)
+                  .tint(PBColors.red.color)
+                }
               }
             }
           }
         }
+        .frame(minHeight: minHeight - 77)
         .overlay {
           if item?.pockets.isEmpty == true {
             VStack(spacing: 8) {
@@ -99,6 +140,13 @@ struct PocketSheet: View {
       .padding(.horizontal, 20)
       .padding(.top, 12)
     }
+    .pbAlert(isPresented: $isPresentedDeleteAlert, type: .delete) {
+      guard let deletePocket else { return }
+      deletePocket.deletePushAlarm()
+      modelContext.delete(deletePocket)
+      try? modelContext.save()
+    }
+    .animation(.default, value: isEditMode)
   }
 }
 
@@ -128,7 +176,9 @@ extension PocketSheet {
     ]
   )
   
-  PocketSheet(date: .now, item: $item)
-    .environmentObject(PBFormatter())
+  NavigationStack {
+    PocketSheet(date: .now, item: $item, minHeight: 300.0)
+      .environmentObject(PBFormatter())
+  }
 }
 #endif
