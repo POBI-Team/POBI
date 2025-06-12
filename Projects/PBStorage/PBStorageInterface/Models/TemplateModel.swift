@@ -11,6 +11,7 @@ import SwiftData
 public final class TemplateModel {
   @Attribute(.unique) public var id: UUID
   public var title: String
+  public var colorIndex: Int = 7
   public var icon: String?
   @Relationship(deleteRule: .cascade) public var items: [PocketItemModel]
   public var createAt: Date
@@ -27,5 +28,36 @@ public final class TemplateModel {
     self.icon = icon
     self.items = items
     self.createAt = createAt
+  }
+  
+  public convenience init(_ template: Template) {
+    self.init(title: template.title, icon: template.icon)
+  }
+  
+  public func temporary() -> Template {
+    return Template(
+      title: self.title,
+      icon: self.icon,
+    )
+  }
+  
+  public func paste(_ template: Template) {
+    self.title = template.title
+    self.colorIndex = template.colorIndex
+    self.icon = template.icon
+  }
+}
+
+public struct Template: Pocketable {
+  public var title: String
+  public var icon: String?
+  public var colorIndex: Int = 7
+
+  public init(
+    title: String = "",
+    icon: String? = nil,
+  ) {
+    self.title = title
+    self.icon = icon
   }
 }
