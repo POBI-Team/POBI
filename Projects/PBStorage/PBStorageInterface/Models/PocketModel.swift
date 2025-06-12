@@ -92,7 +92,7 @@ public final class PocketModel {
   }
 }
 
-public struct Pocket {
+public struct Pocket: Pocketable {
   public var title: String
   public var onAlarm: Bool
   public var repeats: Bool
