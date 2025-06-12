@@ -32,9 +32,9 @@ public struct PBShapes {
       .stroke(style: .init(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
   }
   
-  public static func arrow(direction: Direction) -> some View {
+  public static func arrow(lineWidht: CGFloat = 2, direction: Direction) -> some View {
     ArrowShape()
-      .stroke(style: .init(lineWidth: 2, lineCap: .round, lineJoin: .round))
+      .stroke(style: .init(lineWidth: lineWidht, lineCap: .round, lineJoin: .round))
       .rotationEffect(direction.angle)
   }
 }
