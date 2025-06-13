@@ -27,31 +27,36 @@ public struct PBCheckBoxTextFieldModifier: ViewModifier {
   @Binding public var isChecked: Bool
   @FocusState private var isFocused: Bool
   private var onSubmitAction: () -> Void = {}
-  
+  private let isDisable: Bool
   public init(
     title: Binding<String>,
     memo: Binding<String>,
     isChecked: Binding<Bool>,
+    isDisable: Bool,
     onSubmitAction: @escaping () -> Void = {}
   ) {
     self._title = title
     self._memo = memo
     self._isChecked = isChecked
+    self.isDisable = isDisable
     self.onSubmitAction = onSubmitAction
   }
   
   public func body(content: Content) -> some View {
     HStack(alignment: .top) {
-      Button {
-        withAnimation {
-          isChecked.toggle()
+      if isDisable {
+        PBImages.disableCheckBox.image
+      } else {
+        Button {
+          withAnimation {
+            isChecked.toggle()
+          }
+        } label: {
+          checkBox(title: title, isChecked: isChecked).checkBoxImage
         }
-        
-      } label: {
-        checkBox(title: title, isChecked: isChecked).checkBoxImage
+        .disabled(checkBox(title: title, isChecked: isChecked) == .deactivate)
+        .buttonStyle(PlainButtonStyle())
       }
-      .disabled(checkBox(title: title, isChecked: isChecked) == .deactivate)
-      .buttonStyle(PlainButtonStyle())
       
       VStack(spacing: 4) {
        content
@@ -91,7 +96,13 @@ private extension PBCheckBoxTextFieldModifier {
 }
 
 extension View {
-  public func checkBoxAndMemoField(title: Binding<String>, memo: Binding<String>, isChecked: Binding<Bool>, onSubmitAction: @escaping () -> Void) -> some View {
-    modifier(PBCheckBoxTextFieldModifier(title: title, memo: memo, isChecked: isChecked, onSubmitAction: onSubmitAction))
+  public func checkBoxAndMemoField(
+    title: Binding<String>,
+    memo: Binding<String>,
+    isChecked: Binding<Bool>,
+    isDisable: Bool = false,
+    onSubmitAction: @escaping () -> Void
+  ) -> some View {
+    modifier(PBCheckBoxTextFieldModifier(title: title, memo: memo, isChecked: isChecked, isDisable: isDisable, onSubmitAction: onSubmitAction))
   }
 }

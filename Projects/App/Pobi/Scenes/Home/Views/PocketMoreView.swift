@@ -12,17 +12,16 @@ import PBStorage
 import PBStorageInterface
 import LocalNotiService
 
-struct PocketMoreView: View {
+struct PocketMoreView<P: PocketModelable>: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
-  @Binding private var isPresentedCreate: Bool
+  @Binding private var isPresentedEdit: Bool
   @State private var isPresentedDeleteAlert: Bool = false
-  @State private var isPresentedHiddenAlert: Bool = false
-  private let pocket: PocketModel
+  private let pocket: P
   
-  init(_ pokcet: PocketModel, isPresentedCreate: Binding<Bool>) {
+  init(_ pokcet: P, isPresentedEdit: Binding<Bool>) {
     self.pocket = pokcet
-    self._isPresentedCreate = isPresentedCreate
+    self._isPresentedEdit = isPresentedEdit
   }
   
   var body: some View {
@@ -31,73 +30,6 @@ struct PocketMoreView: View {
       .overlay {
         VStack(spacing: 0) {
           VStack(spacing: 1) {
-            if !pocket.isHidden {
-              Button {
-                isPresentedCreate = true
-                dismiss()
-              } label: {
-                HStack(spacing: 8) {
-                  PBImages.setting.image
-                  Text("설정하기")
-                    .foregroundStyle(PBColors.navy._900.color)
-                    .font(PBFonts.button._3.font)
-                  Spacer()
-                }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 14)
-              }
-              .background(.white)
-              
-              Button {
-                dismiss()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                  let newPocket = pocket.copy()
-                  modelContext.insert(newPocket)
-                  try? modelContext.save()
-                }
-              } label: {
-                HStack(spacing: 8) {
-                  PBImages.copy.image
-                  Text("복제하기")
-                    .foregroundStyle(PBColors.navy._900.color)
-                    .font(PBFonts.button._3.font)
-                  Spacer()
-                }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 14)
-              }
-              .background(.white)
-            }
-            
-            Button {
-              if !pocket.isHidden {
-                isPresentedHiddenAlert.toggle()
-              } else {
-                pocket.registerPushAlarm(userNickname: ProfileStorage.shared.loadNickname() ?? "사용자")
-                dismiss()
-                FirebaseManager.shared.logEvent(event: .didTapPocketShown)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                  pocket.isHidden.toggle()
-                  try? modelContext.save()
-                }
-              }
-            } label: {
-              HStack(spacing: 8) {
-                if pocket.isHidden {
-                  PBImages.eyeOn.image
-                } else {
-                  PBImages.eyeOff.image
-                }
-                Text(pocket.isHidden ? "포켓 숨기기 해제" : "포켓 숨기기")
-                  .foregroundStyle(PBColors.navy._900.color)
-                  .font(PBFonts.button._3.font)
-                Spacer()
-              }
-              .padding(.horizontal, 20)
-              .padding(.vertical, 14)
-            }
-            .background(.white)
-            
             Button {
               isPresentedDeleteAlert.toggle()
             } label: {
@@ -135,23 +67,16 @@ struct PocketMoreView: View {
         .pbAlert(isPresented: $isPresentedDeleteAlert, type: .delete) {
           dismiss()
           DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            pocket.deletePushAlarm()
+            if let pocket = pocket as? PocketModel {
+              pocket.deletePushAlarm()
+            }
             modelContext.delete(pocket)
-            try? modelContext.save()
-          }
-        }
-        .pbAlert(isPresented: $isPresentedHiddenAlert, type: .hidden) {
-          pocket.deletePushAlarm()
-          dismiss()
-          FirebaseManager.shared.logEvent(event: .didTapPocketHidden)
-          DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            pocket.isHidden.toggle()
             try? modelContext.save()
           }
         }
       }
       .presentationCornerRadius(30)
-      .presentationDetents([.height(pocket.isHidden ? 227 : 331)])
+      .presentationDetents([.height(331)])
   }
 }
 
@@ -160,15 +85,6 @@ struct PocketMoreView: View {
     .sheet(
       isPresented: .constant(true),
       content: {
-        PocketMoreView(.init(id: .init(), title: "테스트"), isPresentedCreate: .constant(false))
-      })
-}
-
-#Preview("숨김") {
-  Color.white
-    .sheet(
-      isPresented: .constant(true),
-      content: {
-        PocketMoreView(.init(id: .init(), title: "테스트", isHidden: true), isPresentedCreate: .constant(false))
+        PocketMoreView(PocketModel(id: .init(), title: "테스트"), isPresentedEdit: .constant(false))
       })
 }

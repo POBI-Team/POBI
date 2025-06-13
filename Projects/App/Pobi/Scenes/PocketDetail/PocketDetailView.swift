@@ -10,14 +10,14 @@ import SwiftUI
 import PBDesignSystem
 import PBStorageInterface
 
-struct PocketDetailView: View {
+struct PocketDetailView<P: PocketModelable>: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
   @EnvironmentObject private var formatter: PBFormatter
-  private let pocket: PocketModel
+  private let pocket: P
   private let colors = PBColors.list.colors
   
-  init(_ pocket: PocketModel) {
+  init(_ pocket: P) {
     self.pocket = pocket
   }
   
@@ -29,20 +29,14 @@ struct PocketDetailView: View {
             Text(pocket.title)
               .font(PBFonts.title._1.font)
               .foregroundStyle(PBColors.navy._900.color)
-            HStack(spacing: 6) {
-              if pocket.isHidden {
-                PBImages.eyeOff.image
-                  .renderingMode(.template)
-                  .resizable()
-                  .frame(width: 16, height: 16)
-                  .foregroundStyle(PBColors.navy._400.color)
-              } else {
+            if let pocket = pocket as? PocketModel {
+              HStack(spacing: 6) {
                 PBImages.clock.image
+                alarmLabel(pocket)
+                  .font(PBFonts.label._1.font)
+                  .foregroundStyle(PBColors.navy._400.color)
+                  .lineLimit(1)
               }
-              alarmLabel
-                .font(PBFonts.label._1.font)
-                .foregroundStyle(PBColors.navy._400.color)
-                .lineLimit(1)
             }
           }
           Spacer()
@@ -52,7 +46,7 @@ struct PocketDetailView: View {
         }
         .padding(.vertical, 20)
         .padding(.horizontal, 24)
-        .background((pocket.isHidden ? PBColors.list.gray.self : colors[pocket.colorIndex])._03.color)
+        .background(colors[pocket.colorIndex]._03.color)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         
       }
@@ -74,20 +68,22 @@ struct PocketDetailView: View {
     }
     .rightItem {
       NavigationLink {
-        CreatePocketView(pocket: pocket)
+        if let pocket = pocket as? PocketModel {
+          CreatePocketView(pocket: pocket)
+        } else if let template = pocket as? TemplateModel {
+          CreateTemplateView(template: template)
+        }
       } label: {
         PBImages.setting.image
           .renderingMode(.template)
       }
       .tint(PBColors.navy._900.color)
-      .disabled(pocket.isHidden)
     }
   }
 }
 
 private extension PocketDetailView {
-  var alarmLabel: some View {
-    if pocket.isHidden { return AnyView(Text("숨긴 포켓")) }
+  func alarmLabel(_ pocket: PocketModel) -> some View {
     if pocket.onAlarm {
       let time = formatter.label(pocket.alarm.time, format: "a h:mm", locale: Locale(identifier: "ko_KR"))
       if pocket.repeats {
@@ -132,7 +128,6 @@ private extension PocketDetailView {
         title: "테스트",
         onAlarm: true,
         repeats: true,
-        isHidden: true,
         alarm: PocketAlarmModel(isWeekRepeat: true, days: [1,2,3,4,5,6], date: .now, time: .now)
       )
     )

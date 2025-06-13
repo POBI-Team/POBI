@@ -13,26 +13,19 @@ import PBStorageInterface
 
 struct PocketList: View {
   @EnvironmentObject var notificationManager: NotificationManager
+  
   @Query(sort: [SortDescriptor<PocketModel>(\.createAt, order: .forward)])
   private var pockets: [PocketModel]
+  @Query(sort: [SortDescriptor<TemplateModel>(\.createAt, order: .forward)])
+  private var templates: [TemplateModel]
+  
   @State private var isPresentedCreate: Bool = false
   @State private var isPresentedDetail: Bool = false
   @State private var seletedPocket: PocketModel?
-  private var seletedTabIndex: Int
+  private let selectedTabIndex: Int
   
-  private func pockectFilter(_ pocket: PocketModel) -> Bool {
-    switch seletedTabIndex {
-    case 0:
-      return !pocket.isHidden
-    case 1:
-      return pocket.isHidden
-    default:
-      return false
-    }
-  }
-  
-  init(seletedTabIndex: Int) {
-    self.seletedTabIndex = seletedTabIndex
+  init(selectedTabIndex: Int) {
+    self.selectedTabIndex = selectedTabIndex
   }
   
   var body: some View {
@@ -41,11 +34,21 @@ struct PocketList: View {
         columns: [GridItem(.flexible(), spacing: 15), GridItem(.flexible())],
         spacing: 15
       ) {
-        ForEach(pockets.filter { pockectFilter($0) }) { pocket in
-          NavigationLink {
-            PocketDetailView(pocket)
-          } label: {
-            PocketCell(pocket)
+        if selectedTabIndex == 0 {
+          ForEach(pockets) { pocket in
+            NavigationLink {
+              PocketDetailView(pocket)
+            } label: {
+              PocketCell(pocket)
+            }
+          }
+        } else {
+          ForEach(templates) { template in
+            NavigationLink {
+              PocketDetailView(template)
+            } label: {
+              PocketCell(template)
+            }
           }
         }
       }
@@ -62,19 +65,23 @@ struct PocketList: View {
       }
     }
     .overlay {
-      if pockets.filter({ pockectFilter($0) }).isEmpty {
-        if seletedTabIndex == 0 {
+      if pockets.isEmpty {
+        if selectedTabIndex == 0 {
           PocketListEmptyView()
             .padding(.bottom, 70)
         } else {
-          PocketHiddenListEmptyView()
+          TemplateListEmptyView()
             .padding(.bottom, 70)
         }
       }
     }
     .fullScreenCover(isPresented: $isPresentedCreate) {
       NavigationStack {
-        CreatePocketView(pocket: nil)
+        if selectedTabIndex == 0 {
+          CreatePocketView(pocket: nil)
+        } else {
+          CreateTemplateView(template: nil)
+        }
       }
     }
     .onAppear {
@@ -92,6 +99,6 @@ struct PocketList: View {
 }
 
 #Preview {
-  PocketList(seletedTabIndex: 0)
+  PocketList(selectedTabIndex: 0)
     .environmentObject(NotificationManager())
 }

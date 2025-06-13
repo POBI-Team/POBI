@@ -10,15 +10,15 @@ import SwiftUI
 import PBDesignSystem
 import PBStorageInterface
 
-struct ItemList: View {
-  private let pocket: PocketModel
+struct ItemList<P: PocketModelable>: View {
+  private let pocket: P
   @Environment(\.modelContext) private var modelContext
   @State private var newPocketItem: PocketItemModel
   @State private var lists: [PocketItemModel]
   @State private var isPresnetedRecommend: Bool = false
   @FocusState private var focusIndex: Int?
   
-  init(pocket: PocketModel) {
+  init(pocket: P) {
     self.pocket = pocket
     self.lists = pocket.items.sorted(by: { $0.sortIndex < $1.sortIndex })
     self.newPocketItem = .init()
@@ -61,7 +61,8 @@ struct ItemList: View {
               .checkBoxAndMemoField(
                 title: Binding(get: { item.title }, set: { item.title = $0 }),
                 memo: Binding(get: { item.memo }, set: { item.memo = $0 }),
-                isChecked: Binding(get: { item.isChecked }, set: { item.isChecked = $0 })
+                isChecked: Binding(get: { item.isChecked }, set: { item.isChecked = $0 }),
+                isDisable: pocket is TemplateModel
               ) {
                 if item.title.isEmpty {
                   lists.removeAll(where: { $0.id == item.id })
@@ -100,7 +101,11 @@ struct ItemList: View {
                 addItem()
               }
             }
-            .checkBoxAndMemoField(title: $newPocketItem.title, memo: $newPocketItem.memo, isChecked: .constant(false)) {
+            .checkBoxAndMemoField(
+              title: $newPocketItem.title,
+              memo: $newPocketItem.memo,
+              isChecked: .constant(false)
+            ) {
               if !newPocketItem.title.isEmpty {
                 addItem()
                 withAnimation {
@@ -129,26 +134,24 @@ struct ItemList: View {
       RecommendedListView(pocketItems: $lists)
     }
     .overlay(alignment: .bottomTrailing) {
-      if !pocket.isHidden {
-        Button {
-          isPresnetedRecommend = true
-        } label: {
-          HStack(spacing: 4) {
-            PBImages.lamp.image
-            Text("추천")
-              .font(PBFonts.button._1.font)
-              .foregroundStyle(.white)
-          }
-          .padding(.vertical, 9)
-          .padding(.leading, 16)
-          .padding(.trailing, 20)
-          .background(PBColors.navy._900.color)
-          .clipShape(Capsule())
+      Button {
+        isPresnetedRecommend = true
+      } label: {
+        HStack(spacing: 4) {
+          PBImages.lamp.image
+          Text("추천")
+            .font(PBFonts.button._1.font)
+            .foregroundStyle(.white)
         }
-        .buttonStyle(.plain)
-        .padding(.trailing, 16)
-        .padding(.bottom, 20)
+        .padding(.vertical, 9)
+        .padding(.leading, 16)
+        .padding(.trailing, 20)
+        .background(PBColors.navy._900.color)
+        .clipShape(Capsule())
       }
+      .buttonStyle(.plain)
+      .padding(.trailing, 16)
+      .padding(.bottom, 20)
     }
   }
 }
@@ -161,5 +164,9 @@ private extension ItemList {
 }
 
 #Preview {
-  ItemList(pocket: .init())
+  ItemList(pocket: PocketModel())
+}
+
+#Preview("Template") {
+  ItemList(pocket: TemplateModel())
 }

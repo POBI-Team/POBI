@@ -22,21 +22,20 @@ struct PocketListEmptyView: View {
           .foregroundStyle(PBColors.navy._200.color)
           .multilineTextAlignment(.center)
           .lineSpacing(6)
-
       }
     }
   }
 }
 
-struct PocketHiddenListEmptyView: View {
+struct TemplateListEmptyView: View {
   var body: some View {
     VStack(spacing: 32) {
       PBImages.pobiHiddenEmpty.image
       VStack(spacing: 8) {
-        Text("숨긴 포켓이 없어요")
+        Text("템플릿이 없어요!")
           .font(PBFonts.title._1.font)
           .foregroundStyle(PBColors.navy._900.color)
-        Text("안 쓰거나 숨기고 싶은 포켓이 있다면,\n‘내 포켓’에서 숨길 수 있어요")
+        Text("자주 쓰고 싶은 포켓이 있다면,\n‘내 포켓’에서 템플릿으로 만들 수 있어요")
           .font(PBFonts.body._4.font)
           .foregroundStyle(PBColors.navy._200.color)
           .multilineTextAlignment(.center)
@@ -51,6 +50,6 @@ struct PocketHiddenListEmptyView: View {
  
 }
 #Preview {
-  PocketHiddenListEmptyView()
+  TemplateListEmptyView()
  
 }

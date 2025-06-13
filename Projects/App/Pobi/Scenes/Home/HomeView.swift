@@ -12,7 +12,7 @@ import PBStorage
 import LocalNotiService
 
 struct HomeView: View {
-  @State private var seletedTabIndex: Int = 0
+  @State private var selectedTabIndex: Int = 0
   @Binding private var isPresentedCreate: Bool
   @State private var isAppear = false
   @State private var profileImageType: ProfileImageType = .first
@@ -37,11 +37,11 @@ struct HomeView: View {
             .frame(width: 48, height: 48)
         }
         PBSegmentView(
-          selected: $seletedTabIndex, items: .init("내 포켓"), .init("숨긴 포켓")
+          selected: $selectedTabIndex, items: .init("내 포켓"), .init("템플릿")
         )
       }
       .padding(.leading, 4)
-      PocketList(seletedTabIndex: seletedTabIndex)
+      PocketList(selectedTabIndex: selectedTabIndex)
     }
     .toolbar(.hidden)
     .padding(.horizontal, 24)
