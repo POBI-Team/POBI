@@ -69,6 +69,14 @@ public final class PocketModel: PocketModelable {
     return newPocket
   }
 
+  public func template() -> TemplateModel {
+    return TemplateModel(
+      title: self.title,
+      icon: self.icon,
+      items: self.items.map { $0.copy() }
+    )
+  }
+  
   public func temporary() -> Pocket {
     return Pocket(
       title: self.title,
