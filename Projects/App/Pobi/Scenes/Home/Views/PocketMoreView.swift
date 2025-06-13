@@ -31,6 +31,70 @@ struct PocketMoreView<P: PocketModelable>: View {
         VStack(spacing: 0) {
           VStack(spacing: 1) {
             Button {
+              isPresentedEdit = true
+              dismiss()
+            } label: {
+              HStack(spacing: 8) {
+                Group {
+                  PBImages.setting.image
+                  Text("설정하기")
+                    .font(PBFonts.button._3.font)
+                }
+                .foregroundStyle(PBColors.navy._900.color)
+                Spacer()
+              }
+              .padding(.horizontal, 20)
+              .padding(.vertical, 14)
+            }
+            .background(.white)
+            
+            if let pocket = pocket as? PocketModel {
+              Button {
+                dismiss()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                  let newPocket = pocket.copy()
+                  modelContext.insert(newPocket)
+                  try? modelContext.save()
+                }
+              } label: {
+                HStack(spacing: 8) {
+                  Group {
+                    PBImages.copy.image
+                    Text("복제하기")
+                      .font(PBFonts.button._3.font)
+                  }
+                  .foregroundStyle(PBColors.navy._900.color)
+                  Spacer()
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 14)
+              }
+              .background(.white)
+              
+              Button {
+                dismiss()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                  let newTemplate = pocket.template()
+                  modelContext.insert(newTemplate)
+                  try? modelContext.save()
+                }
+              } label: {
+                HStack(spacing: 8) {
+                  Group {
+                    PBImages.template.image
+                    Text("템플릿 만들기")
+                      .font(PBFonts.button._3.font)
+                  }
+                  .foregroundStyle(PBColors.navy._900.color)
+                  Spacer()
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 14)
+              }
+              .background(.white)
+            }
+            
+            Button {
               isPresentedDeleteAlert.toggle()
             } label: {
               HStack(spacing: 8) {
@@ -76,7 +140,7 @@ struct PocketMoreView<P: PocketModelable>: View {
         }
       }
       .presentationCornerRadius(30)
-      .presentationDetents([.height(331)])
+      .presentationDetents([.height(pocket is PocketModel ? 311 : 227)])
   }
 }
 
@@ -86,5 +150,14 @@ struct PocketMoreView<P: PocketModelable>: View {
       isPresented: .constant(true),
       content: {
         PocketMoreView(PocketModel(id: .init(), title: "테스트"), isPresentedEdit: .constant(false))
+      })
+}
+
+#Preview("Template") {
+  Color.white
+    .sheet(
+      isPresented: .constant(true),
+      content: {
+        PocketMoreView(TemplateModel(id: .init(), title: "테스트"), isPresentedEdit: .constant(false))
       })
 }

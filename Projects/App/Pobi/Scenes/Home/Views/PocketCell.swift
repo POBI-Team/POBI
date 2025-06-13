@@ -103,12 +103,20 @@ private extension PocketCell {
 
 #Preview("week") {
   PocketCell(PocketModel(id: .init(), title: "테스트", onAlarm: true, repeats: true, alarm: .init(isWeekRepeat: true, days: [1,2,3,4,5,6], date: .now, time: .now)))
+    .environmentObject(PBFormatter())
 }
 
 #Preview("day") {
   PocketCell(PocketModel(id: .init(), title: "테스트", onAlarm: true, repeats: true, alarm: .init(isWeekRepeat: false, days: [1,2], date: .now, time: .now)))
+    .environmentObject(PBFormatter())
 }
 
 #Preview("date") {
   PocketCell(PocketModel(id: .init(), title: "테스트", onAlarm: true, alarm: .init(isWeekRepeat: true, days: [1,2], date: .now, time: .now)))
+    .environmentObject(PBFormatter())
+}
+
+#Preview("Template") {
+  PocketCell(TemplateModel(title: "테스트"))
+    .environmentObject(PBFormatter())
 }
