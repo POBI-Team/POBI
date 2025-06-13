@@ -8,7 +8,7 @@
 import SwiftData
 
 @Model
-public final class TemplateModel {
+public final class TemplateModel: PocketModelable {
   @Attribute(.unique) public var id: UUID
   public var title: String
   public var colorIndex: Int = 7
