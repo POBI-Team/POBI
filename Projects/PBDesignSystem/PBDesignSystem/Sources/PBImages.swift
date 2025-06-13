@@ -44,6 +44,7 @@ public struct PBImages {
   public static var warningCycle: UIImage { UIImage(named: "warning_cycle", in: .module, with: nil)! }
   public static var pobiHiddenEmpty: UIImage { UIImage(named: "pobi_hidden_empty", in: .module, with: nil)! }
   public static var reset: UIImage { UIImage(named: "reset", in: .module, with: nil)! }
+  public static var template: UIImage { UIImage(named: "template", in: .module, with: nil)! }
 }
 
 public extension UIImage {
