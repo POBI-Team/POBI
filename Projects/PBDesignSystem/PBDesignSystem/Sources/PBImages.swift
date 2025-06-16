@@ -45,6 +45,8 @@ public struct PBImages {
   public static var pobiHiddenEmpty: UIImage { UIImage(named: "pobi_hidden_empty", in: .module, with: nil)! }
   public static var reset: UIImage { UIImage(named: "reset", in: .module, with: nil)! }
   public static var template: UIImage { UIImage(named: "template", in: .module, with: nil)! }
+  public static var home: UIImage { UIImage(named: "home", in: .module, compatibleWith: nil)! }
+  public static var calendar: UIImage { UIImage(named: "calendar", in: .module, compatibleWith: nil)! }
 }
 
 public extension UIImage {

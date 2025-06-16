@@ -16,6 +16,7 @@ struct ScheduleView: View {
   @State private var isPresentedDatePicker: Bool = false
   
   var body: some View {
+    VStack(spacing: 0) {
       HStack(spacing: 15) {
         Text(dateLabel)
           .font(PBFonts.headline._1.font)
@@ -43,8 +44,11 @@ struct ScheduleView: View {
       .sheet(isPresented: $isPresentedDatePicker) {
         YearAndMonthPickerView(seletedDate: $currentDate)
       }
-    PocketCalendarView(seletedDate: $currentDate)
-      .padding(.horizontal, 9)
+      GeometryReader { reader in
+        PocketCalendarView(seletedDate: $currentDate, height: reader.size.height)
+          .padding(.horizontal, 9)
+      }
+    }
   }
 }
 

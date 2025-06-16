@@ -21,207 +21,133 @@ struct PocketCalendarView: View {
   @State private var currentPage = 0
   @State private var calendars: [[PBCalendarItem]] = []
   
-  @State private var totalHeight: CGFloat = 0
+  private let totalHeight: CGFloat
   @State private var sheetHeight: CGFloat = 0
   @State private var rowHeight: CGFloat?
   @State private var columnWidth: CGFloat?
   
   @GestureState private var dragOffset: CGFloat = .zero
   
-#if DEBUG
-  private var pockets: [PocketModel] = [
-    PocketModel(
-      title: "test1",
-      alarm: .init(
-        isWeekRepeat: false,
-        days: [],
-        date: Calendar.current.date(from: DateComponents(year: 2025, month: 6, day: 4))!,
-        time: .now
-      )
-    ),
-    PocketModel(
-      title: "test2",
-      alarm: .init(
-        isWeekRepeat: false,
-        days: [],
-        date: Calendar.current.date(from: DateComponents(year: 2025, month: 6, day: 4))!,
-        time: .now
-      )
-    ),
-    PocketModel(
-      title: "test3",
-      alarm: .init(
-        isWeekRepeat: false,
-        days: [],
-        date: Calendar.current.date(from: DateComponents(year: 2025, month: 6, day: 4))!,
-        time: .now
-      )
-    ),
-    PocketModel(
-      title: "test4",
-      alarm: .init(
-        isWeekRepeat: false,
-        days: [],
-        date: Calendar.current.date(from: DateComponents(year: 2025, month: 6, day: 4))!,
-        time: .now
-      )
-    ),
-    PocketModel(
-      title: "test5",
-      alarm: .init(
-        isWeekRepeat: false,
-        days: [],
-        date: Calendar.current.date(from: DateComponents(year: 2025, month: 6, day: 4))!,
-        time: .now
-      )
-    ),
-    PocketModel(
-      title: "test6",
-      alarm: .init(
-        isWeekRepeat: false,
-        days: [],
-        date: Calendar.current.date(from: DateComponents(year: 2025, month: 6, day: 4))!,
-        time: .now
-      )
-    )
-  ]
-#else
   @Query(
     filter: #Predicate<PocketModel> { $0.isCalendar },
     sort: \.alarm.time.secondsSinceStartOfDay
   )
   private var pockets: [PocketModel]
-#endif
-  init(seletedDate: Binding<Date>) {
+  
+  init(seletedDate: Binding<Date>, height: CGFloat) {
     self._selectedDate = seletedDate
+    self.totalHeight = height
   }
   
   var body: some View {
-    GeometryReader { fristGeometry in
-      ZStack {
-        Rectangle()
-          .foregroundStyle(.clear)
-        VStack {
-          TabView(selection: $currentPage) {
-            ForEach([-1,0,1], id: \.self) { page in
-              VStack {
-                HStack {
-                  ForEach(calenderManager.weekdays, id: \.self) { weekday in
-                    Text(formatter.weekDay(weekday) ?? "")
-                      .font(PBFonts.body._4.font)
-                      .foregroundStyle(weekday == 1 ? PBColors.red.color : PBColors.navy._100.color)
-                      .frame(maxWidth: .infinity)
-                  }
+    ZStack {
+      Rectangle()
+        .foregroundStyle(.clear)
+      VStack {
+        TabView(selection: $currentPage) {
+          ForEach([-1,0,1], id: \.self) { page in
+            VStack {
+              HStack {
+                ForEach(calenderManager.weekdays, id: \.self) { weekday in
+                  Text(formatter.weekDay(weekday) ?? "")
+                    .font(PBFonts.body._4.font)
+                    .foregroundStyle(weekday == 1 ? PBColors.red.color : PBColors.navy._100.color)
+                    .frame(maxWidth: .infinity)
                 }
-                .frame(height: 31)
-                .padding(.horizontal, 4)
-                GeometryReader { secondGeometry in
-                  LazyVGrid(
-                    columns: Array(repeating: GridItem(spacing: 0), count: 7),
-                    spacing: 0
-                  ) {
-                    if !calendars.isEmpty {
-                      let calendar = calendars[page+1]
-                      ForEach(calendar) { item in
-                        ZStack {
-                          RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(rectangleColor(item: item))
-                          VStack(spacing: 0) {
-                            Text("\(item.day)")
-                              .font(PBFonts.label._1.font)
-                              .foregroundStyle(dayLabelColor(item: item))
-                            GeometryReader { thirdGeometry in
-                              ZStack(alignment: .top) {
-                                DotsView(
-                                  width: columnWidth,
-                                  pockets: item.pockets
-                                )
-                                .frame(height: thirdGeometry.size.height)
-                                .opacity(sheetHeight/(totalHeight/2))
-                                
-                                PocketTagList(
-                                  height: rowHeight,
-                                  item: item,
-                                  selectedItem: selectedItem
-                                )
-                                .padding(.top, 4)
-                                .opacity(1.0 - (sheetHeight/(totalHeight/2)))
+              }
+              .frame(height: 31)
+              .padding(.horizontal, 4)
+              GeometryReader { firstReader in
+                LazyVGrid(
+                  columns: Array(repeating: GridItem(spacing: 0), count: 7),
+                  spacing: 0
+                ) {
+                  if !calendars.isEmpty {
+                    let calendar = calendars[page+1]
+                    ForEach(calendar) { item in
+                      ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                          .foregroundStyle(rectangleColor(item: item))
+                        VStack(spacing: 0) {
+                          Text("\(item.day)")
+                            .font(PBFonts.label._1.font)
+                            .foregroundStyle(dayLabelColor(item: item))
+                          GeometryReader { secondReader in
+                            ZStack(alignment: .top) {
+                              DotsView(
+                                width: columnWidth,
+                                pockets: item.pockets
+                              )
+                              .frame(height: firstReader.size.height)
+                              .opacity(sheetHeight/(totalHeight/2))
+                              
+                              PocketTagList(
+                                height: rowHeight,
+                                item: item,
+                                selectedItem: selectedItem
+                              )
+                              .padding(.top, 4)
+                              .opacity(1.0 - (sheetHeight/(totalHeight/2)))
+                            }
+                            .onAppear {
+                              if rowHeight == nil {
+                                rowHeight = secondReader.size.height
                               }
-                              .onAppear {
-                                if rowHeight == nil {
-                                  rowHeight = thirdGeometry.size.height
-                                }
-                                
-                                if columnWidth == nil {
-                                  columnWidth = thirdGeometry.size.width
-                                }
+                              
+                              if columnWidth == nil {
+                                columnWidth = secondReader.size.width
                               }
                             }
                           }
-                          .padding(.vertical, 8)
-                          .padding(.horizontal, 4)
                         }
-                        .onAppear {
-                          if selectedItem == nil, item.isToday {
-                            selectedItem = item
-                          }
-                        }
-                        .onTapGesture {
-                          selectedItem = item
-                          withAnimation {
-                            sheetHeight = fristGeometry.size.height / 2
-                          }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: secondGeometry.size.height / CGFloat(calendar.count / 7))
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 4)
                       }
+                      .onAppear {
+                        if selectedItem == nil, item.isToday {
+                          selectedItem = item
+                        }
+                      }
+                      .onTapGesture {
+                        selectedItem = item
+                        withAnimation {
+                          sheetHeight = totalHeight / 2
+                        }
+                      }
+                      .frame(maxWidth: .infinity)
+                      .frame(height: firstReader.size.height / CGFloat(calendar.count / 7))
                     }
                   }
                 }
               }
-              .tag(page)
-              .onDisappear {
-                if currentPage != 0 {
-                  selectedDate = selectedDate.moveMonth(by: currentPage)!
-                  let newCalendar = calenderManager.days(
-                    in: selectedDate.moveMonth(by: currentPage)!,
-                    with: pockets
-                  )
-                  if currentPage == 1 {
-                    calendars.append(newCalendar)
-                    calendars.removeFirst()
-                  } else {
-                    calendars.insert(newCalendar, at: 0)
-                    calendars.removeLast()
-                  }
-                  currentPage = 0
+              
+            }
+            .onDisappear {
+              if currentPage != 0 {
+                selectedDate = selectedDate.moveMonth(by: currentPage)!
+                let newCalendar = calenderManager.days(
+                  in: selectedDate.moveMonth(by: currentPage)!,
+                  with: pockets
+                )
+                if currentPage == 1 {
+                  calendars.append(newCalendar)
+                  calendars.removeFirst()
+                } else {
+                  calendars.insert(newCalendar, at: 0)
+                  calendars.removeLast()
                 }
+                currentPage = 0
               }
             }
+            .tag(page)
           }
-          .tabViewStyle(.page(indexDisplayMode: .never))
-          .frame(maxHeight: totalHeight)
-          .frame(height: max(totalHeight/2, totalHeight - sheetHeight), alignment: .top)
-          
-          Spacer()
         }
-        VStack {
-          Spacer()
-          PocketSheet(
-            date: selectedDate,
-            item: $selectedItem,
-            minHeight: totalHeight/2
-          )
-          .frame(height: max(0, sheetHeight), alignment: .top)
-          .background(.white)
-          .clipped()
-        }
+        .tabViewStyle(.page(indexDisplayMode: .never))
+        .frame(maxHeight: totalHeight)
+        .frame(height: max(totalHeight/2, totalHeight - sheetHeight), alignment: .top)
+        Spacer()
       }
       .onAppear {
-        if totalHeight == 0 {
-          totalHeight = fristGeometry.size.height
-        }
-        
         if calendars.isEmpty {
           calendars = [
             calenderManager.days(
@@ -239,7 +165,19 @@ struct PocketCalendarView: View {
           ]
         }
       }
+      VStack {
+        Spacer()
+        PocketSheet(
+          date: selectedDate,
+          item: $selectedItem,
+          minHeight: totalHeight/2
+        )
+        .frame(height: max(0, sheetHeight), alignment: .top)
+        .background(.white)
+        .clipped()
+      }
     }
+    .id(calendars.isEmpty)
     .onChange(of: dragOffset) { oldValue, newValue in
       if abs(newValue) > abs(oldValue) {
         sheetHeight -= (newValue - oldValue)
@@ -302,7 +240,9 @@ private extension Date {
 #Preview {
   @Previewable @State var date = Calendar.current.date(from: DateComponents(year: 2025, month: 6))!
   
-  PocketCalendarView(seletedDate: $date)
-    .environmentObject(PBCalendarManager())
-    .environmentObject(PBFormatter())
+  GeometryReader {
+    PocketCalendarView(seletedDate: $date, height: $0.size.height)
+      .environmentObject(PBCalendarManager())
+      .environmentObject(PBFormatter())
+  }
 }
