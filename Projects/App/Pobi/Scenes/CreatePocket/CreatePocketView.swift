@@ -24,9 +24,9 @@ struct CreatePocketView: View {
   
   private let pocketModel: PocketModel?
   
-  init(pocket: PocketModel?) {
+  init(pocket: PocketModel?, date: Date? = nil) {
     self.pocketModel = pocket
-    self.pocket = pocket?.temporary() ?? .init()
+    self.pocket = pocket?.temporary() ?? .init(alarm: Alarm(date: date ?? .now))
   }
   
   var body: some View {

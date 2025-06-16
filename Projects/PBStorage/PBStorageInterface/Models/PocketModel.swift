@@ -114,7 +114,7 @@ public struct Pocket: Pocketable {
     isCalendar: Bool = false,
     colorIndex: Int = 0,
     icon: String? = nil,
-    alarm: Alarm = .init(isWeekRepeat: true, days: [1,2,3,4,5,6,7], date: .now, time: .now)
+    alarm: Alarm = Alarm()
   ) {
     self.title = title
     self.onAlarm = onAlarm

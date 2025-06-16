@@ -139,36 +139,33 @@ final class PBCalendarTests: XCTestCase {
     XCTAssertEqual([["24, 24일 마다"], ["24, 24일 마다"]], output)
   }
   
-//  func test_date_호출_시_입력한_날짜가_16일이면서_해당_월에_포함되어_있는_경우_해당_월에_16일() {
-//    // Arrange
-//    let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
-//    // Act
-//    let item = PBCalendarItem(day: 16, isToday: false, isInCurrentMonth: true)
-//    let output = sut.date(of: item, in: date)
-//    // Assert
-//    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 16))!
-//    XCTAssertEqual(result, output)
-//  }
-//  
-//  func test_date_호출_시_입력한_날짜가_28일이면서_해당_월에_포함되어_있는_않는_경우_이전_월에_28일() {
-//    // Arrange
-//    let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
-//    // Act
-//    let item = PBCalendarItem(day: 28, isToday: false, isInCurrentMonth: false)
-//    let output = sut.date(of: item, in: date)
-//    // Assert
-//    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 2, day: 28))!
-//    XCTAssertEqual(result, output)
-//  }
-//  
-//  func test_date_호출_시_입력한_날짜가_2일이면서_해당_월에_포함되어_있는_않는_경우_다음_월에_2일() {
-//    // Arrange
-//    let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
-//    // Act
-//    let item = PBCalendarItem(day: 2, isToday: false, isInCurrentMonth: false)
-//    let output = sut.date(of: item, in: date)
-//    // Assert
-//    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 2))!
-//    XCTAssertEqual(result, output)
-//  }
+  func test_date_호출_시_입력한_날짜가_16일이면서_해당_월에_포함되어_있는_경우_해당_월에_16일() {
+    // Arrange
+    let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
+    // Act
+    let output = sut.date(of: 16, in: date, isInCurrentMonth: true)
+    // Assert
+    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 16))!
+    XCTAssertEqual(result, output)
+  }
+  
+  func test_date_호출_시_입력한_날짜가_28일이면서_해당_월에_포함되어_있는_않는_경우_이전_월에_28일() {
+    // Arrange
+    let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
+    // Act
+    let output = sut.date(of: 28, in: date, isInCurrentMonth: false)
+    // Assert
+    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 2, day: 28))!
+    XCTAssertEqual(result, output)
+  }
+  
+  func test_date_호출_시_입력한_날짜가_2일이면서_해당_월에_포함되어_있는_않는_경우_다음_월에_2일() {
+    // Arrange
+    let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
+    // Act
+    let output = sut.date(of: 2, in: date, isInCurrentMonth: false)
+    // Assert
+    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 2))!
+    XCTAssertEqual(result, output)
+  }
 }

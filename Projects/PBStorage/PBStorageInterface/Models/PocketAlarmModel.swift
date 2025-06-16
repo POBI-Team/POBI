@@ -54,10 +54,10 @@ public struct Alarm {
   public var time: Date
   
   public init(
-    isWeekRepeat: Bool,
-    days: [Int],
-    date: Date,
-    time: Date
+    isWeekRepeat: Bool = true,
+    days: [Int] = [1,2,3,4,5,6,7],
+    date: Date = .now,
+    time: Date = .now
   ) {
     self.isWeekRepeat = isWeekRepeat
     self.days = days

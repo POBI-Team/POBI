@@ -47,6 +47,7 @@ public struct PBImages {
   public static var template: UIImage { UIImage(named: "template", in: .module, with: nil)! }
   public static var home: UIImage { UIImage(named: "home", in: .module, compatibleWith: nil)! }
   public static var calendar: UIImage { UIImage(named: "calendar", in: .module, compatibleWith: nil)! }
+  public static var `return`: UIImage { UIImage(named: "return", in: .module, compatibleWith: nil)! }
 }
 
 public extension UIImage {

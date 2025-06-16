@@ -15,8 +15,8 @@ struct PocketSheet: View {
   @Environment(\.modelContext) private var modelContext
   @EnvironmentObject private var formatter: PBFormatter
   @Binding private var item: PBCalendarItem?
-  let date: Date
-  let minHeight: CGFloat
+  @State private var date: Date
+  private let minHeight: CGFloat
   
   @State private var isEditMode: Bool = false
   @State private var isPresentedDeleteAlert: Bool = false

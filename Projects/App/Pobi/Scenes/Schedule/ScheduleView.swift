@@ -12,49 +12,94 @@ import PBCalendar
 
 struct ScheduleView: View {
   @EnvironmentObject private var formatter: PBFormatter
-  @State private var currentDate: Date = .now
+  @EnvironmentObject private var calendarManager: PBCalendarManager
+
+  @State private var selectedDate: Date = .now
   @State private var isPresentedDatePicker: Bool = false
+  @State private var isPresentedCreate: Bool = false
+  @State private var didTapTodayButton = UUID()
   
   var body: some View {
     VStack(spacing: 0) {
-      HStack(spacing: 15) {
-        Text(dateLabel)
-          .font(PBFonts.headline._1.font)
-          .foregroundStyle(PBColors.navy._900.color)
-          .padding(.leading, 4)
-        PBShapes.arrow(direction: isPresentedDatePicker ? .bottom : .right)
-          .frame(width: 12, height: 6)
-          .foregroundStyle(PBColors.navy._900.color)
+      HStack(spacing: 12) {
+        HStack(spacing: 15) {
+          Text(dateLabel)
+            .font(PBFonts.headline._1.font)
+            .foregroundStyle(PBColors.navy._900.color)
+            .padding(.leading, 4)
+          PBShapes.arrow(direction: isPresentedDatePicker ? .bottom : .right)
+            .frame(width: 12, height: 6)
+            .foregroundStyle(PBColors.navy._900.color)
+        }
+        .onTapGesture {
+          isPresentedDatePicker = true
+        }
         Spacer()
-        Circle()
-          .frame(width: 40, height: 40)
-          .foregroundStyle(PBColors.yellow._50.color)
-          .overlay {
-            PBShapes.plus(lineWidth: 2.2)
-              .frame(width: 18, height: 18)
-              .foregroundStyle(PBColors.yellow._600.color)
+        
+        if !isCurrentMonth {
+          Button {
+            didTapTodayButton = UUID()
+          } label: {
+            Capsule()
+              .stroke(lineWidth: 1.4)
+              .foregroundStyle(PBColors.navy._50.color)
+              .frame(width: 73, height: 38)
+              .overlay {
+                HStack(spacing: 4) {
+                  PBImages.return.image
+                  Text("오늘")
+                    .font(PBFonts.caption._2.font)
+                    .foregroundStyle(PBColors.navy._900.color)
+                }
+              }
           }
+          .buttonStyle(.plain)
+        }
+        
+        Button {
+          isPresentedCreate = true
+        } label: {
+          Circle()
+            .frame(width: 40, height: 40)
+            .foregroundStyle(PBColors.navy._900.color)
+            .overlay {
+              PBShapes.plus(lineWidth: 2.2)
+                .frame(width: 18, height: 18)
+                .foregroundStyle(.white)
+            }
+        }
+        .buttonStyle(.plain)
       }
       .animation(.default.speed(2), value: isPresentedDatePicker)
-      .onTapGesture {
-        isPresentedDatePicker = true
-      }
       .frame(height: 80)
       .padding(.horizontal, 20)
-      .sheet(isPresented: $isPresentedDatePicker) {
-        YearAndMonthPickerView(seletedDate: $currentDate)
-      }
       GeometryReader { reader in
-        PocketCalendarView(seletedDate: $currentDate, height: reader.size.height)
-          .padding(.horizontal, 9)
+        PocketCalendarView(
+          seletedDate: $selectedDate,
+          isPresentedCreate: $isPresentedCreate,
+          didTapTodayButton: $didTapTodayButton,
+          height: reader.size.height
+        )
+        .padding(.horizontal, 9)
       }
+    }
+    .sheet(isPresented: $isPresentedDatePicker) {
+      YearAndMonthPickerView(seletedDate: $selectedDate)
     }
   }
 }
 
 private extension ScheduleView {
   var dateLabel: String {
-    formatter.label(currentDate, format: "MMMM YYYY", locale: Locale(identifier: "ko_kr"))
+    formatter.label(selectedDate, format: "MMMM YYYY", locale: Locale(identifier: "ko_kr"))
+  }
+  
+  var isCurrentMonth: Bool {
+    Calendar.current.isDate(
+      selectedDate,
+      equalTo: .now,
+      toGranularity: .month
+    )
   }
 }
 
