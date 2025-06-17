@@ -37,7 +37,7 @@ final class PBCalendarTests: XCTestCase {
     // Act
     let output = sut.days(in: date)
     // Assert
-    XCTAssertEqual([23, 24, 25, 26, 27, 28, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 1, 2, 3, 4, 5], output.map(\.day))
+    XCTAssertEqual([23, 24, 25, 26, 27, 28, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 1, 2, 3, 4, 5], output.map(\.dateComponents.day!))
   }
   
   func test_days_호출_시_사용자의_달력_시작요일이_화요일인_경우_3월의_달력은_2월25일부터_3월31일까지_표시() {
@@ -49,7 +49,7 @@ final class PBCalendarTests: XCTestCase {
     // Act
     let output = sut.days(in: date)
     // Assert
-    XCTAssertEqual([25, 26, 27, 28, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], output.map(\.day))
+    XCTAssertEqual([25, 26, 27, 28, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31], output.map(\.dateComponents.day!))
   }
   
   func test_days_호출_시_10일에_포켓이_등록되어_있을_경우_10일에_표시() {
@@ -74,7 +74,7 @@ final class PBCalendarTests: XCTestCase {
       }
       .map { item in
         item.pockets.map {
-          "\(item.day), \($0.title)"
+          "\(item.dateComponents.day!), \($0.title)"
         }
       }
     // Assert
@@ -103,7 +103,7 @@ final class PBCalendarTests: XCTestCase {
       }
       .map { item in
         item.pockets.map {
-          "\(item.day), \($0.title)"
+          "\(item.dateComponents.day!), \($0.title)"
         }
       }
     // Assert
@@ -132,40 +132,10 @@ final class PBCalendarTests: XCTestCase {
       }
       .map { item in
         item.pockets.map {
-          "\(item.day), \($0.title)"
+          "\(item.dateComponents.day!), \($0.title)"
         }
       }
     // Assert
     XCTAssertEqual([["24, 24일 마다"], ["24, 24일 마다"]], output)
-  }
-  
-  func test_date_호출_시_입력한_날짜가_16일이면서_해당_월에_포함되어_있는_경우_해당_월에_16일() {
-    // Arrange
-    let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
-    // Act
-    let output = sut.date(of: 16, in: date, isInCurrentMonth: true)
-    // Assert
-    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 16))!
-    XCTAssertEqual(result, output)
-  }
-  
-  func test_date_호출_시_입력한_날짜가_28일이면서_해당_월에_포함되어_있는_않는_경우_이전_월에_28일() {
-    // Arrange
-    let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
-    // Act
-    let output = sut.date(of: 28, in: date, isInCurrentMonth: false)
-    // Assert
-    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 2, day: 28))!
-    XCTAssertEqual(result, output)
-  }
-  
-  func test_date_호출_시_입력한_날짜가_2일이면서_해당_월에_포함되어_있는_않는_경우_다음_월에_2일() {
-    // Arrange
-    let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
-    // Act
-    let output = sut.date(of: 2, in: date, isInCurrentMonth: false)
-    // Assert
-    let result = Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 2))!
-    XCTAssertEqual(result, output)
   }
 }

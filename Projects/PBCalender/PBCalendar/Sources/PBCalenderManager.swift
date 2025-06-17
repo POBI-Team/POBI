@@ -41,19 +41,16 @@ public final class PBCalendarManager: Sendable, ObservableObject {
         
         if e > -1 && e < lastDay { // 현재 달
           day = e + 1
-          isToday = self.isToday(date: date, day: e + 1)
           isInCurrentMonth = true
         } else if e >= lastDay { // 이후 달
           day = e - lastDay + 1
-          isToday = false
           isInCurrentMonth = false
         } else { // 이전 달
           day = lastDayOfMonthBefore + e + 1
-          isToday = false
           isInCurrentMonth = false
         }
-        
-        let date = self.date(of: day, in: date, isInCurrentMonth: isInCurrentMonth)
+        let itemDateComponents = dateComponents(of: day, in: date, weekday: weekday, isInCurrentMonth: isInCurrentMonth)
+        isToday = calendar.date(.now, matchesComponents: itemDateComponents)
         pockets.forEach { pocket in
           if pocket.repeats {
             if pocket.alarm.isWeekRepeat {
@@ -66,55 +63,35 @@ public final class PBCalendarManager: Sendable, ObservableObject {
               }
             }
           } else {
-            if compare(pocket.alarm.date, with: date) {
+            if calendar.date(pocket.alarm.date, matchesComponents: itemDateComponents) {
               targetPockets.append(pocket)
             }
           }
         }
         return PBCalendarItem(
-          id: makeComponents(for: date, day: day).description,
-          dateComponents: calendar.dateComponents([.year, .month, .day, .weekday], from: date),
+          id: itemDateComponents.description,
+          dateComponents: itemDateComponents,
           isToday: isToday,
           isInCurrentMonth: isInCurrentMonth,
           pockets: targetPockets
         )
       }
   }
-  
-  public func date(of day: Int, in date: Date, isInCurrentMonth: Bool) -> Date {
-    var components = calendar.dateComponents([.year, .month], from: date)
-    components.day = day
-    let date = calendar.date(from: components)!
-    if isInCurrentMonth {
-      return date
-    } else {
-      if day > 15 {
-        return calendar.date(byAdding: .month, value: -1, to: date)!
-      } else {
-        return calendar.date(byAdding: .month, value: 1, to: date)!
-      }
-    }
-  }
 }
 
 private extension PBCalendarManager {
-  func compare(_ date1: Date, with date2: Date) -> Bool {
-    calendar.dateComponents([.year, .month, .day], from: date1).description == calendar.dateComponents([.year, .month, .day], from: date2).description
-  }
-  
-  func isToday(date: Date, day: Int) -> Bool {
-    calendar.date(
-      .now,
-      matchesComponents: makeComponents(for: date, day: day)
-    )
-  }
-  
-  func makeComponents(for date: Date, day: Int) -> DateComponents {
-    return DateComponents(
-      year: calendar.component(.year, from: date),
-      month: calendar.component(.month, from: date),
-      day: day
-    )
+  func dateComponents(of day: Int, in date: Date, weekday: Int, isInCurrentMonth: Bool) -> DateComponents {
+    var components = calendar.dateComponents([.year, .month], from: date)
+    components.day = day
+    components.weekday = weekday
+    if !isInCurrentMonth {
+      if day > 15 {
+        components.month! -= 1
+      } else {
+        components.month! += 1
+      }
+    }
+    return components
   }
   
   func numberOfDays(in date: Date) -> Int {
@@ -124,7 +101,6 @@ private extension PBCalendarManager {
   func firstWeekdayOfMonth(in date: Date) -> Int {
     let components = calendar.dateComponents([.year, .month], from: date)
     let firstDayOfMonth = calendar.date(from: components)!
-    
     return calendar.component(.weekday, from: firstDayOfMonth)
   }
   
