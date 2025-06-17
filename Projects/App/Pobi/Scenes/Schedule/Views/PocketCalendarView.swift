@@ -38,12 +38,12 @@ struct PocketCalendarView: View {
   private var pockets: [PocketModel]
   
   init(
-    seletedDate: Binding<Date>,
+    selectedDate: Binding<Date>,
     isPresentedCreate: Binding<Bool>,
     didTapTodayButton: Binding<UUID>,
     height: CGFloat
   ) {
-    self._selectedDate = seletedDate
+    self._selectedDate = selectedDate
     self._isPresentedCreate = isPresentedCreate
     self._didTapTodayButton = didTapTodayButton
     self.totalHeight = height
@@ -274,7 +274,7 @@ private extension Date {
   @Previewable @State var isPresentedCreate = false
   GeometryReader {
     PocketCalendarView(
-      seletedDate: $date,
+      selectedDate: $date,
       isPresentedCreate: $isPresentedCreate,
       didTapTodayButton: .constant(.init()),
       height: $0.size.height

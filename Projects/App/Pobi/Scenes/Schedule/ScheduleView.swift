@@ -75,7 +75,7 @@ struct ScheduleView: View {
       .padding(.horizontal, 20)
       GeometryReader { reader in
         PocketCalendarView(
-          seletedDate: $selectedDate,
+          selectedDate: $selectedDate,
           isPresentedCreate: $isPresentedCreate,
           didTapTodayButton: $didTapTodayButton,
           height: reader.size.height
