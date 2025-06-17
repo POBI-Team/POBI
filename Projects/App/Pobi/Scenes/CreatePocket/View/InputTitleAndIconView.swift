@@ -11,7 +11,6 @@ import PBDesignSystem
 import PBStorageInterface
 import NetworkService
 
-
 struct InputTitleAndIconView<P: Pocketable>: View {
   @FocusState.Binding var isFocused: Bool
   @Binding private var pocket: P
@@ -141,7 +140,7 @@ struct InputTitleAndIconView<P: Pocketable>: View {
     .background(.white)
     .clipShape(RoundedRectangle(cornerRadius: 20))
     .onAppear {
-      guard !icons.isEmpty else { return }
+      guard icons.isEmpty else { return }
       Task {
         do {
           icons = try await NetworkClient.shared.request(
@@ -152,7 +151,7 @@ struct InputTitleAndIconView<P: Pocketable>: View {
             pocket.icon = icons.first ?? ""
           }
         } catch {
-#warning("에러 처리")
+          #warning("에러 처리")
         }
       }
     }
