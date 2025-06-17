@@ -31,10 +31,7 @@ struct PocketCalendarView: View {
   
   private let totalHeight: CGFloat
 
-  @Query(
-    filter: #Predicate<PocketModel> { $0.isCalendar },
-    sort: \.alarm.time
-  )
+  @Query(sort: [SortDescriptor<PocketModel>(\.alarm.time)])
   private var pockets: [PocketModel]
   
   init(
@@ -79,16 +76,16 @@ struct PocketCalendarView: View {
                         RoundedRectangle(cornerRadius: 8)
                           .foregroundStyle(rectangleColor(item: item))
                         VStack(spacing: 0) {
-                          Text("\(item.day)")
+                          Text("\(item.dateComponents.day ?? 0)")
                             .font(PBFonts.label._1.font)
                             .foregroundStyle(dayLabelColor(item: item))
                           GeometryReader { secondReader in
                             ZStack(alignment: .top) {
                               DotsView(
                                 width: columnWidth,
-                                pockets: item.pockets
+                                item: item
                               )
-                              .frame(height: firstReader.size.height)
+                              .frame(height: secondReader.size.height)
                               .opacity(sheetHeight/(totalHeight/2))
                               
                               PocketTagList(
@@ -166,22 +163,16 @@ struct PocketCalendarView: View {
       .fullScreenCover(isPresented: $isPresentedCreate) {
         var date: Date? = nil
         if let selectedItem {
-          date = calendarManager.date(
-            of: selectedItem.day,
-            in: selectedDate,
-            isInCurrentMonth: selectedItem.isInCurrentMonth
-          )
+          date = Calendar.current.date(from: selectedItem.dateComponents)
         }
         return CreatePocketView(pocket: nil, date: date)
       }
       VStack {
         Spacer()
         PocketSheet(
-          date: selectedDate,
           item: $selectedItem,
           minHeight: totalHeight/2
         )
-        .id(selectedItem?.id)
         .frame(height: max(0, sheetHeight), alignment: .top)
         .background(.white)
         .clipped()
@@ -197,6 +188,10 @@ struct PocketCalendarView: View {
       selectedDate = .now
       setupCalendar()
       selectedItem = calendars[1].first { $0.isToday }
+    }
+    .onChange(of: pockets) {
+      setupCalendar()
+      selectedItem = calendars.flatMap { $0 }.first { $0.isToday }
     }
     .gesture(
       DragGesture()
@@ -226,7 +221,7 @@ private extension PocketCalendarView {
   func dayLabelColor(item: PBCalendarItem) -> Color {
     if let selectedItem, item.id == selectedItem.id { return .white }
     if item.isToday { return PBColors.navy._900.color }
-    if item.weekday == 1 {
+    if item.dateComponents.weekday == 1 {
       return PBColors.red.color
         .opacity(item.isInCurrentMonth ? 1 : 0.3)
     } else {

@@ -53,6 +53,7 @@ public final class PBCalendarManager: Sendable, ObservableObject {
           isInCurrentMonth = false
         }
         
+        let date = self.date(of: day, in: date, isInCurrentMonth: isInCurrentMonth)
         pockets.forEach { pocket in
           if pocket.repeats {
             if pocket.alarm.isWeekRepeat {
@@ -65,13 +66,18 @@ public final class PBCalendarManager: Sendable, ObservableObject {
               }
             }
           } else {
-            if pocket.alarm.date == self.date(of: day, in: date, isInCurrentMonth: isInCurrentMonth) {
+            if compare(pocket.alarm.date, with: date) {
               targetPockets.append(pocket)
             }
           }
         }
-        
-        return PBCalendarItem(id: makeComponents(for: date, day: day).description, day: day, weekday: weekday, isToday: isToday, isInCurrentMonth: isInCurrentMonth, pockets: targetPockets)
+        return PBCalendarItem(
+          id: makeComponents(for: date, day: day).description,
+          dateComponents: calendar.dateComponents([.year, .month, .day, .weekday], from: date),
+          isToday: isToday,
+          isInCurrentMonth: isInCurrentMonth,
+          pockets: targetPockets
+        )
       }
   }
   
@@ -92,6 +98,10 @@ public final class PBCalendarManager: Sendable, ObservableObject {
 }
 
 private extension PBCalendarManager {
+  func compare(_ date1: Date, with date2: Date) -> Bool {
+    calendar.dateComponents([.year, .month, .day], from: date1).description == calendar.dateComponents([.year, .month, .day], from: date2).description
+  }
+  
   func isToday(date: Date, day: Int) -> Bool {
     calendar.date(
       .now,

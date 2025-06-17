@@ -9,16 +9,14 @@ import PBStorageInterface
 
 public struct PBCalendarItem: @unchecked Sendable, Identifiable {
   public let id: String
-  public let day: Int
-  public let weekday: Int
+  public let dateComponents: DateComponents
   public let isToday: Bool
   public let isInCurrentMonth: Bool
-  public let pockets: [PocketModel]
+  public var pockets: [PocketModel]
   
-  public init(id: String, day: Int, weekday: Int, isToday: Bool, isInCurrentMonth: Bool, pockets: [PocketModel]) {
+  public init(id: String, dateComponents: DateComponents, isToday: Bool, isInCurrentMonth: Bool, pockets: [PocketModel]) {
     self.id = id + "\(isInCurrentMonth)"
-    self.day = day
-    self.weekday = weekday
+    self.dateComponents = dateComponents
     self.isToday = isToday
     self.isInCurrentMonth = isInCurrentMonth
     self.pockets = pockets

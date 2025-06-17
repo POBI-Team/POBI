@@ -15,20 +15,16 @@ struct PocketSheet: View {
   @Environment(\.modelContext) private var modelContext
   @EnvironmentObject private var formatter: PBFormatter
   @Binding private var item: PBCalendarItem?
-  @State private var date: Date
   private let minHeight: CGFloat
   
   @State private var isEditMode: Bool = false
   @State private var isPresentedDeleteAlert: Bool = false
-  @State private var deletePocket: PocketModel?
 
   init(
-    date: Date,
     item: Binding<PBCalendarItem?>,
     minHeight: CGFloat
   ) {
     self._item = item
-    self.date = date
     self.minHeight = minHeight
   }
   
@@ -100,12 +96,10 @@ struct PocketSheet: View {
                   .padding(.horizontal, 16)
                   .background(PBColors.list.colors[pocket.colorIndex]._03.color)
                   .clipShape(RoundedRectangle(cornerRadius: 12))
-                  
                 }
                 if isEditMode {
                   Button {
                     isPresentedDeleteAlert = true
-                    deletePocket = pocket
                   } label: {
                     RoundedRectangle(cornerRadius: 12)
                       .overlay {
@@ -116,6 +110,12 @@ struct PocketSheet: View {
                   }
                   .frame(width: 48, height: 48)
                   .tint(PBColors.red.color)
+                  .pbAlert(isPresented: $isPresentedDeleteAlert, type: .delete) {
+                    pocket.deletePushAlarm()
+                    item?.pockets.removeAll { $0.id == pocket.id }
+                    modelContext.delete(pocket)
+                    try? modelContext.save()
+                  }
                 }
               }
             }
@@ -140,12 +140,6 @@ struct PocketSheet: View {
       .padding(.horizontal, 20)
       .padding(.top, 12)
     }
-    .pbAlert(isPresented: $isPresentedDeleteAlert, type: .delete) {
-      guard let deletePocket else { return }
-      deletePocket.deletePushAlarm()
-      modelContext.delete(deletePocket)
-      try? modelContext.save()
-    }
     .animation(.default, value: isEditMode)
   }
 }
@@ -156,8 +150,11 @@ extension PocketSheet {
   }
   
   var dateLabel: String {
-    guard let item else { return "날짜를 선택해주세요" }
-    return formatter.label(date, format: "M월", locale: Locale(identifier: "ko_KR")) + " \(item.day)일 " + (formatter.weekDay(item.weekday) ?? "")
+    guard let item,
+          let month = item.dateComponents.month,
+          let day = item.dateComponents.day,
+          let weekday = formatter.weekDay(item.dateComponents.weekday ?? 0) else { return "날짜를 선택해주세요" }
+    return "\(month)월 \(day)일 \(weekday)"
   }
 }
 
@@ -165,8 +162,7 @@ extension PocketSheet {
 #Preview {
   @Previewable @State var item: PBCalendarItem? = PBCalendarItem(
     id: "test",
-    day: 10,
-    weekday: 1,
+    dateComponents: .init(),
     isToday: false,
     isInCurrentMonth: true,
     pockets: [
@@ -177,7 +173,7 @@ extension PocketSheet {
   )
   
   NavigationStack {
-    PocketSheet(date: .now, item: $item, minHeight: 300.0)
+    PocketSheet(item: $item, minHeight: 300.0)
       .environmentObject(PBFormatter())
   }
 }
