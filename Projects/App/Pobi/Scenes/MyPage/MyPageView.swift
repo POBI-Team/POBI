@@ -14,7 +14,6 @@ import PBStorageInterface
 import LocalNotiService
 
 struct MyPageView: View {
-  @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
   @State private var isPresentAlert: Bool = false
 
@@ -129,17 +128,9 @@ struct MyPageView: View {
             modelContext.delete(pocket)
           })
         try? modelContext.save()
-        dismiss()
       }
     }
     .title("마이페이지")
-    .leftItem {
-      Button {
-        dismiss()
-      } label: {
-        PBImages.left.image
-      }
-    }
   }
 }
 
