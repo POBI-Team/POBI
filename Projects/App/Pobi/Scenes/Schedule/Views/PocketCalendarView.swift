@@ -31,7 +31,7 @@ struct PocketCalendarView: View {
   
   private let totalHeight: CGFloat
 
-  @Query(sort: [SortDescriptor<PocketModel>(\.alarm.time)])
+  @Query(filter: #Predicate<PocketModel> { $0.isCalendar })
   private var pockets: [PocketModel]
   
   init(
@@ -237,18 +237,19 @@ private extension PocketCalendarView {
   }
   
   func setupCalendar() {
+    let sortedPockets = pockets.sorted { $0.alarm.time.secondsSinceStartOfDay < $1.alarm.time.secondsSinceStartOfDay }
     calendars = [
       calendarManager.days(
         in: selectedDate.moveMonth(by: -1)!,
-        with: pockets
+        with: sortedPockets
       ),
       calendarManager.days(
         in: selectedDate,
-        with: pockets
+        with: sortedPockets
       ),
       calendarManager.days(
         in: selectedDate.moveMonth(by: 1)!,
-        with: pockets
+        with: sortedPockets
       )
     ]
   }
