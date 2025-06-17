@@ -44,7 +44,6 @@ public final class PocketAlarmModel {
     self.date = alarm.date
     self.time = alarm.time
   }
-  
 }
 
 public struct Alarm {

@@ -82,6 +82,7 @@ public final class PocketModel: PocketModelable {
       title: self.title,
       onAlarm: self.onAlarm,
       repeats: self.repeats,
+      isCalendar: self.isCalendar,
       colorIndex: self.colorIndex,
       icon: self.icon,
       alarm: self.alarm.temporary()
@@ -95,6 +96,7 @@ public final class PocketModel: PocketModelable {
     self.colorIndex = pocket.colorIndex
     self.icon = pocket.icon
     self.alarm.paste(pocket.alarm)
+    self.isCalendar = pocket.isCalendar
   }
 }
 
