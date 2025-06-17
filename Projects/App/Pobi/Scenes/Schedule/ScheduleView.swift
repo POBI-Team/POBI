@@ -28,6 +28,7 @@ struct ScheduleView: View {
             .foregroundStyle(PBColors.navy._900.color)
             .padding(.leading, 4)
           PBShapes.arrow(direction: isPresentedDatePicker ? .bottom : .right)
+            .animation(.default.speed(2), value: isPresentedDatePicker)
             .frame(width: 12, height: 6)
             .foregroundStyle(PBColors.navy._900.color)
         }
@@ -70,7 +71,6 @@ struct ScheduleView: View {
         }
         .buttonStyle(.plain)
       }
-      .animation(.default.speed(2), value: isPresentedDatePicker)
       .frame(height: 80)
       .padding(.horizontal, 20)
       GeometryReader { reader in

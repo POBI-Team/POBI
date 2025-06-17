@@ -32,6 +32,7 @@ struct PocketSheet: View {
     VStack(spacing: 0) {
       Divider()
         .foregroundStyle(PBColors.navy._10.color)
+      
       VStack(spacing: 0) {
         VStack(spacing: 8) {
           Capsule()
@@ -43,7 +44,13 @@ struct PocketSheet: View {
               .foregroundStyle(PBColors.navy._900.color)
             Spacer()
             Button {
-              isEditMode.toggle()
+              if #available(iOS 18.0, *) {
+                withAnimation {
+                  isEditMode.toggle()
+                }
+              } else {
+                isEditMode.toggle()
+              }
             } label: {
               Text(isEditMode ? "완료" : "편집")
                 .font(PBFonts.button._2.font)
@@ -76,8 +83,8 @@ struct PocketSheet: View {
                     
                     if isEditMode {
                       PBImages.setting.image
-                      .frame(width: 24, height: 24)
-                      .padding(.trailing, 8)
+                        .frame(width: 24, height: 24)
+                        .padding(.trailing, 8)
                     }
                     
                     Text(pocket.title)
@@ -121,7 +128,6 @@ struct PocketSheet: View {
             }
           }
         }
-        .frame(minHeight: minHeight - 77)
         .overlay {
           if item?.pockets.isEmpty == true {
             VStack(spacing: 8) {
@@ -140,7 +146,6 @@ struct PocketSheet: View {
       .padding(.horizontal, 20)
       .padding(.top, 12)
     }
-    .animation(.default, value: isEditMode)
   }
 }
 
