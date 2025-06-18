@@ -20,7 +20,7 @@ struct ColorPaletteView: View {
       }
       Section(header: Text("White")) {
         ColorCell(
-          color: PBColors.white.color,
+          color: .white,
           text: Text("White")
         )
       }
