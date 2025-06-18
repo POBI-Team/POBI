@@ -19,6 +19,7 @@ struct PocketCalendarView: View {
   @Binding private var selectedDate: Date
   @Binding private var isPresentedCreate: Bool
   @Binding private var didTapTodayButton: UUID
+  @Binding private var didTapPicketFinishButton: UUID
   
   @State private var selectedItem: PBCalendarItem?
   @State private var currentPage = 0
@@ -38,11 +39,13 @@ struct PocketCalendarView: View {
     selectedDate: Binding<Date>,
     isPresentedCreate: Binding<Bool>,
     didTapTodayButton: Binding<UUID>,
+    didTapPicketFinishButton: Binding<UUID>,
     height: CGFloat
   ) {
     self._selectedDate = selectedDate
     self._isPresentedCreate = isPresentedCreate
     self._didTapTodayButton = didTapTodayButton
+    self._didTapPicketFinishButton = didTapPicketFinishButton
     self.totalHeight = height
   }
   
@@ -185,9 +188,11 @@ struct PocketCalendarView: View {
       }
     }
     .onChange(of: didTapTodayButton) {
-      selectedDate = .now
       setupCalendar()
       selectedItem = calendars[1].first { $0.isToday }
+    }
+    .onChange(of: didTapPicketFinishButton) {
+      setupCalendar()
     }
     .onChange(of: pockets) {
       setupCalendar()
@@ -273,6 +278,7 @@ private extension Date {
       selectedDate: $date,
       isPresentedCreate: $isPresentedCreate,
       didTapTodayButton: .constant(.init()),
+      didTapPicketFinishButton: .constant(.init()),
       height: $0.size.height
     )
       .environmentObject(PBCalendarManager())

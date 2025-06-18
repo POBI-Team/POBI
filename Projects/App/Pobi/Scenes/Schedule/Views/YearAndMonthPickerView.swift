@@ -12,17 +12,19 @@ import PBDesignSystem
 
 struct YearAndMonthPickerView: View {
   @Environment(\.dismiss) private var dismiss
-  @State private var seletedDate: Date
+  @State private var selectedDate: Date
   @Binding private var currentDate: Date
+  @Binding private var didTapPicketFinishButton: UUID
   
-  init(seletedDate: Binding<Date>) {
-    self.seletedDate = seletedDate.wrappedValue
-    self._currentDate = seletedDate
+  init(selectedDate: Binding<Date>, didTapPicketFinishButton: Binding<UUID>) {
+    self.selectedDate = selectedDate.wrappedValue
+    self._currentDate = selectedDate
+    self._didTapPicketFinishButton = didTapPicketFinishButton
   }
   
   var body: some View {
     VStack(spacing: 0) {
-      YearAndMonthPicker(seletedDate: $seletedDate)
+      YearAndMonthPicker(selectedDate: $selectedDate)
       HStack {
         PBRoundButton(12) {
           dismiss()
@@ -34,7 +36,8 @@ struct YearAndMonthPickerView: View {
         .frame(height: 52)
         
         PBRoundButton(12) {
-          currentDate = seletedDate
+          currentDate = selectedDate
+          didTapPicketFinishButton = .init()
           dismiss()
         } label: {
           Text("완료")
@@ -51,28 +54,28 @@ struct YearAndMonthPickerView: View {
 }
 
 #Preview {
-  YearAndMonthPickerView(seletedDate: .constant(.now))
+  YearAndMonthPickerView(selectedDate: .constant(.now), didTapPicketFinishButton: .constant(.init()))
 }
 
 struct YearAndMonthPicker: UIViewRepresentable {
   private var selectedYear: Int {
     didSet {
-      seletedDate = Calendar.current.date(from: DateComponents(year: selectedYear, month: selectedMonth))!
+      selectedDate = Calendar.current.date(from: DateComponents(year: selectedYear, month: selectedMonth))!
     }
   }
   private var selectedMonth: Int  {
     didSet {
-      seletedDate = Calendar.current.date(from: DateComponents(year: selectedYear, month: selectedMonth))!
+      selectedDate = Calendar.current.date(from: DateComponents(year: selectedYear, month: selectedMonth))!
     }
   }
-  private var months: [Int] = Array(1...12)
-  private let infiniteRows = 2000
-  private var middleIndex: Int { infiniteRows / 2 }
-  @Binding private var seletedDate: Date
+  private let months: [Int] = Array(1...12)
+  private let infiniteRows = 2001
+  private let middleIndex: Int = 1001
+  @Binding private var selectedDate: Date
   
-  init(seletedDate: Binding<Date>) {
-    self._seletedDate = seletedDate
-    let yearAndMonth = Calendar.current.dateComponents([.year, .month], from: seletedDate.wrappedValue)
+  init(selectedDate: Binding<Date>) {
+    self._selectedDate = selectedDate
+    let yearAndMonth = Calendar.current.dateComponents([.year, .month], from: selectedDate.wrappedValue)
     self.selectedYear = yearAndMonth.year ?? 0
     self.selectedMonth = yearAndMonth.month ?? 0
   }
@@ -91,13 +94,6 @@ struct YearAndMonthPicker: UIViewRepresentable {
   
   func makeCoordinator() -> YearAndMonthPicker.Coordinator {
     return YearAndMonthPicker.Coordinator(self)
-  }
-}
-
-extension YearAndMonthPicker {
-  private func year(forRow row: Int) -> Int {
-    let baseYear = Calendar.current.component(.year, from: seletedDate)
-    return baseYear + (row - middleIndex)
   }
 }
 
@@ -124,9 +120,9 @@ extension YearAndMonthPicker {
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
       switch component {
-      case 0: "\(parent.year(forRow: row))년"
-      case 1: "\(parent.months[row])월"
-      default: ""
+      case 0: return "\(parent.selectedYear + row - parent.middleIndex)년"
+      case 1: return "\(parent.months[row])월"
+      default: return ""
       }
     }
     
@@ -136,6 +132,7 @@ extension YearAndMonthPicker {
         let distance = row - parent.middleIndex
         parent.selectedYear += distance
         pickerView.selectRow(parent.middleIndex, inComponent: component, animated: false)
+        pickerView.reloadComponent(component)
       case 1:
         parent.selectedMonth = parent.months[row]
       default:

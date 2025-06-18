@@ -128,6 +128,7 @@ struct PocketSheet: View {
             }
           }
         }
+        .frame(minHeight: minHeight - 77)
         .overlay {
           if item?.pockets.isEmpty == true {
             VStack(spacing: 8) {
