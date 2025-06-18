@@ -27,9 +27,8 @@ struct PocketCalendarView: View {
   @State private var sheetHeight: CGFloat = 0
   @State private var rowHeight: CGFloat?
   @State private var columnWidth: CGFloat?
-  
-  @GestureState private var dragOffset: CGFloat = .zero
-  
+  @State private var dragStartHeight: CGFloat = 0
+
   private let totalHeight: CGFloat
 
   @Query(filter: #Predicate<PocketModel> { $0.isCalendar })
@@ -182,11 +181,6 @@ struct PocketCalendarView: View {
       }
     }
     .id(calendars.isEmpty)
-    .onChange(of: dragOffset) { oldValue, newValue in
-      if abs(newValue) > abs(oldValue) {
-        sheetHeight -= (newValue - oldValue)
-      }
-    }
     .onChange(of: didTapTodayButton) {
       setupCalendar()
       selectedItem = calendars[1].first { $0.isToday }
@@ -200,15 +194,16 @@ struct PocketCalendarView: View {
     }
     .gesture(
       DragGesture()
-        .updating($dragOffset) { value, state, _ in
-          state = value.translation.height
+        .onChanged { value in
+          sheetHeight = dragStartHeight + value.translation.height * -1
         }
-        .onEnded { _ in
-          if sheetHeight < totalHeight * 0.25 {
+        .onEnded { value in
+          let finalHeight = sheetHeight + (value.translation.height - value.predictedEndTranslation.height) / 4
+          if finalHeight < totalHeight * 0.25 {
             withAnimation {
               sheetHeight = 0
             }
-          } else if sheetHeight > totalHeight * 0.75 {
+          } else if finalHeight > totalHeight * 0.75 {
             withAnimation {
               sheetHeight = totalHeight
             }
@@ -217,6 +212,7 @@ struct PocketCalendarView: View {
               sheetHeight = totalHeight / 2
             }
           }
+          dragStartHeight = sheetHeight
         }
     )
   }
