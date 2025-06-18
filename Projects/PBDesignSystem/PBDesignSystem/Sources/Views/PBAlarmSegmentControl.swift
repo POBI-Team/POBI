@@ -33,7 +33,7 @@ public struct PBAlarmSegmentControl: View {
                 isRepeated = false
               }
             } label: {
-              Text("1회 알림")
+              Text("하루")
                 .font(PBFonts.button._2.font)
             }
             .buttonStyle(PlainButtonStyle())
@@ -44,15 +44,13 @@ public struct PBAlarmSegmentControl: View {
                 isRepeated = true
               }
             } label: {
-              Text("반복 알림")
+              Text("반복")
                 .font(PBFonts.button._2.font)
             }
             .buttonStyle(PlainButtonStyle())
             .foregroundStyle(PBColors.navy._900.color)
           }
-          .padding(.trailing, 14)
-          .padding(.leading, 17)
-
+          .padding(.horizontal, 28)
         }
         .padding(.vertical, 4)
         .padding(.horizontal, 5)
