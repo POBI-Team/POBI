@@ -18,8 +18,10 @@ struct CreatePocketView: View {
   @State private var isDidTapDownButton = false
   @State private var isPresentedEditAlert = false
   @State private var isPresentedOffAlarmAlert = false
+  @State private var isPresentedTemplateList = false
   @State private var toastID: UUID? = nil
   @State private var pocket: Pocket
+  @State private var selectedTemplate: TemplateModel?
   @FocusState private var isFocused: Bool
   
   private let pocketModel: PocketModel?
@@ -108,6 +110,12 @@ struct CreatePocketView: View {
             .scrollIndicators(.hidden)
             .scrollDismissesKeyboard(.immediately)
             .animation(.easeInOut, value: pocket.onAlarm)
+            .onChange(of: selectedTemplate) { oldValue, newValue in
+              if let template = newValue {
+                pocket.title = template.title
+                pocket.icon = template.icon
+              }
+            }
 
             PBRoundButton(16) {
               guard !pocket.title.isEmpty else { toastID = .init(); return }
@@ -119,6 +127,9 @@ struct CreatePocketView: View {
                   FirebaseManager.shared.logEvent(event: .alarmActivation)
                 } else {
                   FirebaseManager.shared.logEvent(event: .alarmDisable)
+                }
+                if let template = selectedTemplate {
+                  newPocketModel.items = template.items.map { $0.copy() }
                 }
                 modelContext.insert(newPocketModel)
                 dismiss()
@@ -142,25 +153,32 @@ struct CreatePocketView: View {
           }
         }
     }
-    .rightItem {
-      if pocketModel == nil {
-        Button {
-          dismiss()
-        } label: {
-          PBImages.cancel.image
-        }
-      }
-    }
     .leftItem {
-      if pocketModel != nil {
-        Button {
-          dismiss()
-        } label: {
+      Button {
+        dismiss()
+      } label: {
+        if pocketModel == nil {
+          PBImages.cancel.image
+        } else {
           PBImages.left.image
         }
       }
     }
+    .rightItem {
+      if pocketModel == nil {
+        Button {
+          isPresentedTemplateList = true
+        } label: {
+          Text("템플릿")
+            .foregroundStyle(PBColors.yellow._600.color)
+            .font(PBFonts.button._1.font)
+        }
+      }
+    }
     .pbToast(toastID: $toastID, message: "포켓 이름을 입력해주세요!", height: 12)
+    .fullScreenCover(isPresented: $isPresentedTemplateList) {
+      TemplateList(selectedTemplate: $selectedTemplate)
+    }
   }
 }
 
