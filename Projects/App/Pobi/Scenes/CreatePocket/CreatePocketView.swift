@@ -26,7 +26,10 @@ struct CreatePocketView: View {
   
   init(pocket: PocketModel?, date: Date? = nil) {
     self.pocketModel = pocket
-    self.pocket = pocket?.temporary() ?? .init(alarm: Alarm(date: date ?? .now))
+    self.pocket = pocket?.temporary() ?? Pocket(
+      isCalendar: date != nil,
+      alarm: Alarm(date: date ?? .now)
+    )
   }
   
   var body: some View {
@@ -177,7 +180,12 @@ private extension CreatePocketView {
   }
 }
 
-#Preview {
+#Preview("Edit") {
   CreatePocketView(pocket: .init(onAlarm: true))
+    .environmentObject(PBFormatter())
+}
+
+#Preview("Create") {
+  CreatePocketView(pocket: nil)
     .environmentObject(PBFormatter())
 }
