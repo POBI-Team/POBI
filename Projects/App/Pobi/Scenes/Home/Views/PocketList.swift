@@ -61,7 +61,7 @@ struct PocketList: View {
         PBPlusButton {
           isPresentedCreate.toggle()
         }
-        .padding(.bottom, 10)
+        .padding(.bottom, 24)
       }
     }
     .overlay {
