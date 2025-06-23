@@ -93,7 +93,8 @@ final class PBCalendarTests: XCTestCase {
           days: [1],
           date: .now,
           time: .now
-        )
+        ),
+        createAt: Calendar.current.date(from: DateComponents(year: 2025, month: 2))!
       )
     ]
     // Act
@@ -122,7 +123,8 @@ final class PBCalendarTests: XCTestCase {
           days: [24],
           date: .now,
           time: .now
-        )
+        ),
+        createAt: Calendar.current.date(from: DateComponents(year: 2025, month: 2))!
       )
     ]
     // Act

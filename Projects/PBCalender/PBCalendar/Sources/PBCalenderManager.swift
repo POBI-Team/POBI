@@ -51,7 +51,9 @@ public final class PBCalendarManager: Sendable, ObservableObject {
         }
         let itemDateComponents = dateComponents(of: day, in: date, weekday: weekday, isInCurrentMonth: isInCurrentMonth)
         isToday = calendar.date(.now, matchesComponents: itemDateComponents)
+        let date = calendar.date(from: itemDateComponents)
         pockets.forEach { pocket in
+          guard isToday || pocket.createAt < date! || !pocket.repeats else { return }
           if pocket.repeats {
             if pocket.alarm.isWeekRepeat {
               if pocket.alarm.days.contains(weekday) {
