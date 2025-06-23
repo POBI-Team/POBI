@@ -58,6 +58,7 @@ struct PocketSheet: View {
                 .font(PBFonts.button._2.font)
             }
             .tint(PBColors.navy._900.color)
+            .disabled(item?.pockets.isEmpty ?? true)
           }
         }
         .contentShape(Rectangle())
@@ -90,16 +91,21 @@ struct PocketSheet: View {
                     }
                     
                     Text(pocket.title)
+                      .lineLimit(1)
                       .font(PBFonts.body._2.font)
                       .foregroundStyle(PBColors.navy._900.color)
                       .padding(.trailing, 12)
-                    Text(timeLabel(time: pocket.alarm.time))
-                      .font(PBFonts.label._2.font)
-                      .foregroundStyle(PBColors.navy._900.color)
+                    if !isEditMode {
+                      Text(timeLabel(time: pocket.alarm.time))
+                        .font(PBFonts.label._2.font)
+                        .foregroundStyle(PBColors.navy._900.color)
+                    }
                     Spacer()
-                    PBShapes.arrow(direction: .right)
-                      .frame(width: 14, height: 7)
-                      .foregroundStyle(PBColors.navy._900.color)
+                    if !isEditMode {
+                      PBShapes.arrow(direction: .right)
+                        .frame(width: 14, height: 7)
+                        .foregroundStyle(PBColors.navy._900.color)
+                    }
                   }
                   .frame(height: 48)
                   .padding(.horizontal, 16)
