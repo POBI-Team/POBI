@@ -128,7 +128,10 @@ struct PocketMoreView<P: PocketModelable>: View {
         }
         .padding(.horizontal, 20)
         .padding(.top, 8)
-        .pbAlert(isPresented: $isPresentedDeleteAlert, type: .delete) {
+        .pbAlert(
+          isPresented: $isPresentedDeleteAlert,
+          type: pocket is PocketModel ? .delete : .deleteTemplate
+        ) {
           dismiss()
           DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             if let pocket = pocket as? PocketModel {
