@@ -15,16 +15,18 @@ struct PocketSheet: View {
   @Environment(\.modelContext) private var modelContext
   @EnvironmentObject private var formatter: PBFormatter
   @Binding private var item: PBCalendarItem?
+  @Binding private var isEditMode: Bool
   private let minHeight: CGFloat
   
-  @State private var isEditMode: Bool = false
   @State private var isPresentedDeleteAlert: Bool = false
 
   init(
     item: Binding<PBCalendarItem?>,
+    isEditMode: Binding<Bool>,
     minHeight: CGFloat
   ) {
     self._item = item
+    self._isEditMode = isEditMode
     self.minHeight = minHeight
   }
   
@@ -177,9 +179,14 @@ extension PocketSheet {
       PocketModel(title: "Test3", colorIndex: 2, icon: "❤️")
     ]
   )
+  @Previewable @State var isEditMode: Bool = false
   
   NavigationStack {
-    PocketSheet(item: $item, minHeight: 300.0)
+    PocketSheet(
+      item: $item,
+      isEditMode: $isEditMode,
+      minHeight: 300.0
+    )
       .environmentObject(PBFormatter())
   }
 }

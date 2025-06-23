@@ -28,6 +28,7 @@ struct PocketCalendarView: View {
   @State private var rowHeight: CGFloat?
   @State private var columnWidth: CGFloat?
   @State private var dragStartHeight: CGFloat = 0
+  @State private var isEditMode = false
 
   private let totalHeight: CGFloat
 
@@ -174,6 +175,7 @@ struct PocketCalendarView: View {
         Spacer()
         PocketSheet(
           item: $selectedItem,
+          isEditMode: $isEditMode,
           minHeight: totalHeight/2
         )
         .frame(height: max(0, sheetHeight), alignment: .top)
@@ -192,6 +194,14 @@ struct PocketCalendarView: View {
     .onChange(of: pockets) {
       setupCalendar()
       selectedItem = calendars.flatMap { $0 }.first { $0.isToday }
+    }
+    .onChange(of: sheetHeight) { oldValue, newValue in
+      if newValue <= 0 {
+        isEditMode = false
+      }
+    }
+    .onChange(of: selectedItem?.id) {
+      isEditMode = false
     }
     .gesture(
       DragGesture()
