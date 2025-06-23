@@ -14,12 +14,12 @@ struct YearAndMonthPickerView: View {
   @Environment(\.dismiss) private var dismiss
   @State private var selectedDate: Date
   @Binding private var currentDate: Date
-  @Binding private var didTapPicketFinishButton: UUID
+  @Binding private var didTapPickerFinishButton: UUID
   
-  init(selectedDate: Binding<Date>, didTapPicketFinishButton: Binding<UUID>) {
+  init(selectedDate: Binding<Date>, didTapPickerFinishButton: Binding<UUID>) {
     self.selectedDate = selectedDate.wrappedValue
     self._currentDate = selectedDate
-    self._didTapPicketFinishButton = didTapPicketFinishButton
+    self._didTapPickerFinishButton = didTapPickerFinishButton
   }
   
   var body: some View {
@@ -37,7 +37,7 @@ struct YearAndMonthPickerView: View {
         
         PBRoundButton(12) {
           currentDate = selectedDate
-          didTapPicketFinishButton = .init()
+          didTapPickerFinishButton = .init()
           dismiss()
         } label: {
           Text("완료")
@@ -54,7 +54,7 @@ struct YearAndMonthPickerView: View {
 }
 
 #Preview {
-  YearAndMonthPickerView(selectedDate: .constant(.now), didTapPicketFinishButton: .constant(.init()))
+  YearAndMonthPickerView(selectedDate: .constant(.now), didTapPickerFinishButton: .constant(.init()))
 }
 
 struct YearAndMonthPicker: UIViewRepresentable {

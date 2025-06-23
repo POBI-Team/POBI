@@ -18,7 +18,7 @@ struct ScheduleView: View {
   @State private var isPresentedDatePicker: Bool = false
   @State private var isPresentedCreate: Bool = false
   @State private var didTapTodayButton = UUID()
-  @State private var didTapPicketFinishButton = UUID()
+  @State private var didTapPickerFinishButton = UUID()
   
   var body: some View {
     VStack(spacing: 0) {
@@ -80,7 +80,7 @@ struct ScheduleView: View {
           selectedDate: $selectedDate,
           isPresentedCreate: $isPresentedCreate,
           didTapTodayButton: $didTapTodayButton,
-          didTapPicketFinishButton: $didTapPicketFinishButton,
+          didTapPicketFinishButton: $didTapPickerFinishButton,
           height: reader.size.height
         )
         .padding(.horizontal, 9)
@@ -89,7 +89,7 @@ struct ScheduleView: View {
     .sheet(isPresented: $isPresentedDatePicker) {
       YearAndMonthPickerView(
         selectedDate: $selectedDate,
-        didTapPicketFinishButton: $didTapPicketFinishButton
+        didTapPickerFinishButton: $didTapPickerFinishButton
       )
     }
   }
