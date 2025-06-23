@@ -23,7 +23,7 @@ struct YearAndMonthPickerView: View {
   }
   
   var body: some View {
-    VStack(spacing: 0) {
+    VStack(spacing: 8) {
       YearAndMonthPicker(selectedDate: $selectedDate)
       HStack {
         PBRoundButton(12) {
@@ -49,7 +49,7 @@ struct YearAndMonthPickerView: View {
       .padding(.horizontal, 20)
     }
     .presentationCornerRadius(30)
-    .presentationDetents([.height(348)])
+    .presentationDetents([.height(314)])
   }
 }
 
