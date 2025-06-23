@@ -123,6 +123,7 @@ struct PocketCalendarView: View {
                           withAnimation {
                             sheetHeight = totalHeight / 2
                           }
+                          dragStartHeight = sheetHeight
                         }
                       }
                       .frame(maxWidth: .infinity)
