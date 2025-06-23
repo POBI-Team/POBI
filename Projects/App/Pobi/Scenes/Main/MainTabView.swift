@@ -17,6 +17,7 @@ struct MainTabView: View {
   
   init(isPresentedCreate: Binding<Bool>) {
     UITabBar.appearance().unselectedItemTintColor = PBColors.navy._50
+    UITabBar.appearance().backgroundColor = .white
     self._isPresentedCreate = isPresentedCreate
   }
   
