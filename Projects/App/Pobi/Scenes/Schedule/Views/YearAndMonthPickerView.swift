@@ -30,6 +30,7 @@ struct YearAndMonthPickerView: View {
           dismiss()
         } label: {
           Text("닫기")
+            .font(PBFonts.button._2.font)
             .foregroundStyle(PBColors.navy._900.color)
         }
         .foregroundStyle(PBColors.navy._10.color)
@@ -41,6 +42,7 @@ struct YearAndMonthPickerView: View {
           dismiss()
         } label: {
           Text("완료")
+            .font(PBFonts.button._2.font)
             .foregroundStyle(.white)
         }
         .foregroundStyle(PBColors.navy._900.color)
