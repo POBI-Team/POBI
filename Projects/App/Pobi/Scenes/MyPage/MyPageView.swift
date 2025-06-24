@@ -15,13 +15,16 @@ import LocalNotiService
 
 struct MyPageView: View {
   @Environment(\.modelContext) private var modelContext
+  @EnvironmentObject private var profileStorage: ProfileStorage
   @State private var isPresentAlert: Bool = false
+  @State private var profileImage: Image?
+  @State private var nickname: String?
 
   var body: some View {
     PBNavigationBar {
       VStack(spacing: 20) {
         ZStack(alignment: .bottomTrailing) {
-          if let image = ProfileStorage.shared.loadProfileImageType()?.profileImage {
+          if let image = profileImage {
             image
               .resizable()
               .frame(width: 120, height: 120)
@@ -30,7 +33,6 @@ struct MyPageView: View {
               .fill(Color.gray)
               .frame(width: 120, height: 120)
           }
-          
           NavigationLink {
             ProfileEditView()
           } label: {
@@ -44,7 +46,7 @@ struct MyPageView: View {
           .frame(width: 36, height: 36)
           .padding(.bottom, -4)
         }
-        Text(ProfileStorage.shared.loadNickname() ?? "사용자")
+        Text(nickname ?? "")
           .padding(.bottom, 12)
           .font(PBFonts.title._1.font)
         Group {
@@ -121,6 +123,10 @@ struct MyPageView: View {
       .padding(.top, 36)
       .padding(.horizontal, 20)
       .background(PBColors.navy._10.color)
+      .onAppear {
+        profileImage = profileStorage.loadProfileImageType()?.profileImage
+        nickname = profileStorage.loadNickname()
+      }
       .pbAlert(isPresented: $isPresentAlert, type: .deleteAll) {
         LocalNotiCenter.shared.removeAll()
         try? modelContext.fetch(FetchDescriptor<PocketModel>())

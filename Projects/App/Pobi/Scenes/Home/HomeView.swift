@@ -12,6 +12,7 @@ import PBStorage
 import LocalNotiService
 
 struct HomeView: View {
+  @EnvironmentObject private var profileStorage: ProfileStorage
   @State private var selectedTabIndex: Int = 0
   @Binding private var isPresentedCreate: Bool
   @State private var isAppear = false
@@ -51,8 +52,8 @@ struct HomeView: View {
       }
     }
     .onAppear {
-      self.profileImageType = ProfileStorage.shared.loadProfileImageType() ?? .first
-      self.nickname = ProfileStorage.shared.loadNickname() ?? "사용자"
+      self.profileImageType = profileStorage.loadProfileImageType() ?? .first
+      self.nickname = profileStorage.loadNickname() ?? "사용자"
     }
     .onAppear {
       guard !isAppear else { return }

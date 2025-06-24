@@ -15,6 +15,7 @@ import LocalNotiService
 struct CreatePocketView: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
+  @EnvironmentObject private var profileStorage: ProfileStorage
   @State private var isDidTapDownButton = false
   @State private var isPresentedEditAlert = false
   @State private var isPresentedOffAlarmAlert = false
@@ -42,7 +43,7 @@ struct CreatePocketView: View {
           pocketModel?.deletePushAlarm()
           pocketModel?.paste(pocket)
           if pocket.onAlarm {
-            let nickName = ProfileStorage.shared.loadNickname()
+            let nickName = profileStorage.loadNickname()
             pocketModel?.registerPushAlarm(userNickname: nickName ?? "사용자")
             FirebaseManager.shared.logEvent(event: .alarmActivation)
           } else {
@@ -122,7 +123,7 @@ struct CreatePocketView: View {
               if pocketModel == nil {
                 let newPocketModel = PocketModel(pocket)
                 if pocket.onAlarm {
-                  let nickName = ProfileStorage.shared.loadNickname()
+                  let nickName = profileStorage.loadNickname()
                   newPocketModel.registerPushAlarm(userNickname: nickName ?? "사용자")
                   FirebaseManager.shared.logEvent(event: .alarmActivation)
                 } else {

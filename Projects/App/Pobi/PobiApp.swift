@@ -9,6 +9,7 @@ import UIKit
 import SwiftUI
 
 import PBDesignSystem
+import PBStorage
 import PBStorageInterface
 import PBCalendar
 
@@ -77,6 +78,7 @@ struct PobiApp: App {
         .environmentObject(appDelegate.notificationManager)
         .environmentObject(PBFormatter())
         .environmentObject(PBCalendarManager())
+        .environmentObject(ProfileStorage())
         .modelContainer(for: [PocketModel.self, PocketItemModel.self, PocketAlarmModel.self, TemplateModel.self])
     }
   }
