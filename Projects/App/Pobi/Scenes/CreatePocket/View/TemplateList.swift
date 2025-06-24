@@ -75,20 +75,6 @@ struct TemplateList: View {
         }
         .padding(.horizontal, 20)
       }
-      .padding(.top, 24)
-      
-      PBRoundButton(16) {
-        selectedTemplate = tempTemplate
-        dismiss()
-      } label: {
-        Text("완료")
-          .foregroundStyle(.white)
-          .font(PBFonts.button._1.font)
-      }
-      .disabled(tempTemplate == nil)
-      .foregroundStyle(PBColors.navy._900.color)
-      .frame(height: 52)
-      .padding(14)
     }
     .title("템플릿 리스트")
     .leftItem {
