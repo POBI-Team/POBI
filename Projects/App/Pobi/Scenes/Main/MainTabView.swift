@@ -12,12 +12,14 @@ import PBCalendar
 
 struct MainTabView: View {
   @EnvironmentObject var notificationManager: NotificationManager
-  
   @Binding var isPresentedCreate: Bool
   
   init(isPresentedCreate: Binding<Bool>) {
-    UITabBar.appearance().unselectedItemTintColor = PBColors.navy._50
-    UITabBar.appearance().backgroundColor = .white
+    let appearance = UITabBarAppearance()
+    appearance.backgroundColor = .white
+    appearance.shadowColor = PBColors.navy._50
+    UITabBar.appearance().scrollEdgeAppearance = appearance
+    UITabBar.appearance().standardAppearance = appearance
     self._isPresentedCreate = isPresentedCreate
   }
   
@@ -43,11 +45,16 @@ struct MainTabView: View {
   }
 }
 
+#if DEBUG
+import PBStorage
+
 #Preview {
   NavigationStack {
     MainTabView(isPresentedCreate: .constant(false))
       .environmentObject(NotificationManager())
       .environmentObject(PBFormatter())
       .environmentObject(PBCalendarManager())
+      .environmentObject(ProfileStorage())
   }
 }
+#endif
