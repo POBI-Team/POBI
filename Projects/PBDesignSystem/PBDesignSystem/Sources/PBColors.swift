@@ -63,6 +63,7 @@ public enum Yellow {
   public static var _200: UIColor { UIColor(hexString: "FFDA8A") }
   public static var _100: UIColor { UIColor(hexString: "FFE8B7") }
   public static var _50: UIColor { UIColor(hexString: "FFF6E3") }
+  public static var _10: UIColor { UIColor(hexString: "FFFAF0") }
 }
 
 public protocol PBListColor {
