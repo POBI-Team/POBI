@@ -37,7 +37,7 @@ public enum PBAlertType {
       return PBAlertView(isPresented: isPresented)
         .image(PBImages.pobiAlert.image)
         .title("모든 포켓을 삭제할까요?")
-        .body("등록된 소지품이 모두 사라져요!")
+        .body("등록된 소지품과 템플릿이 모두 사라져요!")
         .addButton(.cancel(cancelAction))
         .addButton(.defalt("초기화", action))
     case .offAlarm:
