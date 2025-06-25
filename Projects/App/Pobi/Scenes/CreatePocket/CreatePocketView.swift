@@ -10,27 +10,29 @@ import SwiftUI
 import PBDesignSystem
 import PBStorage
 import PBStorageInterface
-import NetworkService
 import LocalNotiService
 
 struct CreatePocketView: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
-  @State private var isAppear = false
-  @State private var icons = [String]()
+  @EnvironmentObject private var profileStorage: ProfileStorage
   @State private var isDidTapDownButton = false
   @State private var isPresentedEditAlert = false
   @State private var isPresentedOffAlarmAlert = false
+  @State private var isPresentedTemplateList = false
   @State private var toastID: UUID? = nil
   @State private var pocket: Pocket
+  @State private var selectedTemplate: TemplateModel?
   @FocusState private var isFocused: Bool
   
-  private let colors = PBColors.list.colors
   private let pocketModel: PocketModel?
   
-  init(pocket: PocketModel?) {
+  init(pocket: PocketModel?, date: Date? = nil) {
     self.pocketModel = pocket
-    self.pocket = pocket?.temporary() ?? .init()
+    self.pocket = pocket?.temporary() ?? Pocket(
+      isCalendar: date != nil,
+      alarm: Alarm(date: date ?? .now)
+    )
   }
   
   var body: some View {
@@ -41,7 +43,7 @@ struct CreatePocketView: View {
           pocketModel?.deletePushAlarm()
           pocketModel?.paste(pocket)
           if pocket.onAlarm {
-            let nickName = ProfileStorage.shared.loadNickname()
+            let nickName = profileStorage.loadNickname()
             pocketModel?.registerPushAlarm(userNickname: nickName ?? "사용자")
             FirebaseManager.shared.logEvent(event: .alarmActivation)
           } else {
@@ -60,153 +62,47 @@ struct CreatePocketView: View {
           VStack {
             ScrollView {
               VStack(spacing: 12) {
-                VStack(alignment: .center, spacing: 16) {
-                  Button {
-                    withAnimation(.default.speed(1.5)) {
-                      isDidTapDownButton.toggle()
-                      isFocused = false
-                    }
-                  } label: {
-                    PBCircleEmojiView(pocket.icon, size: .xlarge)
-                      .foregroundStyle(colors[pocket.colorIndex]._03.color)
-                  }
-                  TextField(
-                    "포켓 이름을 입력해주세요!",
-                    text: Binding(
-                      get: { pocket.title },
-                      set: { pocket.title = $0 }
-                    )
-                  )
-                  .focused($isFocused)
-                  .underLine(text: Binding(
-                    get: { pocket.title },
-                    set: { pocket.title = $0 }
-                  ))
-                  VStack {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                      LazyHGrid(
-                        rows: [GridItem(.flexible())],
-                        spacing: 12
-                      ) {
-                        ForEach(colors.indices, id: \.self) { i in
-                          Button {
-                            withAnimation {
-                              pocket.colorIndex = i
-                              isFocused = false
-                            }
-                          } label: {
-                            PBSelectableCircleView(isSelected: pocket.colorIndex == i) {
-                              Circle()
-                                .frame(width: 40, height: 40)
-                                .foregroundStyle(Color.clear)
-                                .overlay {
-                                  Circle()
-                                    .frame(width: 36, height: 36)
-                                    .foregroundStyle(colors[i]._01.color)
-                                }
-                            }
-                          }
-                        }
-                      }
-                      .padding(.horizontal, 24)
-                    }
-                    .frame(height: 72)
-                    .background(PBColors.navy._10.color)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                      if icons.isEmpty {
-                        ProgressView()
-                      } else {
-                        LazyHGrid(
-                          rows: [
-                            GridItem(.flexible()),
-                            GridItem(.flexible()),
-                            GridItem(.flexible())
-                          ],
-                          spacing: 12
-                        ) {
-                          ForEach(icons.indices, id: \.self) { i in
-                            Button {
-                              withAnimation {
-                                pocket.icon = icons[i]
-                                isFocused = false
-                              }
-                            } label: {
-                              PBSelectableCircleView(isSelected: pocket.icon == icons[i]) {
-                                PBCircleEmojiView(icons[i], size: .medium)
-                                  .foregroundStyle(Color.white)
-                              }
-                            }
-                          }
-                        }
-                        .padding(.vertical, 18)
-                        .padding(.horizontal, 24)
-                      }
-                      
-                    }
-                    .frame(height: 184)
-                    .background(PBColors.navy._10.color)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                  }
-                  .disabled(!isDidTapDownButton)
-                  .frame(height: isDidTapDownButton ? nil : 0, alignment: .top)
-                  .clipped()
-                  
-                  Button {
-                    withAnimation(.default.speed(1.5)) {
-                      isDidTapDownButton.toggle()
-                      isFocused = false
-                    }
-                    
-                  } label: {
-                    isDidTapDownButton ? PBImages.up.image : PBImages.down.image
-                  }
-                }
-                .padding(.horizontal, 24)
-                .padding(.top, 20)
-                .padding(.bottom, 16)
-                .background(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                .onAppear {
-                  guard !isAppear else { return }
-                  Task {
-                    do {
-                      icons = try await NetworkClient.shared.request(
-                        target: FirebaseAPI.icons,
-                        of: [String].self
+                InputTitleAndIconView(
+                  isFocused: $isFocused,
+                  isDidTapDownButton: $isDidTapDownButton,
+                  pocket: $pocket
+                )
+                // MARK: SettingAlarmView
+                SettingAlarmView(pocket: $pocket, isFocused: _isFocused, isDidTapDownButton: $isDidTapDownButton)
+                // MARK: Alarm & Calendar Toggle
+                VStack(spacing: 16) {
+                  HStack {
+                    Toggle(
+                      isOn: Binding(
+                        get: { pocket.onAlarm },
+                        set: { setOnAlarm(valeu: $0) }
                       )
-                      if pocket.icon == nil {
-                        pocket.icon = icons.first ?? ""
-                      }
-                    } catch {
-                      #warning("에러 처리")
+                    ) {
+                      Text("알림")
+                        .font(PBFonts.body._2.font)
+                        .foregroundStyle(PBColors.navy._900.color)
                     }
-                    isAppear = true
+                    .tint(PBColors.yellow._500.color)
                   }
-                }
-                // MARK: Alarm Toggle
-                HStack {
-                  Toggle(
-                    isOn: Binding(
-                      get: { pocket.onAlarm },
-                      set: { setOnAlarm(valeu: $0) }
-                    )
-                  ) {
-                    Text("알림")
-                      .font(PBFonts.body._2.font)
-                      .foregroundStyle(PBColors.navy._900.color)
+                  
+                  HStack {
+                    Toggle(
+                      isOn: Binding(
+                        get: { pocket.isCalendar },
+                        set: { pocket.isCalendar = $0 }
+                      )
+                    ) {
+                      Text("캘린더에 표시")
+                        .font(PBFonts.body._2.font)
+                        .foregroundStyle(PBColors.navy._900.color)
+                    }
+                    .tint(PBColors.yellow._500.color)
                   }
-                  .tint(PBColors.yellow._500.color)
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 16)
                 .background(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                // MARK: SettingAlarmView
-                if pocket.onAlarm {
-                  SettingAlarmView(pocket: $pocket, isFocused: _isFocused, isDidTapDownButton: $isDidTapDownButton)
-                }
                 Spacer()
               }
               .padding(.horizontal, 20)
@@ -215,17 +111,26 @@ struct CreatePocketView: View {
             .scrollIndicators(.hidden)
             .scrollDismissesKeyboard(.immediately)
             .animation(.easeInOut, value: pocket.onAlarm)
+            .onChange(of: selectedTemplate) { oldValue, newValue in
+              if let template = newValue {
+                pocket.title = template.title
+                pocket.icon = template.icon
+              }
+            }
 
             PBRoundButton(16) {
               guard !pocket.title.isEmpty else { toastID = .init(); return }
               if pocketModel == nil {
                 let newPocketModel = PocketModel(pocket)
                 if pocket.onAlarm {
-                  let nickName = ProfileStorage.shared.loadNickname()
+                  let nickName = profileStorage.loadNickname()
                   newPocketModel.registerPushAlarm(userNickname: nickName ?? "사용자")
                   FirebaseManager.shared.logEvent(event: .alarmActivation)
                 } else {
                   FirebaseManager.shared.logEvent(event: .alarmDisable)
+                }
+                if let template = selectedTemplate {
+                  newPocketModel.items = template.items.map { $0.copy() }
                 }
                 modelContext.insert(newPocketModel)
                 dismiss()
@@ -249,25 +154,32 @@ struct CreatePocketView: View {
           }
         }
     }
-    .rightItem {
-      if pocketModel == nil {
-        Button {
-          dismiss()
-        } label: {
-          PBImages.cancel.image
-        }
-      }
-    }
     .leftItem {
-      if pocketModel != nil {
-        Button {
-          dismiss()
-        } label: {
+      Button {
+        dismiss()
+      } label: {
+        if pocketModel == nil {
+          PBImages.cancel.image
+        } else {
           PBImages.left.image
         }
       }
     }
+    .rightItem {
+      if pocketModel == nil {
+        Button {
+          isPresentedTemplateList = true
+        } label: {
+          Text("템플릿")
+            .foregroundStyle(PBColors.yellow._600.color)
+            .font(PBFonts.button._1.font)
+        }
+      }
+    }
     .pbToast(toastID: $toastID, message: "포켓 이름을 입력해주세요!", height: 12)
+    .fullScreenCover(isPresented: $isPresentedTemplateList) {
+      TemplateList(selectedTemplate: $selectedTemplate)
+    }
   }
 }
 
@@ -287,6 +199,12 @@ private extension CreatePocketView {
   }
 }
 
-#Preview {
+#Preview("Edit") {
   CreatePocketView(pocket: .init(onAlarm: true))
+    .environmentObject(PBFormatter())
+}
+
+#Preview("Create") {
+  CreatePocketView(pocket: nil)
+    .environmentObject(PBFormatter())
 }

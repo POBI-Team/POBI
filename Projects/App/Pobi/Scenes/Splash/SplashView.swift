@@ -15,21 +15,19 @@ import LocalNotiService
 import Lottie
 
 struct SplashView: View {
-  @EnvironmentObject var notificationManager: NotificationManager
-  @Environment(\.modelContext) private var modelContext
+  @EnvironmentObject private var profileStorage: ProfileStorage
   @State private var isEndSplash: Bool = false
-  @State private var isNotFirstEntry: Bool
-  @State private var isPresnetedCreate: Bool = false
+  @State private var isNotFirstEntry: Bool = false
+  @State private var isPresentedCreate: Bool = false
   @State private var cancelBag: Set<AnyCancellable> = []
-  
-  init() {
-    self.isNotFirstEntry = ProfileStorage.shared.loadNotFirstEntry()
-  }
   
   var body: some View {
     if !isEndSplash {
       PBColors.cream.color
         .ignoresSafeArea(.all)
+        .onAppear {
+          isNotFirstEntry = profileStorage.loadNotFirstEntry()
+        }
         .overlay {
           VStack(spacing: 0) {
             Text("나의 포켓비서")
@@ -49,12 +47,10 @@ struct SplashView: View {
         }
     } else {
       if isNotFirstEntry {
-         NavigationStack {
-           HomeView(isPresentedCreate: $isPresnetedCreate)
-             .modelContext(modelContext)
-             .id(notificationManager.seletedPocketID)
+        NavigationStack {
+          MainTabView(isPresentedCreate: $isPresentedCreate)
+            .transition(.move(edge: .trailing))
         }
-         .transition(.move(edge: .trailing))
       } else {
         NavigationStack {
           OnboardingView()
@@ -71,7 +67,7 @@ struct SplashView: View {
                 .sink { _ in
                   withAnimation {
                     isNotFirstEntry = true
-                    isPresnetedCreate = true
+                    isPresentedCreate = true
                   }
                 }
                 .store(in: &cancelBag)

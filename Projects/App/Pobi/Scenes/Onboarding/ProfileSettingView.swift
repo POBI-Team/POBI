@@ -11,6 +11,8 @@ import PBDesignSystem
 import PBStorage
 
 struct ProfileSettingView: View {
+  @EnvironmentObject private var profileStorage: ProfileStorage
+  
   @State private var nickname: String = ""
   @State private var profileTpye: ProfileImageType = .first
   @State private var isPresnetedComplete: Bool = false
@@ -55,9 +57,9 @@ struct ProfileSettingView: View {
         .padding(.horizontal, 44)
       Spacer()
       PBRoundButton(16) {
-        ProfileStorage.shared.saveNotFirstEntry()
-        ProfileStorage.shared.saveNickname(nickname)
-        ProfileStorage.shared.saveProfileImageType(profileTpye)
+        profileStorage.saveNotFirstEntry()
+        profileStorage.saveNickname(nickname)
+        profileStorage.saveProfileImageType(profileTpye)
         isPresnetedComplete = true
       } label: {
         Text("다음")

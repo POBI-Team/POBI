@@ -7,9 +7,8 @@
 
 import Foundation
 
-final class PBFormatter: Sendable {
+final class PBFormatter: Sendable, ObservableObject {
   private let weeks = [2,3,4,5,6,7,1] // 월요일 부터 시작
-  static let shared = PBFormatter()
   let dateFormatter = DateFormatter()
   
   func label(_ date: Date, format: String, locale: Locale? = nil) -> String {
@@ -34,7 +33,7 @@ final class PBFormatter: Sendable {
     }
   }
   
-  private func weekDay(_ day: Int) -> String? {
+  func weekDay(_ day: Int) -> String? {
     switch day {
     case 1: "일"
     case 2: "월"

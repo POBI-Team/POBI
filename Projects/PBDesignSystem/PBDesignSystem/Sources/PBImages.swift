@@ -8,13 +8,12 @@ import UIKit
 import SwiftUI
 
 public struct PBImages {
-  public static var plus36: UIImage { UIImage(named: "plus_36", in: .module, with: nil)! }
-  public static var plus16: UIImage { UIImage(named: "plus_16", in: .module, with: nil)! }
   public static var right: UIImage { UIImage(named: "right", in: .module, with: nil)! }
   public static var clock: UIImage { UIImage(named: "clock", in: .module, with: nil)! }
   public static var deactivateCheckBox: UIImage { UIImage(named: "deactivate_checkBox", in: .module, with: nil)! }
   public static var uncheckedCheckBox: UIImage { UIImage(named: "unchecked_checkBox", in: .module, with: nil)! }
   public static var checkedCheckBox: UIImage { UIImage(named: "checked_checkBox", in: .module, with: nil)! }
+  public static var disableCheckBox: UIImage { UIImage(named: "disable_checkBox", in: .module, with: nil)! }
   public static var left: UIImage { UIImage(named: "left", in: .module, with: nil)! }
   public static var manu: UIImage { UIImage(named: "manu", in: .module, with: nil)! }
   public static var down: UIImage { UIImage(named: "down", in: .module, with: nil)! }
@@ -45,6 +44,11 @@ public struct PBImages {
   public static var warningCycle: UIImage { UIImage(named: "warning_cycle", in: .module, with: nil)! }
   public static var pobiHiddenEmpty: UIImage { UIImage(named: "pobi_hidden_empty", in: .module, with: nil)! }
   public static var reset: UIImage { UIImage(named: "reset", in: .module, with: nil)! }
+  public static var template: UIImage { UIImage(named: "template", in: .module, with: nil)! }
+  public static var home: UIImage { UIImage(named: "home", in: .module, compatibleWith: nil)! }
+  public static var calendar: UIImage { UIImage(named: "calendar", in: .module, compatibleWith: nil)! }
+  public static var `return`: UIImage { UIImage(named: "return", in: .module, compatibleWith: nil)! }
+  public static var speaker: UIImage { UIImage(named: "speaker", in: .module, compatibleWith: nil)! }
 }
 
 public extension UIImage {

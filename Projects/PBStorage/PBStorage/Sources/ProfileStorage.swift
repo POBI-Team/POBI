@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
 public enum ProfileImageType: String {
   case first
   case second
 }
 
-public final class ProfileStorage: @unchecked Sendable {
-  public static let shared = ProfileStorage()
+public final class ProfileStorage: ObservableObject, @unchecked Sendable {
   private let userDefaults: UserDefaults
   
   public init(userDefaults: UserDefaults = .standard) {

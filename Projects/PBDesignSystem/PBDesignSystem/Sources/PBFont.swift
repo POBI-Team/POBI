@@ -70,6 +70,7 @@ public enum Caption {
 public enum Label {
   public static var _1: UIFont { .custom(.semiBold, size: 14) }
   public static var _2: UIFont { .custom(.medium, size: 12) }
+  public static var _3: UIFont { .custom(.medium, size: 10) }
 }
 
 public enum TossFace {

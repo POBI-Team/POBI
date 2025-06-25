@@ -11,6 +11,7 @@ import PBStorage
 import PBDesignSystem
 
 struct CompleteView: View {
+  @EnvironmentObject private var profileStorage: ProfileStorage
   @State private var isPresentedHome = false
   @State private var isPresentedCreate = false
   
@@ -20,7 +21,7 @@ struct CompleteView: View {
       Text("🎉")
         .font(PBFonts.tossFace.xlarge.font)
         .padding(.bottom, 42)
-      Text("\(ProfileStorage.shared.loadNickname() ?? "사용자")님, 반가워요!")
+      Text("\(profileStorage.loadNickname() ?? "")님, 반가워요!")
         .font(PBFonts.headline._1.font)
         .foregroundStyle(PBColors.navy._900.color)
       Spacer()

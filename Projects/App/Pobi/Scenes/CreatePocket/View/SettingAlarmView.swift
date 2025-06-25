@@ -17,6 +17,7 @@ struct SettingAlarmView: View {
   @Binding private var pocket: Pocket
   @Binding private var isDidTapDownButton: Bool
   @FocusState private var isFocused: Bool
+  @EnvironmentObject private var formatter: PBFormatter
   
   init(
     pocket: Binding<Pocket>,
@@ -39,36 +40,28 @@ struct SettingAlarmView: View {
           .font(PBFonts.body._2.font)
           .foregroundStyle(PBColors.navy._900.color)
         Spacer()
-        if pocket.repeats {
-          Button {
+        Button {
+          if pocket.repeats {
             isPresentedDataSelectView.toggle()
-          } label: {
-            HStack(spacing: 8) {
-              Spacer()
-              Text(repeatLabel)
-                .font(PBFonts.caption._1.font)
-                .foregroundStyle(PBColors.navy._300.color)
-                .lineLimit(1)
-                .frame(maxWidth: 150, alignment: .trailing)
-              PBImages.right.image
-            }
-            .frame(height: 34)
-          }
-        } else {
-          PBRoundButton(10) {
+          } else {
             withAnimation(.default.speed(1.5)) {
               isSelectedDate.toggle()
               isDidTapDownButton = false
               isSelectedTime = false
               isFocused = false
             }
-          } label: {
-            Text(dateLabel)
-              .font(PBFonts.caption._1.font)
-              .foregroundStyle(PBColors.navy._900.color)
           }
-          .frame(width: 84, height: 34)
-          .foregroundStyle(PBColors.navy._50.color)
+        } label: {
+          HStack(spacing: 8) {
+            Spacer()
+            Text(pocket.repeats ? repeatLabel : dateLabel)
+              .font(PBFonts.caption._1.font)
+              .foregroundStyle(PBColors.navy._300.color)
+              .lineLimit(1)
+              .frame(maxWidth: 150, alignment: .trailing)
+            PBImages.right.image
+          }
+          .frame(height: 34)
         }
       }
       .padding(.horizontal, 20)
@@ -117,7 +110,7 @@ struct SettingAlarmView: View {
       }
       .padding(.top, 8)
       .padding(.horizontal, 20)
-
+      
       
       VStack(alignment: .center, spacing: 0) {
         if isSelectedTime {
@@ -162,24 +155,25 @@ struct SettingAlarmView: View {
 
 private extension SettingAlarmView {
   var repeatLabel: String {
-    PBFormatter.shared.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
+    formatter.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
   }
   
   var timeLabel: String {
-    PBFormatter.shared.label(pocket.alarm.time, format: "h:mm a")
+    formatter.label(pocket.alarm.time, format: "h:mm a")
   }
   
   var dateLabel: String {
-    PBFormatter.shared.label(pocket.alarm.date, format: "M월 d일")
+    formatter.label(pocket.alarm.date, format: "yyyy년 M월 d일")
   }
 }
 
 #Preview {
   @Previewable @FocusState var isFocused: Bool
-
+  
   SettingAlarmView(
     pocket: .constant(.init()),
     isFocused: _isFocused,
     isDidTapDownButton: .constant(false)
   )
+  .environmentObject(PBFormatter())
 }

@@ -11,15 +11,11 @@ import PBDesignSystem
 import PBStorage
 
 struct ProfileEditView: View {
+  @EnvironmentObject private var profileStorage: ProfileStorage
   @State private var profileType: ProfileImageType?
-  @State private var nickname: String
+  @State private var nickname: String = ""
   @Environment(\.dismiss) private var dismiss
   @FocusState private var isFocused: Bool
-  
-  init() {
-    self.profileType = ProfileStorage.shared.loadProfileImageType()
-    self.nickname = ProfileStorage.shared.loadNickname() ?? ""
-  }
   
   var body: some View {
     PBNavigationBar {
@@ -41,7 +37,6 @@ struct ProfileEditView: View {
             PBImages.profileSecond.image
               .grayscale(profileType == .second ? 0.0 : 1.0)
           }
-         
           .buttonStyle(PlainButtonStyle())
         }
         .padding(.top, 32)
@@ -59,11 +54,15 @@ struct ProfileEditView: View {
       .onTapGesture {
         isFocused = false
       }
+      .onAppear {
+        profileType = profileStorage.loadProfileImageType()
+        nickname = profileStorage.loadNickname() ?? ""
+      }
       
       Spacer()
       PBRoundButton(16) {
-        ProfileStorage.shared.saveNickname(nickname)
-        ProfileStorage.shared.saveProfileImageType(profileType ?? .first)
+        profileStorage.saveNickname(nickname)
+        profileStorage.saveProfileImageType(profileType ?? .first)
         dismiss()
       } label: {
         Text("프로필 설정하기")

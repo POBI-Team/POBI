@@ -11,6 +11,7 @@ import SwiftUI
 @MainActor
 public enum PBAlertType {
   case delete
+  case deleteTemplate
   case deleteAll
   case offAlarm
   case edit
@@ -22,6 +23,13 @@ public enum PBAlertType {
       return PBAlertView(isPresented: isPresented)
         .image(PBImages.pobiAlert.image)
         .title("포켓을 삭제할까요?")
+        .body("등록된 소지품이 모두 사라져요!")
+        .addButton(.cancel(cancelAction))
+        .addButton(.defalt("삭제", action))
+    case .deleteTemplate:
+      return PBAlertView(isPresented: isPresented)
+        .image(PBImages.pobiAlert.image)
+        .title("템플릿을 삭제할까요?")
         .body("등록된 소지품이 모두 사라져요!")
         .addButton(.cancel(cancelAction))
         .addButton(.defalt("삭제", action))
