@@ -49,6 +49,7 @@ public struct PBImages {
   public static var calendar: UIImage { UIImage(named: "calendar", in: .module, compatibleWith: nil)! }
   public static var `return`: UIImage { UIImage(named: "return", in: .module, compatibleWith: nil)! }
   public static var speaker: UIImage { UIImage(named: "speaker", in: .module, compatibleWith: nil)! }
+  public static var onboardingCalendar: UIImage { UIImage(named: "onboarding_calendar", in: .module, compatibleWith: nil)! }
 }
 
 public extension UIImage {

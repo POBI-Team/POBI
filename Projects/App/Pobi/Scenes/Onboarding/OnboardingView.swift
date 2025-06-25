@@ -49,7 +49,7 @@ struct OnboardingView: View {
             .font(PBFonts.headline._1.font)
             .foregroundStyle(PBColors.navy._900.color)
             .padding(.bottom, 20)
-          Text("여행, 출근, 운동 등 상황별 포켓을\n만들고 소지품을 추가하세요.")
+          Text("상황별로 소지품 폴더 ‘포켓’을\n만들고 소지품을 추가하세요.")
             .multilineTextAlignment(.center)
             .font(PBFonts.body._1.font)
             .foregroundStyle(PBColors.navy._200.color)
@@ -58,6 +58,21 @@ struct OnboardingView: View {
           Spacer()
         }
         .tag(1)
+        
+        VStack {
+          Text("캘린더에서 포켓을 관리해요!")
+            .font(PBFonts.headline._1.font)
+            .foregroundStyle(PBColors.navy._900.color)
+            .padding(.bottom, 20)
+          Text("캘린더에서 일정별로 포켓을 추가하고,\n소지품을 미리미리 준비해요.")
+            .multilineTextAlignment(.center)
+            .font(PBFonts.body._1.font)
+            .foregroundStyle(PBColors.navy._200.color)
+            .padding(.bottom, 35)
+          PBImages.onboardingCalendar.image
+          Spacer()
+        }
+        .tag(2)
         
         VStack {
           Text("똑똑한 알림을 받아요!")
@@ -72,14 +87,14 @@ struct OnboardingView: View {
           PBImages.onboardingThird.image
           Spacer()
         }
-        .tag(2)
+        .tag(3)
       }
       .tabViewStyle(.page(indexDisplayMode: .never))
       .frame(height: 500)
-      TabIndicator(count: 3, currentIndex: $currentIndex)
+      TabIndicator(count: 4, currentIndex: $currentIndex)
       Spacer()
       PBRoundButton(16) {
-        if currentIndex == 2 {
+        if currentIndex == 3 {
           isPresentedProfileSetting = true
         } else {
           withAnimation {
