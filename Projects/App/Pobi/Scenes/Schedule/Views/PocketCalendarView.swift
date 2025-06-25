@@ -193,7 +193,6 @@ struct PocketCalendarView: View {
     }
     .onChange(of: pockets) {
       setupCalendar()
-      selectedItem = calendars.flatMap { $0 }.first { $0.isToday }
     }
     .onChange(of: sheetHeight) { oldValue, newValue in
       if newValue <= 0 {
