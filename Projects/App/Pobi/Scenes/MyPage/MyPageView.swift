@@ -62,6 +62,16 @@ struct MyPageView: View {
                   PBImages.right.image
                 }
               }
+              Link(destination: URL(string: "https://furry-gruyere-f25.notion.site/21c0c2771f6d806da953d8ff76c9789a?source=copy_link")!) {
+                HStack {
+                  PBImages.speaker.image
+                  Text("공지사항")
+                    .font(PBFonts.button._3.font)
+                    .foregroundStyle(PBColors.navy._900.color)
+                  Spacer()
+                  PBImages.right.image
+                }
+              }
               Link(destination: URL(string: "itms-apps://itunes.apple.com/app/6744066403")!) {
                 HStack {
                   PBImages.mail.image
@@ -142,4 +152,5 @@ struct MyPageView: View {
 
 #Preview {
   MyPageView()
+    .environmentObject(ProfileStorage())
 }
