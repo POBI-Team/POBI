@@ -58,7 +58,7 @@ struct HomeView: View {
             Spacer()
             Text("자세히 보기")
               .font(PBFonts.button._4.font)
-              .foregroundStyle(.white)
+              .foregroundStyle(PBColors.navy._900.color)
               .frame(width: 75, height: 28)
               .background(PBColors.yellow._300.color)
               .clipShape(RoundedRectangle(cornerRadius: 8))
