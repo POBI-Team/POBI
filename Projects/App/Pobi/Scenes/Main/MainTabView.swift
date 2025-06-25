@@ -18,6 +18,7 @@ struct MainTabView: View {
     let appearance = UITabBarAppearance()
     appearance.backgroundColor = .white
     appearance.shadowColor = PBColors.navy._50
+    appearance.stackedLayoutAppearance.normal.iconColor = PBColors.navy._50
     UITabBar.appearance().scrollEdgeAppearance = appearance
     UITabBar.appearance().standardAppearance = appearance
     self._isPresentedCreate = isPresentedCreate
