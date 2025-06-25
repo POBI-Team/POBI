@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftData
 
 import PBDesignSystem
-import PBStorage
 import PBStorageInterface
 
 struct TemplateList: View {
@@ -73,7 +72,7 @@ struct TemplateList: View {
             }
           }
         }
-        .padding(.horizontal, 20)
+        .padding(20)
       }
       .overlay {
         if templates.isEmpty {
