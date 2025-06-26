@@ -42,7 +42,11 @@ struct InputTitleAndIconView<P: Pocketable>: View {
       }
       TextField(
         "포켓 이름을 입력해주세요!",
-        text: $pocket.title
+        text: Binding {
+          pocket.title
+        } set: {
+          pocket.title = $0.trimmingCharacters(in: .whitespaces)
+        }
       )
       .focused($isFocused)
       .underLine(text: $pocket.title)
