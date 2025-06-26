@@ -41,7 +41,7 @@ struct InputTitleAndIconView<P: Pocketable>: View {
           .foregroundStyle(colors[pocket.colorIndex]._03.color)
       }
       TextField(
-        "포켓 이름을 입력해주세요!",
+        pocket is Pocket ? "포켓 이름" : "템플릿 이름",
         text: Binding {
           pocket.title
         } set: {

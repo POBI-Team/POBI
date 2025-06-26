@@ -82,7 +82,7 @@ struct PocketMoreView<P: PocketModelable>: View {
                 HStack(spacing: 8) {
                   Group {
                     PBImages.template.image
-                    Text("템플릿 만들기")
+                    Text("템플릿으로 만들기")
                       .font(PBFonts.button._3.font)
                   }
                   .foregroundStyle(PBColors.navy._900.color)
