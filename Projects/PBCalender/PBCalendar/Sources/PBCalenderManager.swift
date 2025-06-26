@@ -24,13 +24,13 @@ public final class PBCalendarManager: Sendable, ObservableObject {
   }
   
   public func days(in date: Date, with pockets: [PocketModel] = []) -> [PBCalendarItem] {
-    let startfirstWeekdayIndex = firstWeekdayOfMonth(in: date) - calendar.firstWeekday // 사용자의 캘린더 시작 날짜에 따라 첫일이 시작하는 시점
+    let startFirstWeekdayIndex = (firstWeekdayOfMonth(in: date) - calendar.firstWeekday + 7) % 7
     let lastDay = numberOfDays(in: date)
     let lastDayOfMonthBefore = numberOfDays(in: previousMonth(at: date))
-    let rowCount = ceil((Double(lastDay + startfirstWeekdayIndex) / 7))
-    let visibleDaysCountOfNextMonth = Int(rowCount) * 7 - (lastDay + startfirstWeekdayIndex)
+    let rowCount = ceil((Double(lastDay + startFirstWeekdayIndex) / 7))
+    let visibleDaysCountOfNextMonth = Int(rowCount) * 7 - (lastDay + startFirstWeekdayIndex)
     let weekdays = weekdays
-    return Array(-startfirstWeekdayIndex..<lastDay + visibleDaysCountOfNextMonth)
+    return Array(-startFirstWeekdayIndex..<lastDay + visibleDaysCountOfNextMonth)
       .enumerated()
       .map { i, e -> PBCalendarItem in
         let day: Int

@@ -13,7 +13,9 @@ final class PBCalendarTests: XCTestCase {
   private var sut: PBCalendarManager!
   
   override func setUp() {
-    sut = PBCalendarManager()
+    var calendar = Calendar.current
+    calendar.firstWeekday = 1
+    sut = PBCalendarManager(caledar: calendar)
   }
   
   override func tearDown() {
