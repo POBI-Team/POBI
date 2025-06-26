@@ -80,7 +80,7 @@ struct TemplateList: View {
             Text("템플릿이 없어요!")
               .font(PBFonts.title._1.font)
               .foregroundStyle(PBColors.navy._900.color)
-            Text("자주 쓰고 싶은 포켓이 있다면,\n‘내 포켓’ 또는 ‘템플릿'에서 템플릿으로 만들 수 있어요")
+            Text("자주 쓰고 싶은 포켓이 있다면,\n템플릿을 생성해 빠르게 추가해보세요")
               .font(PBFonts.body._4.font)
               .foregroundStyle(PBColors.navy._200.color)
               .multilineTextAlignment(.center)
