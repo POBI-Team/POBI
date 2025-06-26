@@ -46,15 +46,22 @@ struct ProfileSettingView: View {
         
       }
       .padding(.bottom, 36)
-      TextField("별명을 입력해주세요! (7자 이내)", text: $nickname)
-        .onChange(of: nickname) { oldValue, newValue in
-          if newValue.count > 7 {
-            nickname = oldValue
-          }
+      TextField(
+        "별명을 입력해주세요! (7자 이내)",
+        text: Binding {
+          nickname
+        } set: {
+          nickname = $0.trimmingCharacters(in: .whitespaces)
         }
-        .focused($isFocused)
-        .underLine(text: $nickname)
-        .padding(.horizontal, 44)
+      )
+      .onChange(of: nickname) { oldValue, newValue in
+        if newValue.count > 7 {
+          nickname = oldValue
+        }
+      }
+      .focused($isFocused)
+      .underLine(text: $nickname)
+      .padding(.horizontal, 44)
       Spacer()
       PBRoundButton(16) {
         profileStorage.saveNotFirstEntry()

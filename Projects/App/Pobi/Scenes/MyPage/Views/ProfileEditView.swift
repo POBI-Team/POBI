@@ -41,14 +41,21 @@ struct ProfileEditView: View {
         }
         .padding(.top, 32)
         .padding(.bottom, 36)
-        TextField("별명을 입력해주세요! (7자 이내)", text: $nickname)
-          .onChange(of: nickname) { oldValue, newValue in
-            if newValue.count > 7 {
-              nickname = oldValue
-            }
+        TextField(
+          "별명을 입력해주세요! (7자 이내)",
+          text: Binding {
+            nickname
+          } set: {
+            nickname = $0.trimmingCharacters(in: .whitespaces)
           }
-          .focused($isFocused)
-          .underLine(text: $nickname)
+        )
+        .onChange(of: nickname) { oldValue, newValue in
+          if newValue.count > 7 {
+            nickname = oldValue
+          }
+        }
+        .focused($isFocused)
+        .underLine(text: $nickname)
       }
       .padding(.horizontal, 44)
       .onTapGesture {
@@ -74,7 +81,7 @@ struct ProfileEditView: View {
       .padding(.horizontal, 20)
       .padding(.bottom, 12)
       .foregroundStyle(PBColors.navy._900.color)
-
+      
     }
     .title("마이페이지")
     .leftItem {
@@ -89,4 +96,5 @@ struct ProfileEditView: View {
 
 #Preview {
   ProfileEditView()
+    .environmentObject(ProfileStorage())
 }
