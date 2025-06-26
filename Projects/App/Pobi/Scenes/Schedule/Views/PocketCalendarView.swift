@@ -148,6 +148,7 @@ struct PocketCalendarView: View {
                   calendars.insert(newCalendar, at: 0)
                   calendars.removeLast()
                 }
+                selectedItem = calendars[1].first { $0.isInCurrentMonth }
                 currentPage = 0
               }
             }
@@ -190,9 +191,11 @@ struct PocketCalendarView: View {
     }
     .onChange(of: didTapPicketFinishButton) {
       setupCalendar()
+      selectedItem = calendars[1].first { $0.isInCurrentMonth }
     }
     .onChange(of: pockets) {
       setupCalendar()
+      selectedItem = calendars[1].first { $0.id == selectedItem?.id }
     }
     .onChange(of: sheetHeight) { oldValue, newValue in
       if newValue <= 0 {
