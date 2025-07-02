@@ -12,12 +12,15 @@ import FirebaseAnalytics
 
 final class FirebaseManager: NSObject, @unchecked Sendable {
   public enum EventType: String {
-    case didTapPocketHidden = "did_tap_pocket_hidden"
-    case didTapPocketShown = "did_tap_pocket_Shown"
+    case createPocket = "create_pocket"
+    case createTemplate = "create_template"
     case addRecommendedList = "add_recommended_list"
     case alarmActivation = "alarm_activation"
     case alarmDisable = "alarm_disable"
-
+    case didTapReset = "did_tap_reset"
+    case onCalendar = "on_calendar"
+    case offCalendar = "off_calendar"
+    case importTemplate = "import_template"
   }
   
   static let shared = FirebaseManager()

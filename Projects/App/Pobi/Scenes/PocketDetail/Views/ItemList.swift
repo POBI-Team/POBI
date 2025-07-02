@@ -36,6 +36,7 @@ struct ItemList<P: PocketModelable>: View {
           for i in lists.indices {
             lists[i].isChecked = false
           }
+          FirebaseManager.shared.logEvent(event: .didTapReset)
         } label: {
           HStack(alignment: .center, spacing: 6) {
             Text("리셋")

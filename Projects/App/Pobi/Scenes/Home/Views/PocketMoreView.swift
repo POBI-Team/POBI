@@ -76,7 +76,7 @@ struct PocketMoreView<P: PocketModelable>: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                   let newTemplate = pocket.template()
                   modelContext.insert(newTemplate)
-                  try? modelContext.save()
+                  FirebaseManager.shared.logEvent(event: .createTemplate)
                 }
               } label: {
                 HStack(spacing: 8) {

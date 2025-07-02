@@ -129,10 +129,17 @@ struct CreatePocketView: View {
                 } else {
                   FirebaseManager.shared.logEvent(event: .alarmDisable)
                 }
+                if pocket.isCalendar {
+                  FirebaseManager.shared.logEvent(event: .onCalendar)
+                } else {
+                  FirebaseManager.shared.logEvent(event: .offCalendar)
+                }
                 if let template = selectedTemplate {
                   newPocketModel.items = template.items.map { $0.copy() }
+                  FirebaseManager.shared.logEvent(event: .importTemplate)
                 }
                 modelContext.insert(newPocketModel)
+                FirebaseManager.shared.logEvent(event: .createPocket)
                 dismiss()
               } else {
                 isPresentedEditAlert.toggle()

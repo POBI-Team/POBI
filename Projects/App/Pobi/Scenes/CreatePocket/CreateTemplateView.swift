@@ -52,6 +52,7 @@ struct CreateTemplateView: View {
         if templateModel == nil {
           let newTemplateModel = TemplateModel(template)
           modelContext.insert(newTemplateModel)
+          FirebaseManager.shared.logEvent(event: .createTemplate)
           dismiss()
         } else {
           isPresentedEditAlert.toggle()
