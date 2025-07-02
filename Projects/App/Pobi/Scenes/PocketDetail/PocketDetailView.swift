@@ -118,6 +118,7 @@ private extension PocketDetailView {
         alarm: PocketAlarmModel(isWeekRepeat: true, days: [1,2], date: .now, time: .now)
       )
     )
+    .environmentObject(PBFormatter())
   }
 }
 
@@ -131,5 +132,6 @@ private extension PocketDetailView {
         alarm: PocketAlarmModel(isWeekRepeat: true, days: [1,2,3,4,5,6], date: .now, time: .now)
       )
     )
+    .environmentObject(PBFormatter())
   }
 }

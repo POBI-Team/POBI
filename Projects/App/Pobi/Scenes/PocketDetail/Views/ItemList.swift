@@ -31,20 +31,22 @@ struct ItemList<P: PocketModelable>: View {
         .font(PBFonts.caption._2.font)
         .foregroundStyle(PBColors.navy._100.color)
       Spacer()
-      Button {
-        for i in lists.indices {
-          lists[i].isChecked = false
+      if pocket is PocketModel {
+        Button {
+          for i in lists.indices {
+            lists[i].isChecked = false
+          }
+        } label: {
+          HStack(alignment: .center, spacing: 6) {
+            Text("리셋")
+              .font(PBFonts.label._1.font)
+            PBImages.reset.image
+              .renderingMode(.template)
+          }
+          .frame(height: 16)
         }
-      } label: {
-        HStack(alignment: .center, spacing: 6) {
-          Text("리셋")
-            .font(PBFonts.label._1.font)
-          PBImages.reset.image
-            .renderingMode(.template)
-        }
-        .frame(height: 16)
+        .tint(PBColors.red.color)
       }
-      .tint(PBColors.red.color)
     }
     .padding(.horizontal, 28)
     .padding(.bottom, 8)

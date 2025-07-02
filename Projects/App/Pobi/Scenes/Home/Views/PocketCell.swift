@@ -17,9 +17,7 @@ struct PocketCell<P: PocketModelable>: View {
   @State private var isPresentedEdit = false
   @EnvironmentObject private var formatter: PBFormatter
   
-  init (
-    _ pocket: P
-  ) {
+  init (_ pocket: P) {
     self.pocket = pocket
   }
   
@@ -91,13 +89,10 @@ struct PocketCell<P: PocketModelable>: View {
 
 private extension PocketCell {
   func alarmLabel(_ pocket: PocketModel) -> String {
-    if pocket.onAlarm {
-      if pocket.repeats {
-        return formatter.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
-      }
-      return formatter.label(pocket.alarm.date, format: "M월 d일")
+    if pocket.repeats {
+      return formatter.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
     }
-    return ""
+    return formatter.label(pocket.alarm.date, format: "M월 d일")
   }
 }
 
