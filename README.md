@@ -3,7 +3,6 @@
 
 <img src="https://img.shields.io/badge/swift-v6.0-FA7343?style=plastic&logo=swift&logoColor=FA7343"/> <img src="https://img.shields.io/badge/iOS-v17.0+-000000?style=plastic&logo=apple&logoColor=white"/>
 
-
 # POBI
 
 
@@ -23,6 +22,11 @@
   오늘부터 외출 준비는 포비에게 맡기세요!
 
 </h4>
+<div align="center">
+  <a href="https://apps.apple.com/kr/app/%ED%8F%AC%EB%B9%84-pobi-%EB%82%98%EC%9D%98-%ED%8F%AC%EC%BC%93%EB%B9%84%EC%84%9C/id6744066403">
+    <img src = "https://github.com/user-attachments/assets/6e56f338-972f-4ef3-9964-5dbc21911208" width = "250">
+  </a>
+</div>
 
 ## 서비스 소개    
 
