@@ -9,6 +9,7 @@ import SwiftUI
 
 import PBDesignSystem
 import PBStorage
+import PBStorageInterface
 
 struct ProfileEditView: View {
   @EnvironmentObject private var profileStorage: ProfileStorage
