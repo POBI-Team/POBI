@@ -13,6 +13,7 @@
 		9B0928D42D956389002B96A8 /* NetworkServiceInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B0928D22D956389002B96A8 /* NetworkServiceInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9B0928D62D9563AB002B96A8 /* PBStorageInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B0928D52D9563AB002B96A8 /* PBStorageInterface.framework */; };
 		9B0928D72D9563AB002B96A8 /* PBStorageInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B0928D52D9563AB002B96A8 /* PBStorageInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9B26A7C62E1CAE860010CF17 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 9B26A7C52E1CAE860010CF17 /* ComposableArchitecture */; };
 		9B6192092D9BC41100DB18D1 /* Lottie-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 9B6192082D9BC41100DB18D1 /* Lottie-Dynamic */; };
 		9B61920A2D9BC41500DB18D1 /* Lottie-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 9B6192082D9BC41100DB18D1 /* Lottie-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9B626BB72D9A30F4001255F3 /* LocalNotiService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B626BB62D9A30F4001255F3 /* LocalNotiService.framework */; };
@@ -72,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B26A7C62E1CAE860010CF17 /* ComposableArchitecture in Frameworks */,
 				9B6192092D9BC41100DB18D1 /* Lottie-Dynamic in Frameworks */,
 				9BD4B1A92D8D7F8C00CA86C4 /* NetworkService.framework in Frameworks */,
 				9BA3F4E22DA528CD005BFBA5 /* FirebaseAnalytics in Frameworks */,
@@ -142,6 +144,7 @@
 			packageProductDependencies = (
 				9B6192082D9BC41100DB18D1 /* Lottie-Dynamic */,
 				9BA3F4E12DA528CD005BFBA5 /* FirebaseAnalytics */,
+				9B26A7C52E1CAE860010CF17 /* ComposableArchitecture */,
 			);
 			productName = Pobi;
 			productReference = 9BE14C3C2D6043DF008A0E49 /* Pobi.app */;
@@ -174,6 +177,7 @@
 			packageReferences = (
 				9B6192052D9BC3FE00DB18D1 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				9BA3F4E02DA528CD005BFBA5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				9B26A7C42E1CAE860010CF17 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9BE14C3D2D6043DF008A0E49 /* Products */;
@@ -423,6 +427,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		9B26A7C42E1CAE860010CF17 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.20.2;
+			};
+		};
 		9B6192052D9BC3FE00DB18D1 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios";
@@ -442,6 +454,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		9B26A7C52E1CAE860010CF17 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9B26A7C42E1CAE860010CF17 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
 		9B6192082D9BC41100DB18D1 /* Lottie-Dynamic */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9B6192052D9BC3FE00DB18D1 /* XCRemoteSwiftPackageReference "lottie-ios" */;
