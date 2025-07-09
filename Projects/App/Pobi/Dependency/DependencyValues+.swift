@@ -20,4 +20,9 @@ extension DependencyValues {
     get { self[LocalNotiCenterKey.self] }
     set { self[LocalNotiCenterKey.self] = newValue }
   }
+  
+  var firebaseManager: FirebaseManagerInterface {
+    get { self[FirebaseManagerKey.self] }
+    set { self[FirebaseManagerKey.self] = newValue }
+  }
 }
