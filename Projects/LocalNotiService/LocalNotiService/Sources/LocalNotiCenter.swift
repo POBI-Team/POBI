@@ -12,7 +12,7 @@ import LocalNotiInterface
 public final class LocalNotiCenter: Notifiable {
   public static let shared = LocalNotiCenter()
   
-  init() {}
+  public init() {}
   
   public func isOnAlarm() async -> Bool {
     return await withCheckedContinuation { continuation in
