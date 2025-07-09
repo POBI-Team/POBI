@@ -7,6 +7,7 @@
 
 import PBStorageInterface
 import LocalNotiService
+import LocalNotiInterface
 
 extension PocketModel {
   public func registerPushAlarm(userNickname: String) {

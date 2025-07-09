@@ -12,7 +12,7 @@ public enum TrigerType {
   case week(weeks: [Int])
   case date(Date)
   
-  func requsetIds(id: String) -> [String] {
+  public func requsetIds(id: String) -> [String] {
     switch self {
     case let .day(days):
       return days.map { id + "-\($0)" }
@@ -23,7 +23,7 @@ public enum TrigerType {
     }
   }
   
-  func makeRequsts(time: Date, id: String, content: UNMutableNotificationContent) -> [UNNotificationRequest] {
+  public func makeRequsts(time: Date, id: String, content: UNMutableNotificationContent) -> [UNNotificationRequest] {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "HH-m"
     let splitedTime = dateFormatter

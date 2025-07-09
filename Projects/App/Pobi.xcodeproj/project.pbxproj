@@ -14,6 +14,9 @@
 		9B0928D62D9563AB002B96A8 /* PBStorageInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B0928D52D9563AB002B96A8 /* PBStorageInterface.framework */; };
 		9B0928D72D9563AB002B96A8 /* PBStorageInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B0928D52D9563AB002B96A8 /* PBStorageInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9B26A7C62E1CAE860010CF17 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 9B26A7C52E1CAE860010CF17 /* ComposableArchitecture */; };
+		9B26A8F92E1D202F0010CF17 /* libPBStorageTesting.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B26A8F82E1D202F0010CF17 /* libPBStorageTesting.a */; };
+		9B3B8FED2E1E29A8006CB25A /* LocalNotiInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3B8FEC2E1E29A8006CB25A /* LocalNotiInterface.framework */; };
+		9B3B8FEE2E1E29A8006CB25A /* LocalNotiInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3B8FEC2E1E29A8006CB25A /* LocalNotiInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9B6192092D9BC41100DB18D1 /* Lottie-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 9B6192082D9BC41100DB18D1 /* Lottie-Dynamic */; };
 		9B61920A2D9BC41500DB18D1 /* Lottie-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 9B6192082D9BC41100DB18D1 /* Lottie-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9B626BB72D9A30F4001255F3 /* LocalNotiService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B626BB62D9A30F4001255F3 /* LocalNotiService.framework */; };
@@ -26,6 +29,16 @@
 		9BD4B1A92D8D7F8C00CA86C4 /* NetworkService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD4B1A82D8D7F8C00CA86C4 /* NetworkService.framework */; };
 		9BD4B1AA2D8D7F8C00CA86C4 /* NetworkService.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9BD4B1A82D8D7F8C00CA86C4 /* NetworkService.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9B26A7DD2E1D08960010CF17 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9BE14C342D6043DF008A0E49 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9BE14C3B2D6043DF008A0E49;
+			remoteInfo = Pobi;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		9B01D2662D647CBE0060E8B7 /* Embed Frameworks */ = {
@@ -41,6 +54,7 @@
 				9BBD75F62DD72649005E8007 /* PBCalendar.framework in Embed Frameworks */,
 				9B01D38B2D64AD600060E8B7 /* PBDesignSystem.framework in Embed Frameworks */,
 				9B626BB82D9A30F4001255F3 /* LocalNotiService.framework in Embed Frameworks */,
+				9B3B8FEE2E1E29A8006CB25A /* LocalNotiInterface.framework in Embed Frameworks */,
 				9B0928D42D956389002B96A8 /* NetworkServiceInterface.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -52,6 +66,9 @@
 		9B01D3892D64AD600060E8B7 /* PBDesignSystem.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PBDesignSystem.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B0928D22D956389002B96A8 /* NetworkServiceInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = NetworkServiceInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B0928D52D9563AB002B96A8 /* PBStorageInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PBStorageInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B26A7D92E1D08960010CF17 /* PobiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PobiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B26A8F82E1D202F0010CF17 /* libPBStorageTesting.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libPBStorageTesting.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B3B8FEC2E1E29A8006CB25A /* LocalNotiInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LocalNotiInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B626BB62D9A30F4001255F3 /* LocalNotiService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LocalNotiService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BAB70C62D8199E0004D52A1 /* PBStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PBStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BBD75F42DD72649005E8007 /* PBCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PBCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,6 +78,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		9B26A7DA2E1D08960010CF17 /* PobiTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PobiTests;
+			sourceTree = "<group>";
+		};
 		9BE14C3E2D6043DF008A0E49 /* Pobi */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Pobi;
@@ -69,10 +91,19 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9B26A7D62E1D08960010CF17 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B26A8F92E1D202F0010CF17 /* libPBStorageTesting.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9BE14C392D6043DF008A0E49 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B3B8FED2E1E29A8006CB25A /* LocalNotiInterface.framework in Frameworks */,
 				9B26A7C62E1CAE860010CF17 /* ComposableArchitecture in Frameworks */,
 				9B6192092D9BC41100DB18D1 /* Lottie-Dynamic in Frameworks */,
 				9BD4B1A92D8D7F8C00CA86C4 /* NetworkService.framework in Frameworks */,
@@ -92,6 +123,8 @@
 		9B01D2632D647CBE0060E8B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9B3B8FEC2E1E29A8006CB25A /* LocalNotiInterface.framework */,
+				9B26A8F82E1D202F0010CF17 /* libPBStorageTesting.a */,
 				9BBD75F42DD72649005E8007 /* PBCalendar.framework */,
 				9BF8D2E22DC3632400ACED78 /* PBCalender.framework */,
 				9B626BB62D9A30F4001255F3 /* LocalNotiService.framework */,
@@ -108,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				9BE14C3E2D6043DF008A0E49 /* Pobi */,
+				9B26A7DA2E1D08960010CF17 /* PobiTests */,
 				9B01D2632D647CBE0060E8B7 /* Frameworks */,
 				9BE14C3D2D6043DF008A0E49 /* Products */,
 			);
@@ -117,6 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				9BE14C3C2D6043DF008A0E49 /* Pobi.app */,
+				9B26A7D92E1D08960010CF17 /* PobiTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -124,6 +159,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		9B26A7D82E1D08960010CF17 /* PobiTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9B26A7DF2E1D08960010CF17 /* Build configuration list for PBXNativeTarget "PobiTests" */;
+			buildPhases = (
+				9B26A7D52E1D08960010CF17 /* Sources */,
+				9B26A7D62E1D08960010CF17 /* Frameworks */,
+				9B26A7D72E1D08960010CF17 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9B26A7DE2E1D08960010CF17 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				9B26A7DA2E1D08960010CF17 /* PobiTests */,
+			);
+			name = PobiTests;
+			packageProductDependencies = (
+			);
+			productName = PobiTests;
+			productReference = 9B26A7D92E1D08960010CF17 /* PobiTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		9BE14C3B2D6043DF008A0E49 /* Pobi */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9BE14C4A2D6043E0008A0E49 /* Build configuration list for PBXNativeTarget "Pobi" */;
@@ -157,9 +215,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					9B26A7D82E1D08960010CF17 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 9BE14C3B2D6043DF008A0E49;
+					};
 					9BE14C3B2D6043DF008A0E49 = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -185,11 +247,19 @@
 			projectRoot = "";
 			targets = (
 				9BE14C3B2D6043DF008A0E49 /* Pobi */,
+				9B26A7D82E1D08960010CF17 /* PobiTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		9B26A7D72E1D08960010CF17 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9BE14C3A2D6043DF008A0E49 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -200,6 +270,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		9B26A7D52E1D08960010CF17 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9BE14C382D6043DF008A0E49 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -209,7 +286,53 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		9B26A7DE2E1D08960010CF17 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9BE14C3B2D6043DF008A0E49 /* Pobi */;
+			targetProxy = 9B26A7DD2E1D08960010CF17 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		9B26A7E02E1D08960010CF17 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S44QFR96WL;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.siwon.PobiTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pobi.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pobi";
+			};
+			name = Debug;
+		};
+		9B26A7E12E1D08960010CF17 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S44QFR96WL;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.siwon.PobiTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pobi.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pobi";
+			};
+			name = Release;
+		};
 		9BE14C482D6043E0008A0E49 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -406,6 +529,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9B26A7DF2E1D08960010CF17 /* Build configuration list for PBXNativeTarget "PobiTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9B26A7E02E1D08960010CF17 /* Debug */,
+				9B26A7E12E1D08960010CF17 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		9BE14C372D6043DF008A0E49 /* Build configuration list for PBXProject "Pobi" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
