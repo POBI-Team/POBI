@@ -10,6 +10,7 @@
 		9B3B8FDC2E1E28CA006CB25A /* LocalNotiInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3B8FC72E1E28CA006CB25A /* LocalNotiInterface.framework */; };
 		9B3B8FDD2E1E28CA006CB25A /* LocalNotiInterface.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3B8FC72E1E28CA006CB25A /* LocalNotiInterface.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9B3B8FE72E1E294B006CB25A /* LocalNotiInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3B8FC72E1E28CA006CB25A /* LocalNotiInterface.framework */; };
+		9B3B90052E1E3431006CB25A /* LocalNotiInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3B8FC72E1E28CA006CB25A /* LocalNotiInterface.framework */; };
 		9B4DC8992D8FE28B00978C6E /* LocalNotiService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B4DC8762D8FA9C300978C6E /* LocalNotiService.framework */; };
 		9B4DC89A2D8FE28B00978C6E /* LocalNotiService.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B4DC8762D8FA9C300978C6E /* LocalNotiService.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -29,6 +30,13 @@
 			remoteGlobalIDString = 9B3B8FC62E1E28CA006CB25A;
 			remoteInfo = LocalNotiInterface;
 		};
+		9B3B90072E1E3431006CB25A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B4DC86D2D8FA9C300978C6E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9B3B8FC62E1E28CA006CB25A;
+			remoteInfo = LocalNotiInterface;
+		};
 		9B4DC89B2D8FE28B00978C6E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9B4DC86D2D8FA9C300978C6E /* Project object */;
@@ -39,6 +47,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		9B3B8FFC2E1E3429006CB25A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9B4DC89D2D8FE28B00978C6E /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -55,6 +72,7 @@
 
 /* Begin PBXFileReference section */
 		9B3B8FC72E1E28CA006CB25A /* LocalNotiInterface.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LocalNotiInterface.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B3B8FFE2E1E3429006CB25A /* libLocalNotiTesting.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLocalNotiTesting.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B4DC8762D8FA9C300978C6E /* LocalNotiService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LocalNotiService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B4DC88A2D8FE27300978C6E /* LocalNotiDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocalNotiDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -73,6 +91,11 @@
 		9B3B8FC82E1E28CA006CB25A /* LocalNotiInterface */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = LocalNotiInterface;
+			sourceTree = "<group>";
+		};
+		9B3B8FFF2E1E3429006CB25A /* LocalNotiTesting */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = LocalNotiTesting;
 			sourceTree = "<group>";
 		};
 		9B4DC8782D8FA9C300978C6E /* LocalNotiService */ = {
@@ -95,6 +118,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9B3B8FFB2E1E3429006CB25A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B3B90052E1E3431006CB25A /* LocalNotiInterface.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,6 +155,7 @@
 				9B4DC8782D8FA9C300978C6E /* LocalNotiService */,
 				9B4DC88B2D8FE27300978C6E /* LocalNotiDemo */,
 				9B3B8FC82E1E28CA006CB25A /* LocalNotiInterface */,
+				9B3B8FFF2E1E3429006CB25A /* LocalNotiTesting */,
 				9B4DC8982D8FE28B00978C6E /* Frameworks */,
 				9B4DC8772D8FA9C300978C6E /* Products */,
 			);
@@ -135,6 +167,7 @@
 				9B4DC8762D8FA9C300978C6E /* LocalNotiService.framework */,
 				9B4DC88A2D8FE27300978C6E /* LocalNotiDemo.app */,
 				9B3B8FC72E1E28CA006CB25A /* LocalNotiInterface.framework */,
+				9B3B8FFE2E1E3429006CB25A /* libLocalNotiTesting.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -188,6 +221,29 @@
 			productName = LocalNotiInterface;
 			productReference = 9B3B8FC72E1E28CA006CB25A /* LocalNotiInterface.framework */;
 			productType = "com.apple.product-type.framework";
+		};
+		9B3B8FFD2E1E3429006CB25A /* LocalNotiTesting */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9B3B90022E1E3429006CB25A /* Build configuration list for PBXNativeTarget "LocalNotiTesting" */;
+			buildPhases = (
+				9B3B8FFA2E1E3429006CB25A /* Sources */,
+				9B3B8FFB2E1E3429006CB25A /* Frameworks */,
+				9B3B8FFC2E1E3429006CB25A /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9B3B90082E1E3431006CB25A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				9B3B8FFF2E1E3429006CB25A /* LocalNotiTesting */,
+			);
+			name = LocalNotiTesting;
+			packageProductDependencies = (
+			);
+			productName = LocalNotiTesting;
+			productReference = 9B3B8FFE2E1E3429006CB25A /* libLocalNotiTesting.a */;
+			productType = "com.apple.product-type.library.static";
 		};
 		9B4DC8752D8FA9C300978C6E /* LocalNotiService */ = {
 			isa = PBXNativeTarget;
@@ -251,6 +307,9 @@
 					9B3B8FC62E1E28CA006CB25A = {
 						CreatedOnToolsVersion = 16.3;
 					};
+					9B3B8FFD2E1E3429006CB25A = {
+						CreatedOnToolsVersion = 16.3;
+					};
 					9B4DC8752D8FA9C300978C6E = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -276,6 +335,7 @@
 				9B4DC8752D8FA9C300978C6E /* LocalNotiService */,
 				9B4DC8892D8FE27300978C6E /* LocalNotiDemo */,
 				9B3B8FC62E1E28CA006CB25A /* LocalNotiInterface */,
+				9B3B8FFD2E1E3429006CB25A /* LocalNotiTesting */,
 			);
 		};
 /* End PBXProject section */
@@ -312,6 +372,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9B3B8FFA2E1E3429006CB25A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9B4DC8722D8FA9C300978C6E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -338,6 +405,11 @@
 			isa = PBXTargetDependency;
 			target = 9B3B8FC62E1E28CA006CB25A /* LocalNotiInterface */;
 			targetProxy = 9B3B8FE92E1E294B006CB25A /* PBXContainerItemProxy */;
+		};
+		9B3B90082E1E3431006CB25A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9B3B8FC62E1E28CA006CB25A /* LocalNotiInterface */;
+			targetProxy = 9B3B90072E1E3431006CB25A /* PBXContainerItemProxy */;
 		};
 		9B4DC89C2D8FE28B00978C6E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -410,6 +482,34 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_MODULE = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		9B3B90032E1E3429006CB25A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = S44QFR96WL;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9B3B90042E1E3429006CB25A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = S44QFR96WL;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -676,6 +776,15 @@
 			buildConfigurations = (
 				9B3B8FDE2E1E28CA006CB25A /* Debug */,
 				9B3B8FDF2E1E28CA006CB25A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9B3B90022E1E3429006CB25A /* Build configuration list for PBXNativeTarget "LocalNotiTesting" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9B3B90032E1E3429006CB25A /* Debug */,
+				9B3B90042E1E3429006CB25A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
