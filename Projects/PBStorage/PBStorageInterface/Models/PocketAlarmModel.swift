@@ -46,7 +46,7 @@ public final class PocketAlarmModel {
   }
 }
 
-public struct Alarm {
+public struct Alarm: Equatable {
   public var isWeekRepeat: Bool
   public var days: [Int]
   public var date: Date

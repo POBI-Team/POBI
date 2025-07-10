@@ -16,7 +16,7 @@ public protocol PocketModelable: PersistentModel {
   var createAt: Date { get set }
 }
 
-public protocol Pocketable {
+public protocol Pocketable: Equatable {
   var title: String { get set }
   var colorIndex: Int { get set }
   var icon: String? { get set }

@@ -7,7 +7,7 @@
 
 import UserNotifications
 
-public enum TrigerType {
+public enum TrigerType: Equatable {
   case day(days: [Int])
   case week(weeks: [Int])
   case date(Date)
