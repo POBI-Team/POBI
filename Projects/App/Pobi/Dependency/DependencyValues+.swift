@@ -25,4 +25,9 @@ extension DependencyValues {
     get { self[FirebaseManagerKey.self] }
     set { self[FirebaseManagerKey.self] = newValue }
   }
+  
+  var pocketStorage: PocketStorageInterface? {
+    get { self[PocketStorageKey.self] }
+    set { self[PocketStorageKey.self] = newValue }
+  }
 }
