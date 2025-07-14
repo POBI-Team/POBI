@@ -22,7 +22,7 @@ struct ItemList<P: PocketModelable>: View {
   init(pocket: P) {
     self.pocket = pocket
     self.lists = pocket.items.sorted(by: { $0.sortIndex < $1.sortIndex })
-    self.newPocketItem = .init()
+    self.newPocketItem = PocketItemModel(sortIndex: pocket.items.count)
   }
   
   var body: some View {
