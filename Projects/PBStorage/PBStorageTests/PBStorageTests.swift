@@ -13,7 +13,7 @@ final class PBStorageTests: XCTestCase {
   var sut: PocketStorage!
   
   override func setUpWithError() throws {
-    sut = try PocketStorage(isStoredInMemoryOnly: true)
+    sut = PocketStorage(isStoredInMemoryOnly: true)
   }
   
   override func tearDownWithError() throws {
@@ -28,7 +28,11 @@ final class PBStorageTests: XCTestCase {
     ]
     // Act
     pockets.forEach {
-      sut.insert($0)
+      do {
+        try sut.insert($0)
+      } catch {
+        XCTFail("저장 실패")
+      }
     }
     // Assert
     do {
@@ -42,9 +46,17 @@ final class PBStorageTests: XCTestCase {
   func test_delete() {
     // Arrange
     let pocket = PocketModel(title: "Test")
-    sut.insert(pocket)
+    do {
+      try sut.insert(pocket)
+    } catch {
+      XCTFail("저장 실패")
+    }
     // Act
-    sut.delete(pocket)
+    do {
+      try sut.delete(pocket)
+    } catch {
+      XCTFail("삭제 실패")
+    }
     // Assert
     do {
       let outputPocket = try sut.read(PocketModel.self, sortBy: [.init(\.createAt)])

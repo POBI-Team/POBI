@@ -28,11 +28,13 @@ public final class PocketStorage: PocketStorageInterface, @unchecked Sendable {
     return try modelContext.fetch(descriptor)
   }
   
-  public func insert<T: PocketModelable>(_ model: T) {
+  public func insert<T: PocketModelable>(_ model: T) throws {
     modelContext.insert(model)
+    try modelContext.save()
   }
   
-  public func delete<T: PocketModelable>(_ model: T) {
+  public func delete<T: PocketModelable>(_ model: T) throws {
     modelContext.delete(model)
+    try? modelContext.save()
   }
 }

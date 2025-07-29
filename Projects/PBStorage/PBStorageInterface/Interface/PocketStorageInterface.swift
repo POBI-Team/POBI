@@ -7,6 +7,6 @@
 
 public protocol PocketStorageInterface: Sendable {  
   func read<T: PocketModelable>(_ type: T.Type, sortBy sorts: [SortDescriptor<T>], filter: Predicate<T>?) throws -> [T]
-  func insert<T: PocketModelable>(_ model: T)
-  func delete<T: PocketModelable>(_ model: T)
+  func insert<T: PocketModelable>(_ model: T) throws
+  func delete<T: PocketModelable>(_ model: T) throws
 }
