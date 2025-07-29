@@ -10,6 +10,8 @@ import SwiftUI
 import PBDesignSystem
 import PBStorageInterface
 
+import ComposableArchitecture
+
 struct PocketDetailView<P: PocketModelable>: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
@@ -69,7 +71,11 @@ struct PocketDetailView<P: PocketModelable>: View {
     .rightItem {
       NavigationLink {
         if let pocket = pocket as? PocketModel {
-          CreatePocketView(pocket: pocket)
+          CreatePocketView(
+            store: Store(initialState: CreatePocketFeature.State(pocket: pocket)) {
+              CreatePocketFeature()
+            }
+          )
         } else if let template = pocket as? TemplateModel {
           CreateTemplateView(template: template)
         }

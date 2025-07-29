@@ -12,6 +12,8 @@ import PBStorage
 import PBStorageInterface
 import LocalNotiService
 
+import ComposableArchitecture
+
 struct HomeView: View {
   @EnvironmentObject private var profileStorage: ProfileStorage
   @State private var selectedTabIndex: Int = 0
@@ -85,7 +87,11 @@ struct HomeView: View {
     .padding(.horizontal, 24)
     .fullScreenCover(isPresented: $isPresentedCreate) {
       NavigationStack {
-        CreatePocketView(pocket: nil)
+        CreatePocketView(
+          store: Store(initialState: CreatePocketFeature.State(pocket: nil)) {
+            CreatePocketFeature()
+          }
+        )
       }
     }
     .fullScreenCover(isPresented: $isPresentedUpdateGuide) {

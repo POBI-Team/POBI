@@ -12,6 +12,8 @@ import PBStorageInterface
 import PBCalendar
 import PBDesignSystem
 
+import ComposableArchitecture
+
 struct PocketCalendarView: View {
   @EnvironmentObject private var formatter: PBFormatter
   @EnvironmentObject private var calendarManager: PBCalendarManager
@@ -170,7 +172,11 @@ struct PocketCalendarView: View {
         if let selectedItem {
           date = Calendar.current.date(from: selectedItem.dateComponents)
         }
-        return CreatePocketView(pocket: nil, date: date)
+        return CreatePocketView(
+          store: Store(initialState: CreatePocketFeature.State(pocket: nil, date: date)) {
+            CreatePocketFeature()
+          }
+        )
       }
       VStack {
         Spacer()
