@@ -144,19 +144,65 @@ final class CreatePocketFeatureTests: XCTestCase {
     XCTAssertEqual("Test", mockPocketStorage.inputValue.insert?.title)
   }
   
-  @MainActor func test_create_호출_시_selectedTemplate이_존재하면_() async {
+  @MainActor func test_create_호출_시_selectedTemplate이_존재하면_Template을_통해_Pocket_생성() async {
     // Arrange
-    let template = TemplateModel(title: "TestTemplate")
+    let template = TemplateModel(title: "TestTemplate", icon: "❤️")
     await sut.send(.setTemplate(template)) {
       $0.selectedTemplate = template
     }
     await sut.receive(\.setTitle) {
       $0.pocket.title = "TestTemplate"
     }
+    await sut.receive(\.setIcon) {
+      $0.pocket.icon = "❤️"
+    }
     // Act
     await sut.send(.create)
     // Assert
     XCTAssertEqual(1, mockPocketStorage.callCount.insert)
     XCTAssertEqual("TestTemplate", mockPocketStorage.inputValue.insert?.title)
+  }
+  
+  @MainActor func test_switchedAlarm_호출하여_알림을_켤_때_앱_알림이_꺼져있는_경우_isPresentedOffAlarmAlert_true() async {
+    // Arrange
+    mockLocalNoti.returnValue.isOnAlarm = false
+    // Act
+    await sut.send(.switchedAlarm(true))
+    // Assert
+    await sut.receive(\.setIsPresentedOffAlarmAlert) {
+      $0.isPresentedOffAlarmAlert = true
+    }
+    XCTAssertEqual(1, mockLocalNoti.callCount.isOnAlarm)
+  }
+  
+  @MainActor func test_switchedAlarm_호출하여_알림을_켤_때_앱_알림이_켜져있는_경우_onAlarm_true() async {
+    // Arrange
+    mockLocalNoti.returnValue.isOnAlarm = true
+    // Act
+    await sut.send(.switchedAlarm(true))
+    // Assert
+    await sut.receive(\.setOnAlarm) {
+      $0.pocket.onAlarm = true
+    }
+    XCTAssertEqual(1, mockLocalNoti.callCount.isOnAlarm)
+  }
+  
+  @MainActor func test_switchedAlarm_호출하여_알림을_끌_때_앱_알림이_켜져있는_경우_onAlarm_false() async {
+    // Arrange
+    let pocket = PocketModel(title: "Test", onAlarm: true)
+    sut = TestStore(initialState: CreatePocketFeature.State(pocket: pocket)) {
+      CreatePocketFeature()
+    } withDependencies: {
+      $0.profileStorage = mockProfileStorage
+      $0.localNotiCenter = mockLocalNoti
+      $0.firebaseManager = mockFirebaseManager
+    }
+    // Act
+    await sut.send(.switchedAlarm(false))
+    // Assert
+    await sut.receive(\.setOnAlarm) {
+      $0.pocket.onAlarm = false
+    }
+    XCTAssertEqual(0, mockLocalNoti.callCount.isOnAlarm)
   }
 }

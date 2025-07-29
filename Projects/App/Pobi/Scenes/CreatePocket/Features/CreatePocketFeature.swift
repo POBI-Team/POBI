@@ -14,9 +14,10 @@ struct CreatePocketFeature {
   
   @ObservableState
   struct State: Equatable {
-    var pocket: Pocket = .init()
+    var pocket = Pocket()
     let pocketModel: PocketModel?
     var selectedTemplate: TemplateModel?
+    var isPresentedOffAlarmAlert = false
     
     init(pocket: PocketModel?, date: Date? = nil) {
       self.pocketModel = pocket
@@ -30,7 +31,12 @@ struct CreatePocketFeature {
   enum Action {
     case setTitle(String)
     case setOnAlarm(Bool)
-    case setTemplate(TemplateModel)
+    case setTemplate(TemplateModel?)
+    case setOnCalendar(Bool)
+    case setPocket(Pocket)
+    case setIsPresentedOffAlarmAlert(Bool)
+    case setIcon(String?)
+    case switchedAlarm(Bool)
     case edit
     case create
   }
@@ -43,13 +49,34 @@ struct CreatePocketFeature {
   var body: some ReducerOf<Self> {
     Reduce { state, action in
       switch action {
+      case .setIsPresentedOffAlarmAlert(let isPresented):
+        state.isPresentedOffAlarmAlert = isPresented
+      case .setPocket(let pocket):
+        state.pocket = pocket
+      case .setOnCalendar(let isCalendar):
+        state.pocket.isCalendar = isCalendar
       case .setTitle(let title):
         state.pocket.title = title
+      case .setIcon(let icon):
+        state.pocket.icon = icon
       case .setOnAlarm(let onAlarm):
         state.pocket.onAlarm = onAlarm
       case .setTemplate(let template):
         state.selectedTemplate = template
-        return .merge(.send(.setTitle(template.title)))
+        guard let template else { return .none }
+        return .merge(
+          .send(.setTitle(template.title)),
+          .send(.setIcon(template.icon))
+        )
+      case .switchedAlarm(let onAlarm):
+        guard onAlarm else { return .send(.setOnAlarm(onAlarm)) }
+        return .run { send in
+          if await localNotiCenter.isOnAlarm() {
+            await send(.setOnAlarm(onAlarm))
+          } else {
+            await send(.setIsPresentedOffAlarmAlert(true))
+          }
+        }
       case .edit:
         guard let pocketModel = state.pocketModel else { return .none }
         localNotiCenter.remove(id: pocketModel.id.uuidString, type: pocketModel.pushType)
@@ -91,7 +118,7 @@ struct CreatePocketFeature {
           newPocketModel.items = template.items.map { $0.copy() }
           firebaseManager.logEvent(event: .importTemplate)
         }
-        pocketStorage?.insert(newPocketModel)
+        try? pocketStorage?.insert(newPocketModel)
         firebaseManager.logEvent(event: .createPocket)
       }
       return .none
