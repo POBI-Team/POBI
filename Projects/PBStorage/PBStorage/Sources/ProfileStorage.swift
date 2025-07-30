@@ -8,12 +8,9 @@
 import SwiftUI
 import Combine
 
-public enum ProfileImageType: String {
-  case first
-  case second
-}
+import PBStorageInterface
 
-public final class ProfileStorage: ObservableObject, @unchecked Sendable {
+public final class ProfileStorage: ProfileStorable, ObservableObject, @unchecked Sendable {
   private let userDefaults: UserDefaults
   
   public init(userDefaults: UserDefaults = .standard) {

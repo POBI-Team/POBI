@@ -9,7 +9,10 @@ import SwiftUI
 
 import PBDesignSystem
 import PBStorage
+import PBStorageInterface
 import LocalNotiService
+
+import ComposableArchitecture
 
 struct HomeView: View {
   @EnvironmentObject private var profileStorage: ProfileStorage
@@ -84,7 +87,11 @@ struct HomeView: View {
     .padding(.horizontal, 24)
     .fullScreenCover(isPresented: $isPresentedCreate) {
       NavigationStack {
-        CreatePocketView(pocket: nil)
+        CreatePocketView(
+          store: Store(initialState: CreatePocketFeature.State(pocket: nil)) {
+            CreatePocketFeature()
+          }
+        )
       }
     }
     .fullScreenCover(isPresented: $isPresentedUpdateGuide) {

@@ -12,27 +12,20 @@ import PBStorage
 import PBStorageInterface
 import LocalNotiService
 
+import ComposableArchitecture
+
 struct CreatePocketView: View {
-  @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
-  @EnvironmentObject private var profileStorage: ProfileStorage
   @State private var isDidTapDownButton = false
   @State private var isPresentedEditAlert = false
-  @State private var isPresentedOffAlarmAlert = false
   @State private var isPresentedTemplateList = false
   @State private var toastID: UUID? = nil
-  @State private var pocket: Pocket
-  @State private var selectedTemplate: TemplateModel?
   @FocusState private var isFocused: Bool
   
-  private let pocketModel: PocketModel?
+  @Bindable private var store: StoreOf<CreatePocketFeature>
   
-  init(pocket: PocketModel?, date: Date? = nil) {
-    self.pocketModel = pocket
-    self.pocket = pocket?.temporary() ?? Pocket(
-      isCalendar: date != nil,
-      alarm: Alarm(date: date ?? .now)
-    )
+  init(store: StoreOf<CreatePocketFeature>) {
+    self.store = store
   }
   
   var body: some View {
@@ -40,18 +33,10 @@ struct CreatePocketView: View {
       PBColors.navy._10.color
         .ignoresSafeArea(.all)
         .pbAlert(isPresented: $isPresentedEditAlert, type: .edit) {
-          pocketModel?.deletePushAlarm()
-          pocketModel?.paste(pocket)
-          if pocket.onAlarm {
-            let nickName = profileStorage.loadNickname()
-            pocketModel?.registerPushAlarm(userNickname: nickName ?? "사용자")
-            FirebaseManager.shared.logEvent(event: .alarmActivation)
-          } else {
-            FirebaseManager.shared.logEvent(event: .alarmDisable)
-          }
+          store.send(.edit)
           dismiss()
         }
-        .pbAlert(isPresented: $isPresentedOffAlarmAlert, type: .offAlarm) {
+        .pbAlert(isPresented: $store.isPresentedOffAlarmAlert.sending(\.setIsPresentedOffAlarmAlert), type: .offAlarm) {
           if let url = URL(string: UIApplication.openSettingsURLString) {
             if UIApplication.shared.canOpenURL(url) {
               UIApplication.shared.open(url)
@@ -62,20 +47,25 @@ struct CreatePocketView: View {
           VStack {
             ScrollView {
               VStack(spacing: 12) {
+                // MARK: Title & Icon
                 InputTitleAndIconView(
                   isFocused: $isFocused,
                   isDidTapDownButton: $isDidTapDownButton,
-                  pocket: $pocket
+                  pocket: $store.pocket.sending(\.setPocket),
                 )
                 // MARK: SettingAlarmView
-                SettingAlarmView(pocket: $pocket, isFocused: _isFocused, isDidTapDownButton: $isDidTapDownButton)
+                SettingAlarmView(
+                  pocket: $store.pocket.sending(\.setPocket),
+                  isFocused: _isFocused,
+                  isDidTapDownButton: $isDidTapDownButton
+                )
                 // MARK: Alarm & Calendar Toggle
                 VStack(spacing: 16) {
                   HStack {
                     Toggle(
                       isOn: Binding(
-                        get: { pocket.onAlarm },
-                        set: { setOnAlarm(valeu: $0) }
+                        get: { store.state.pocket.onAlarm },
+                        set: { print($0); store.send(.switchedAlarm($0)) }
                       )
                     ) {
                       Text("알림")
@@ -87,10 +77,7 @@ struct CreatePocketView: View {
                   
                   HStack {
                     Toggle(
-                      isOn: Binding(
-                        get: { pocket.isCalendar },
-                        set: { pocket.isCalendar = $0 }
-                      )
+                      isOn: $store.pocket.isCalendar.sending(\.setOnCalendar)
                     ) {
                       Text("캘린더에 표시")
                         .font(PBFonts.body._2.font)
@@ -110,36 +97,12 @@ struct CreatePocketView: View {
             }
             .scrollIndicators(.hidden)
             .scrollDismissesKeyboard(.immediately)
-            .animation(.easeInOut, value: pocket.onAlarm)
-            .onChange(of: selectedTemplate) { oldValue, newValue in
-              if let template = newValue {
-                pocket.title = template.title
-                pocket.icon = template.icon
-              }
-            }
+            .animation(.easeInOut, value: store.state.pocket.onAlarm)
 
             PBRoundButton(16) {
-              guard !pocket.title.isEmpty else { toastID = .init(); return }
-              if pocketModel == nil {
-                let newPocketModel = PocketModel(pocket)
-                if pocket.onAlarm {
-                  let nickName = profileStorage.loadNickname()
-                  newPocketModel.registerPushAlarm(userNickname: nickName ?? "사용자")
-                  FirebaseManager.shared.logEvent(event: .alarmActivation)
-                } else {
-                  FirebaseManager.shared.logEvent(event: .alarmDisable)
-                }
-                if pocket.isCalendar {
-                  FirebaseManager.shared.logEvent(event: .onCalendar)
-                } else {
-                  FirebaseManager.shared.logEvent(event: .offCalendar)
-                }
-                if let template = selectedTemplate {
-                  newPocketModel.items = template.items.map { $0.copy() }
-                  FirebaseManager.shared.logEvent(event: .importTemplate)
-                }
-                modelContext.insert(newPocketModel)
-                FirebaseManager.shared.logEvent(event: .createPocket)
+              guard !store.state.pocket.title.isEmpty else { toastID = .init(); return }
+              if store.state.pocketModel == nil {
+                store.send(.create)
                 dismiss()
               } else {
                 isPresentedEditAlert.toggle()
@@ -154,7 +117,7 @@ struct CreatePocketView: View {
             .padding([.horizontal, .bottom], 14)
           }
         }
-        .onChange(of: pocket.onAlarm) { _, newValue in
+        .onChange(of: store.state.pocket.onAlarm) { _, newValue in
           withAnimation {
             isFocused = false
             isDidTapDownButton = false
@@ -165,7 +128,7 @@ struct CreatePocketView: View {
       Button {
         dismiss()
       } label: {
-        if pocketModel == nil {
+        if store.state.pocketModel == nil {
           PBImages.cancel.image
         } else {
           PBImages.left.image
@@ -173,7 +136,7 @@ struct CreatePocketView: View {
       }
     }
     .rightItem {
-      if pocketModel == nil {
+      if store.state.pocketModel == nil {
         Button {
           isPresentedTemplateList = true
         } label: {
@@ -185,33 +148,27 @@ struct CreatePocketView: View {
     }
     .pbToast(toastID: $toastID, message: "포켓 이름을 입력해주세요!", height: 12)
     .fullScreenCover(isPresented: $isPresentedTemplateList) {
-      TemplateList(selectedTemplate: $selectedTemplate)
-    }
-  }
-}
-
-private extension CreatePocketView {
-  func setOnAlarm(valeu: Bool) {
-    if valeu {
-      Task {
-        if await LocalNotiCenter.shared.isOnAlarm() {
-          pocket.onAlarm = valeu
-        } else {
-          isPresentedOffAlarmAlert = true
-        }
-      }
-    } else {
-      pocket.onAlarm = valeu
+      TemplateList(
+        selectedTemplate: $store.selectedTemplate.sending(\.setTemplate)
+      )
     }
   }
 }
 
 #Preview("Edit") {
-  CreatePocketView(pocket: .init(onAlarm: true))
-    .environmentObject(PBFormatter())
+  CreatePocketView(
+    store: Store(initialState: CreatePocketFeature.State(pocket: .init(onAlarm: true))) {
+      CreatePocketFeature()
+    }
+  )
+  .environmentObject(PBFormatter())
 }
 
 #Preview("Create") {
-  CreatePocketView(pocket: nil)
-    .environmentObject(PBFormatter())
+  CreatePocketView(
+    store: Store(initialState: CreatePocketFeature.State(pocket: nil)) {
+      CreatePocketFeature()
+    }
+  )
+  .environmentObject(PBFormatter())
 }

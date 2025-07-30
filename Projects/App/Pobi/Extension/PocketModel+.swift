@@ -7,6 +7,7 @@
 
 import PBStorageInterface
 import LocalNotiService
+import LocalNotiInterface
 
 extension PocketModel {
   public func registerPushAlarm(userNickname: String) {
@@ -23,7 +24,7 @@ extension PocketModel {
     LocalNotiCenter.shared.remove(id: id.uuidString, type: pushType)
   }
   
-  private var pushType: TrigerType {
+  public var pushType: TrigerType {
     if repeats {
       if alarm.isWeekRepeat {
         return .week(weeks: alarm.days)

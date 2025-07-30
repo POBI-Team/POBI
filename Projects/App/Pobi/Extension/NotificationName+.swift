@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-import PBStorage
+import PBStorageInterface
 import PBDesignSystem
 
 extension NSNotification.Name {
@@ -17,7 +17,6 @@ extension NSNotification.Name {
 }
 
 extension ProfileImageType {
-  
   public var profileImage: Image {
     switch self {
     case .first:

@@ -11,6 +11,8 @@ import PBCalendar
 import PBDesignSystem
 import PBStorageInterface
 
+import ComposableArchitecture
+
 struct PocketSheet: View {
   @Environment(\.modelContext) private var modelContext
   @EnvironmentObject private var formatter: PBFormatter
@@ -70,8 +72,11 @@ struct PocketSheet: View {
               HStack(spacing: 8) {
                 NavigationLink {
                   if isEditMode {
-                    CreatePocketView(pocket: pocket)
-                      .environmentObject(formatter)
+                    CreatePocketView(
+                      store: Store(initialState: CreatePocketFeature.State(pocket: pocket)) {
+                        CreatePocketFeature()
+                      }
+                    )
                   } else {
                     PocketDetailView(pocket)
                   }

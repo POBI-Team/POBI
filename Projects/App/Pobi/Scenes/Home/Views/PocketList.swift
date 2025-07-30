@@ -11,6 +11,8 @@ import SwiftData
 import PBDesignSystem
 import PBStorageInterface
 
+import ComposableArchitecture
+
 struct PocketList: View {
   @EnvironmentObject var notificationManager: NotificationManager
   
@@ -76,7 +78,11 @@ struct PocketList: View {
     .fullScreenCover(isPresented: $isPresentedCreate) {
       NavigationStack {
         if selectedTabIndex == 0 {
-          CreatePocketView(pocket: nil)
+          CreatePocketView(
+            store: Store(initialState: CreatePocketFeature.State(pocket: nil)) {
+              CreatePocketFeature()
+            }
+          )
         } else {
           CreateTemplateView(template: nil)
         }

@@ -10,6 +10,8 @@ import SwiftUI
 import PBDesignSystem
 import PBStorageInterface
 
+import ComposableArchitecture
+
 struct PocketCell<P: PocketModelable>: View {
   private let pocket: P
   private let colors = PBColors.list.colors
@@ -79,7 +81,11 @@ struct PocketCell<P: PocketModelable>: View {
     }
     .navigationDestination(isPresented: $isPresentedEdit) {
       if let pocket = pocket as? PocketModel {
-        CreatePocketView(pocket: pocket)
+        CreatePocketView(
+          store: Store(initialState: CreatePocketFeature.State(pocket: pocket)) {
+            CreatePocketFeature()
+          }
+        )
       } else if let template = pocket as? TemplateModel {
         CreateTemplateView(template: template)
       }

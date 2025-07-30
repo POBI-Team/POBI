@@ -7,10 +7,12 @@
 
 import UserNotifications
 
-public final class LocalNotiCenter: Sendable {
+import LocalNotiInterface
+
+public final class LocalNotiCenter: Notifiable {
   public static let shared = LocalNotiCenter()
   
-  init() {}
+  public init() {}
   
   public func isOnAlarm() async -> Bool {
     return await withCheckedContinuation { continuation in
@@ -57,10 +59,4 @@ public final class LocalNotiCenter: Sendable {
   public func removeAll() {
     UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
   }
-  
-  public func removeAlert(id: String, type: TrigerType) {
-    UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: type.requsetIds(id: id))
-  }
 }
-
-
