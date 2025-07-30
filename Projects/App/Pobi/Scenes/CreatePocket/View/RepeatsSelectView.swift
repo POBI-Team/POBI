@@ -1,5 +1,5 @@
 //
-//  DateSelectView.swift
+//  RepeatsSelectView.swift
 //  Pobi
 //
 //  Created by 이시원 on 3/10/25.
@@ -10,7 +10,7 @@ import SwiftUI
 import PBDesignSystem
 import PBStorageInterface
 
-struct DateSelectView: View {
+struct RepeatsSelectView: View {
   enum Weekday: Int, CaseIterable, CustomStringConvertible {
     case mon = 2
     case tues = 3
@@ -161,7 +161,7 @@ struct DateSelectView: View {
   }
 }
 
-extension DateSelectView {
+extension RepeatsSelectView {
   var isSettingButtonDisabled: Bool {
     if selectedTabIndex == 0, selectedWeekDays.isEmpty { return true }
     else if selectedTabIndex == 1, selectedDays.isEmpty { return true }
@@ -171,7 +171,7 @@ extension DateSelectView {
 
 #Preview {
   Color.white
-    .sheet(isPresented: .constant(true), content: { DateSelectView(alarm: .constant(.init(isWeekRepeat: true, days: [1,2,3,4,5,6,7], date: .now, time: .now)))
+    .sheet(isPresented: .constant(true), content: { RepeatsSelectView(alarm: .constant(.init(isWeekRepeat: true, days: [1,2,3,4,5,6,7], date: .now, time: .now)))
           
     })
 }

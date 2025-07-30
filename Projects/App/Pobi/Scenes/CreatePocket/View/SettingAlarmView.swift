@@ -13,7 +13,7 @@ import PBStorageInterface
 struct SettingAlarmView: View {
   @State private var isSelectedDate = false
   @State private var isSelectedTime = false
-  @State private var isPresentedDataSelectView = false
+  @State private var isPresentedRepeatsSelectView = false
   @Binding private var pocket: Pocket
   @Binding private var isDidTapDownButton: Bool
   @FocusState private var isFocused: Bool
@@ -42,7 +42,7 @@ struct SettingAlarmView: View {
         Spacer()
         Button {
           if pocket.repeats {
-            isPresentedDataSelectView.toggle()
+            isPresentedRepeatsSelectView.toggle()
           } else {
             withAnimation(.default.speed(1.5)) {
               isSelectedDate.toggle()
@@ -145,8 +145,8 @@ struct SettingAlarmView: View {
         isSelectedTime = false
       }
     })
-    .sheet(isPresented: $isPresentedDataSelectView) {
-      DateSelectView(
+    .sheet(isPresented: $isPresentedRepeatsSelectView) {
+      RepeatsSelectView(
         alarm: Binding(get: { pocket.alarm }, set: { pocket.alarm = $0 })
       )
     }
