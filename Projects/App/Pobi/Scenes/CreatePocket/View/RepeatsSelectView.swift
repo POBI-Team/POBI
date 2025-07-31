@@ -152,7 +152,7 @@ struct RepeatsSelectView: View {
       }
       .disabled(isSettingButtonDisabled)
       .foregroundStyle(PBColors.navy._900.color)
-      .frame(height: 48)
+      .frame(height: 52)
     }
     .padding(.top, 24)
     .padding(.horizontal, 20)
