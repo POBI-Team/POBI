@@ -24,7 +24,7 @@ extension PocketModel {
     LocalNotiCenter.shared.remove(id: id.uuidString, type: pushType, time: alarm.time)
   }
   
-  public var pushType: TrigerType {
+  public var pushType: RepeatType {
     if repeats {
       if alarm.isWeekRepeat {
         return .week(weeks: alarm.days)

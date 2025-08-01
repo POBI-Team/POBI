@@ -39,7 +39,7 @@ public final class LocalNotiCenter: Notifiable {
     title: String,
     body: String,
     id: String,
-    trigerType: TrigerType,
+    trigerType: RepeatType,
     time: Date
   ) {
     let content = UNMutableNotificationContent()
@@ -62,7 +62,7 @@ public final class LocalNotiCenter: Notifiable {
     }
   }
   
-  public func remove(id: String, type: TrigerType, time: Date) {
+  public func remove(id: String, type: RepeatType, time: Date) {
     let ids = dateComponentsMaker.make(type: type, time: time).map { dateComponents in  id+"-\(dateComponents.description)" }
     UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ids)
   }

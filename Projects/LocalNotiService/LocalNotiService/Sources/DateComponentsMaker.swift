@@ -8,7 +8,7 @@
 import LocalNotiInterface
 
 struct DateComponentsMaker {
-  func make(type: TrigerType, time: Date) -> [DateComponents] {
+  func make(type: RepeatType, time: Date) -> [DateComponents] {
     let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: time)
     switch type {
     case let .day(days):
