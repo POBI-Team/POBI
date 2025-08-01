@@ -13,6 +13,7 @@
 		9B3B90052E1E3431006CB25A /* LocalNotiInterface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B3B8FC72E1E28CA006CB25A /* LocalNotiInterface.framework */; };
 		9B4DC8992D8FE28B00978C6E /* LocalNotiService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B4DC8762D8FA9C300978C6E /* LocalNotiService.framework */; };
 		9B4DC89A2D8FE28B00978C6E /* LocalNotiService.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9B4DC8762D8FA9C300978C6E /* LocalNotiService.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		9B6C66012E3CAF91000C6964 /* LocalNotiService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B4DC8762D8FA9C300978C6E /* LocalNotiService.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,13 @@
 			remoteInfo = LocalNotiInterface;
 		};
 		9B4DC89B2D8FE28B00978C6E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B4DC86D2D8FA9C300978C6E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9B4DC8752D8FA9C300978C6E;
+			remoteInfo = LocalNotiService;
+		};
+		9B6C66022E3CAF91000C6964 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9B4DC86D2D8FA9C300978C6E /* Project object */;
 			proxyType = 1;
@@ -75,6 +83,7 @@
 		9B3B8FFE2E1E3429006CB25A /* libLocalNotiTesting.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLocalNotiTesting.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B4DC8762D8FA9C300978C6E /* LocalNotiService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LocalNotiService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B4DC88A2D8FE27300978C6E /* LocalNotiDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LocalNotiDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B6C65FD2E3CAF91000C6964 /* LocalNotiServiceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LocalNotiServiceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -109,6 +118,11 @@
 		9B4DC88B2D8FE27300978C6E /* LocalNotiDemo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = LocalNotiDemo;
+			sourceTree = "<group>";
+		};
+		9B6C65FE2E3CAF91000C6964 /* LocalNotiServiceTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = LocalNotiServiceTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -146,6 +160,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9B6C65FA2E3CAF91000C6964 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B6C66012E3CAF91000C6964 /* LocalNotiService.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -156,6 +178,7 @@
 				9B4DC88B2D8FE27300978C6E /* LocalNotiDemo */,
 				9B3B8FC82E1E28CA006CB25A /* LocalNotiInterface */,
 				9B3B8FFF2E1E3429006CB25A /* LocalNotiTesting */,
+				9B6C65FE2E3CAF91000C6964 /* LocalNotiServiceTests */,
 				9B4DC8982D8FE28B00978C6E /* Frameworks */,
 				9B4DC8772D8FA9C300978C6E /* Products */,
 			);
@@ -168,6 +191,7 @@
 				9B4DC88A2D8FE27300978C6E /* LocalNotiDemo.app */,
 				9B3B8FC72E1E28CA006CB25A /* LocalNotiInterface.framework */,
 				9B3B8FFE2E1E3429006CB25A /* libLocalNotiTesting.a */,
+				9B6C65FD2E3CAF91000C6964 /* LocalNotiServiceTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -294,6 +318,29 @@
 			productReference = 9B4DC88A2D8FE27300978C6E /* LocalNotiDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		9B6C65FC2E3CAF91000C6964 /* LocalNotiServiceTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9B6C66062E3CAF91000C6964 /* Build configuration list for PBXNativeTarget "LocalNotiServiceTests" */;
+			buildPhases = (
+				9B6C65F92E3CAF91000C6964 /* Sources */,
+				9B6C65FA2E3CAF91000C6964 /* Frameworks */,
+				9B6C65FB2E3CAF91000C6964 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9B6C66032E3CAF91000C6964 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				9B6C65FE2E3CAF91000C6964 /* LocalNotiServiceTests */,
+			);
+			name = LocalNotiServiceTests;
+			packageProductDependencies = (
+			);
+			productName = LocalNotiServiceTests;
+			productReference = 9B6C65FD2E3CAF91000C6964 /* LocalNotiServiceTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -316,6 +363,9 @@
 					9B4DC8892D8FE27300978C6E = {
 						CreatedOnToolsVersion = 16.2;
 					};
+					9B6C65FC2E3CAF91000C6964 = {
+						CreatedOnToolsVersion = 16.3;
+					};
 				};
 			};
 			buildConfigurationList = 9B4DC8702D8FA9C300978C6E /* Build configuration list for PBXProject "LocalNotiService" */;
@@ -336,6 +386,7 @@
 				9B4DC8892D8FE27300978C6E /* LocalNotiDemo */,
 				9B3B8FC62E1E28CA006CB25A /* LocalNotiInterface */,
 				9B3B8FFD2E1E3429006CB25A /* LocalNotiTesting */,
+				9B6C65FC2E3CAF91000C6964 /* LocalNotiServiceTests */,
 			);
 		};
 /* End PBXProject section */
@@ -356,6 +407,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		9B4DC8882D8FE27300978C6E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9B6C65FB2E3CAF91000C6964 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -393,6 +451,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9B6C65F92E3CAF91000C6964 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -415,6 +480,11 @@
 			isa = PBXTargetDependency;
 			target = 9B4DC8752D8FA9C300978C6E /* LocalNotiService */;
 			targetProxy = 9B4DC89B2D8FE28B00978C6E /* PBXContainerItemProxy */;
+		};
+		9B6C66032E3CAF91000C6964 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9B4DC8752D8FA9C300978C6E /* LocalNotiService */;
+			targetProxy = 9B6C66022E3CAF91000C6964 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -768,6 +838,40 @@
 			};
 			name = Release;
 		};
+		9B6C66042E3CAF91000C6964 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S44QFR96WL;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.siwon.LocalNotiServiceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9B6C66052E3CAF91000C6964 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = S44QFR96WL;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.siwon.LocalNotiServiceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -812,6 +916,15 @@
 			buildConfigurations = (
 				9B4DC8962D8FE27400978C6E /* Debug */,
 				9B4DC8972D8FE27400978C6E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9B6C66062E3CAF91000C6964 /* Build configuration list for PBXNativeTarget "LocalNotiServiceTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9B6C66042E3CAF91000C6964 /* Debug */,
+				9B6C66052E3CAF91000C6964 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

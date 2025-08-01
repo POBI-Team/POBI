@@ -79,7 +79,7 @@ struct CreatePocketFeature {
         }
       case .edit:
         guard let pocketModel = state.pocketModel else { return .none }
-        localNotiCenter.remove(id: pocketModel.id.uuidString, type: pocketModel.pushType)
+        localNotiCenter.remove(id: pocketModel.id.uuidString, type: pocketModel.pushType, time: pocketModel.alarm.time)
         pocketModel.paste(state.pocket)
         if state.pocket.onAlarm {
           let nickName = profileStorage.loadNickname() ?? "사용자"
