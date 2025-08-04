@@ -142,13 +142,7 @@ private extension SettingAlarmView {
   }
   
   var dateLabel: String {
-    let startDate = formatter.label(pocket.alarm.date, format: "yy년 M월 d일")
-    let endDate = formatter.label(pocket.alarm.endDate, format: "yy년 M월 d일")
-    if startDate == endDate {
-      return startDate
-    } else {
-      return "\(startDate) - \(endDate)"
-    }
+    formatter.alarmLabel(pocket.alarm.date, endDate: pocket.alarm.endDate)
   }
 }
 

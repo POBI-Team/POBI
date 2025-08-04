@@ -11,7 +11,23 @@ final class PBFormatter: Sendable, ObservableObject {
   private let weeks = [2,3,4,5,6,7,1] // 월요일 부터 시작
   let dateFormatter = DateFormatter()
   
-  func label(_ date: Date, format: String, locale: Locale? = nil) -> String {
+  func alarmLabel(_ date: Date, endDate: Date?) -> String {
+    var label = self.label(date, format: "yy년 M월 d일")
+    if let endDate {
+      let startDateComponents = Calendar.current.dateComponents([.year, .month, .day], from: date)
+      let endDateComponents = Calendar.current.dateComponents([.year, .month, .day], from: endDate)
+      if startDateComponents.year != endDateComponents.year {
+        label += " - " + self.label(endDate, format: "yy년 M월 d일")
+      } else if startDateComponents.month != endDateComponents.month {
+        label += " - " + self.label(endDate, format: "M월 d일")
+      } else if startDateComponents.day != endDateComponents.day {
+        label += " - " + self.label(endDate, format: "d일")
+      }
+    }
+    return label
+  }
+  
+  func label(_ date: Date, endDate: Date? = nil, format: String, locale: Locale? = nil) -> String {
     dateFormatter.dateFormat = format
     dateFormatter.locale = locale
     return dateFormatter.string(from: date)

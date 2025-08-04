@@ -103,7 +103,10 @@ private extension PocketDetailView {
             Text("\(time)")
           })
       }
-      let date = formatter.label(pocket.alarm.date, format: "M월 d일")
+      var date = formatter.alarmLabel(
+        pocket.alarm.date,
+        endDate: pocket.alarm.endDate
+      )
       return AnyView(
         HStack(spacing: 0) {
           Text("\(date)")
@@ -121,7 +124,32 @@ private extension PocketDetailView {
       PocketModel(
         title: "테스트",
         onAlarm: true,
-        alarm: PocketAlarmModel(isWeekRepeat: true, days: [1,2], date: .now, time: .now)
+        alarm: PocketAlarmModel(
+          isWeekRepeat: true,
+          days: [1,2],
+          date: Calendar.current.date(from: DateComponents(year: 2025, month: 12, day: 20))!,
+          endDate:  Calendar.current.date(from: DateComponents(year: 2025, month: 12, day: 29))!,
+          time: .now
+        )
+      )
+    )
+    .environmentObject(PBFormatter())
+  }
+}
+
+#Preview {
+  NavigationStack {
+    PocketDetailView(
+      PocketModel(
+        title: "테스트",
+        onAlarm: true,
+        alarm: PocketAlarmModel(
+          isWeekRepeat: true,
+          days: [1,2],
+          date: .now,
+          endDate: .now,
+          time: .now
+        )
       )
     )
     .environmentObject(PBFormatter())
