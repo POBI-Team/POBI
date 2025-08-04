@@ -65,7 +65,13 @@ public final class PBCalendarManager: Sendable, ObservableObject {
               }
             }
           } else {
-            if calendar.date(pocket.alarm.date, matchesComponents: itemDateComponents) {
+            if let endDate = pocket.alarm.endDate {
+              if (date! >= pocket.alarm.date && date! <= endDate) ||
+                  calendar.date(pocket.alarm.date, matchesComponents: itemDateComponents) ||
+                  calendar.date(endDate, matchesComponents: itemDateComponents) {
+                targetPockets.append(pocket)
+              }
+            } else if calendar.date(pocket.alarm.date, matchesComponents: itemDateComponents) {
               targetPockets.append(pocket)
             }
           }

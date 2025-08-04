@@ -11,7 +11,7 @@ import LocalNotiInterface
 
 public final class LocalNotiCenter: Notifiable {
   public static let shared = LocalNotiCenter()
-  
+  private let dateComponentsMaker: DateComponentsMaker = DateComponentsMaker()
   public init() {}
   
   public func isOnAlarm() async -> Bool {
@@ -39,7 +39,7 @@ public final class LocalNotiCenter: Notifiable {
     title: String,
     body: String,
     id: String,
-    trigerType: TrigerType,
+    trigerType: RepeatType,
     time: Date
   ) {
     let content = UNMutableNotificationContent()
@@ -47,13 +47,24 @@ public final class LocalNotiCenter: Notifiable {
     content.body = body
     content.sound = .default
     content.userInfo = ["id": id]
-    trigerType.makeRequsts(time: time, id: id, content: content).forEach {
-      UNUserNotificationCenter.current().add($0)
+    dateComponentsMaker.make(type: trigerType, time: time).forEach { dateComponents in
+      let isRepeat: Bool
+      switch trigerType {
+      case .day, .week:
+        isRepeat = true
+      case .date:
+        isRepeat = false
+      }
+      let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: isRepeat)
+      UNUserNotificationCenter.current().add(
+        UNNotificationRequest(identifier: id+"-\(dateComponents.description)", content: content, trigger: trigger)
+      )
     }
   }
   
-  public func remove(id: String, type: TrigerType) {
-    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: type.requsetIds(id: id))
+  public func remove(id: String, type: RepeatType, time: Date) {
+    let ids = dateComponentsMaker.make(type: type, time: time).map { dateComponents in  id+"-\(dateComponents.description)" }
+    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ids)
   }
   
   public func removeAll() {

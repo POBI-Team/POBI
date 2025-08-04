@@ -11,9 +11,10 @@ import PBDesignSystem
 import PBStorageInterface
 
 struct SettingAlarmView: View {
-  @State private var isSelectedDate = false
   @State private var isSelectedTime = false
-  @State private var isPresentedDataSelectView = false
+  @State private var isPresentedRepeatsSelectView = false
+  @State private var isPresentedDateSelectView = false
+
   @Binding private var pocket: Pocket
   @Binding private var isDidTapDownButton: Bool
   @FocusState private var isFocused: Bool
@@ -42,10 +43,10 @@ struct SettingAlarmView: View {
         Spacer()
         Button {
           if pocket.repeats {
-            isPresentedDataSelectView.toggle()
+            isPresentedRepeatsSelectView.toggle()
           } else {
             withAnimation(.default.speed(1.5)) {
-              isSelectedDate.toggle()
+              isPresentedDateSelectView.toggle()
               isDidTapDownButton = false
               isSelectedTime = false
               isFocused = false
@@ -58,7 +59,7 @@ struct SettingAlarmView: View {
               .font(PBFonts.caption._1.font)
               .foregroundStyle(PBColors.navy._300.color)
               .lineLimit(1)
-              .frame(maxWidth: 150, alignment: .trailing)
+              .frame(maxWidth: 250, alignment: .trailing)
             PBImages.right.image
           }
           .frame(height: 34)
@@ -66,27 +67,6 @@ struct SettingAlarmView: View {
       }
       .padding(.horizontal, 20)
       .padding(.bottom, 8)
-      
-      VStack(spacing: 0) {
-        if isSelectedDate {
-          Divider()
-        }
-        DatePicker(
-          "",
-          selection: $pocket.alarm.date,
-          displayedComponents: .date
-        )
-        .frame(height: isSelectedDate ? nil : 0, alignment: .top)
-        .tint(PBColors.yellow._500.color)
-        .datePickerStyle(.graphical)
-        .environment(\.locale, Locale(identifier: Locale.preferredLanguages[0]))
-        if isSelectedDate {
-          Divider()
-        }
-      }
-      .padding(.horizontal, 20)
-      .disabled(!isSelectedDate)
-      .clipped()
       
       HStack {
         Text("시간")
@@ -98,7 +78,6 @@ struct SettingAlarmView: View {
             isSelectedTime.toggle()
             isDidTapDownButton = false
             isFocused = false
-            isSelectedDate = false
           }
         } label: {
           Text(timeLabel)
@@ -119,12 +98,15 @@ struct SettingAlarmView: View {
             .padding(.horizontal, 20)
         }
         
-        DatePicker(
-          "",
-          selection: $pocket.alarm.time,
-          displayedComponents: .hourAndMinute
-        )
-        .datePickerStyle(.wheel)
+        HStack {
+          DatePicker(
+            "",
+            selection: $pocket.alarm.time,
+            displayedComponents: .hourAndMinute
+          )
+          .labelsHidden()
+          .datePickerStyle(.wheel)
+        }
         .frame(height: isSelectedTime ? nil : 0, alignment: .top)
       }
       .disabled(!isSelectedTime)
@@ -133,22 +115,19 @@ struct SettingAlarmView: View {
     .padding(.vertical, 16)
     .background(.white)
     .clipShape(RoundedRectangle(cornerRadius: 20))
-    .onChange(of: pocket.repeats, { _, _ in
-      withAnimation {
-        isSelectedDate = false
-      }
-    })
     .onChange(of: isDidTapDownButton, { _, new in
       guard new else { return }
       withAnimation {
-        isSelectedDate = false
         isSelectedTime = false
       }
     })
-    .sheet(isPresented: $isPresentedDataSelectView) {
-      DateSelectView(
+    .sheet(isPresented: $isPresentedRepeatsSelectView) {
+      RepeatsSelectView(
         alarm: Binding(get: { pocket.alarm }, set: { pocket.alarm = $0 })
       )
+    }
+    .sheet(isPresented: $isPresentedDateSelectView) {
+      DateSelectView(pocket: $pocket)
     }
   }
 }
@@ -163,15 +142,16 @@ private extension SettingAlarmView {
   }
   
   var dateLabel: String {
-    formatter.label(pocket.alarm.date, format: "yyyy년 M월 d일")
+    formatter.alarmLabel(pocket.alarm.date, endDate: pocket.alarm.endDate)
   }
 }
 
 #Preview {
   @Previewable @FocusState var isFocused: Bool
+  @Previewable @State var pocket = Pocket()
   
   SettingAlarmView(
-    pocket: .constant(.init()),
+    pocket: $pocket,
     isFocused: _isFocused,
     isDidTapDownButton: .constant(false)
   )

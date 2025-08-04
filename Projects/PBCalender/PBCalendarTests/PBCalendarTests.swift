@@ -83,6 +83,66 @@ final class PBCalendarTests: XCTestCase {
     XCTAssertEqual([["10, 10일 하루"]], output)
   }
   
+  func test_days_호출_시_date와_endDate가_10일로_동일할_경우_10일에_표시() {
+    // Arrange
+    let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
+    let pockets: [PocketModel] = [
+      PocketModel(
+        title: "10일 하루",
+        repeats: false,
+        alarm: PocketAlarmModel(
+          isWeekRepeat: false,
+          days: [],
+          date: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 10, hour: 3, minute: 3))!,
+          endDate: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 10, hour: 11, minute: 11))!,
+          time: .now
+        )
+      )
+    ]
+    // Act
+    let output = sut.days(in: date, with: pockets)
+      .filter { item in
+        !item.pockets.isEmpty
+      }
+      .map { item in
+        item.pockets.map {
+          "\(item.dateComponents.day!), \($0.title)"
+        }
+      }
+    // Assert
+    XCTAssertEqual([["10, 10일 하루"]], output)
+  }
+  
+  func test_days_호출_시_date_3월30일_endDate_4월2일인_경우_30일_부터_4일까지_표시() {
+    // Arrange
+    let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
+    let pockets: [PocketModel] = [
+      PocketModel(
+        title: "3월 30일 ~ 4월 2일",
+        repeats: false,
+        alarm: PocketAlarmModel(
+          isWeekRepeat: false,
+          days: [],
+          date: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 30, hour: 3, minute: 3))!,
+          endDate: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 2, hour: 11, minute: 11))!,
+          time: .now
+        )
+      )
+    ]
+    // Act
+    let output = sut.days(in: date, with: pockets)
+      .filter { item in
+        !item.pockets.isEmpty
+      }
+      .map { item in
+        item.pockets.map {
+          "\(item.dateComponents.day!), \($0.title)"
+        }
+      }
+    // Assert
+    XCTAssertEqual([["30, 3월 30일 ~ 4월 2일"], ["31, 3월 30일 ~ 4월 2일"], ["1, 3월 30일 ~ 4월 2일"], ["2, 3월 30일 ~ 4월 2일"]], output)
+  }
+  
   func test_days_호출_시_일요일_반복_포켓이_등록되어_있을_경우_매주_일요일에_표시() {
     // Arrange
     let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월

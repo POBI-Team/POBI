@@ -14,6 +14,7 @@ import LocalNotiTesting
 
 import ComposableArchitecture
 
+@MainActor
 final class CreatePocketFeatureTests: XCTestCase {
   var sut: TestStore<CreatePocketFeature.State, CreatePocketFeature.Action>!
   var mockProfileStorage: MockProfileStorage!
@@ -21,7 +22,7 @@ final class CreatePocketFeatureTests: XCTestCase {
   var mockFirebaseManager: MockFirebaseManager!
   var mockPocketStorage: MockPocketStorage!
   
-  override func setUpWithError() throws {
+  override func setUp() async throws {
     mockProfileStorage = MockProfileStorage()
     mockLocalNoti = MockLocalNotiCenter()
     mockFirebaseManager = MockFirebaseManager()
@@ -36,7 +37,7 @@ final class CreatePocketFeatureTests: XCTestCase {
     }
   }
   
-  override func tearDownWithError() throws {
+  override func tearDown() async throws {
     mockProfileStorage = nil
     mockLocalNoti = nil
     mockFirebaseManager = nil
@@ -54,7 +55,8 @@ final class CreatePocketFeatureTests: XCTestCase {
       $0.firebaseManager = mockFirebaseManager
     }
     mockProfileStorage.returnValue.loadNickname = "testUser"
-    
+    let pushType = pocket.pushType
+
     // Act
     await sut.send(.setTitle("newTitle")) {
       $0.pocket.title = "newTitle"
@@ -67,7 +69,7 @@ final class CreatePocketFeatureTests: XCTestCase {
     
     XCTAssertEqual(1, mockLocalNoti.callCount.remove)
     XCTAssertEqual(pocket.id.uuidString, mockLocalNoti.inputValue.remove?.id)
-    XCTAssertEqual(pocket.pushType, mockLocalNoti.inputValue.remove?.type)
+    XCTAssertEqual(pushType, mockLocalNoti.inputValue.remove?.type)
 
     XCTAssertEqual(1, mockLocalNoti.callCount.register)
     XCTAssertEqual("똑똑! testUser님 'newTitle' 소지품 챙기세요!", mockLocalNoti.inputValue.register?.body)
@@ -87,7 +89,7 @@ final class CreatePocketFeatureTests: XCTestCase {
       $0.firebaseManager = mockFirebaseManager
     }
     mockProfileStorage.returnValue.loadNickname = "testUser"
-    
+    let pushType = pocket.pushType
     // Act
     await sut.send(.setTitle("newTitle")) {
       $0.pocket.title = "newTitle"
@@ -100,7 +102,7 @@ final class CreatePocketFeatureTests: XCTestCase {
     
     XCTAssertEqual(1, mockLocalNoti.callCount.remove)
     XCTAssertEqual(pocket.id.uuidString, mockLocalNoti.inputValue.remove?.id)
-    XCTAssertEqual(pocket.pushType, mockLocalNoti.inputValue.remove?.type)
+    XCTAssertEqual(pushType, mockLocalNoti.inputValue.remove?.type)
 
     XCTAssertEqual(0, mockLocalNoti.callCount.register)
   }

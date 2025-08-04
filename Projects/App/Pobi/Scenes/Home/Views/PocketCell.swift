@@ -98,7 +98,7 @@ private extension PocketCell {
     if pocket.repeats {
       return formatter.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
     }
-    return formatter.label(pocket.alarm.date, format: "M월 d일")
+    return formatter.alarmLabel(pocket.alarm.date, endDate: pocket.alarm.endDate)
   }
 }
 
@@ -113,7 +113,25 @@ private extension PocketCell {
 }
 
 #Preview("date") {
-  PocketCell(PocketModel(id: .init(), title: "테스트", onAlarm: true, alarm: .init(isWeekRepeat: true, days: [1,2], date: .now, time: .now)))
+  PocketCell(PocketModel(id: .init(), title: "테스트", onAlarm: true, alarm: .init(isWeekRepeat: true, days: [1,2], date: .now, endDate: .now, time: .now)))
+    .environmentObject(PBFormatter())
+}
+
+#Preview("date-endDate") {
+  PocketCell(
+    PocketModel(
+      id: .init(),
+      title: "테스트",
+      onAlarm: true,
+      alarm: .init(
+        isWeekRepeat: true,
+        days: [1,2],
+        date: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 20))!,
+        endDate: .now,
+        time: .now
+      )
+    )
+  )
     .environmentObject(PBFormatter())
 }
 

@@ -25,8 +25,8 @@ public final class MockLocalNotiCenter: Notifiable, @unchecked Sendable {
   
   public struct InputValue {
     public var requestAuthorization: UNAuthorizationOptions?
-    public var register: (title: String, body: String, id: String, trigerType: TrigerType, time: Date)?
-    public var remove: (id: String, type: LocalNotiInterface.TrigerType)?
+    public var register: (title: String, body: String, id: String, trigerType: RepeatType, time: Date)?
+    public var remove: (id: String, type: LocalNotiInterface.RepeatType, time: Date)?
   }
   
   public var callCount: CallCount = .init()
@@ -46,14 +46,14 @@ public final class MockLocalNotiCenter: Notifiable, @unchecked Sendable {
     return returnValue.requestAuthorization
   }
   
-  public func register(title: String, body: String, id: String, trigerType: TrigerType, time: Date) {
+  public func register(title: String, body: String, id: String, trigerType: RepeatType, time: Date) {
     callCount.register += 1
     inputValue.register = (title, body, id, trigerType, time)
   }
   
-  public func remove(id: String, type: LocalNotiInterface.TrigerType) {
+  public func remove(id: String, type: LocalNotiInterface.RepeatType, time: Date) {
     callCount.remove += 1
-    inputValue.remove = (id, type)
+    inputValue.remove = (id, type, time)
   }
   
   public func removeAll() {
