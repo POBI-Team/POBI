@@ -32,7 +32,7 @@ struct DateSelectView: View {
   }
   
   var body: some View {
-    VStack {
+    VStack(spacing: 12) {
       HStack(alignment: .bottom, spacing: 32) {
         VStack(spacing: 6) {
           Text("시작")
@@ -72,12 +72,11 @@ struct DateSelectView: View {
         ),
         displayedComponents: .date
       )
-      .padding(.horizontal, 20)
       .labelsHidden()
       .tint(PBColors.yellow._500.color)
       .datePickerStyle(.graphical)
       .environment(\.locale, Locale(identifier: Locale.preferredLanguages[0]))
-      
+      Spacer()
       PBRoundButton(16) {
         pocket.alarm.date = startDate
         pocket.alarm.endDate = endDate
@@ -90,7 +89,6 @@ struct DateSelectView: View {
       .foregroundStyle(PBColors.navy._900.color)
       .frame(height: 52)
       .padding(.horizontal, 20)
-      .padding(.top, 10)
     }
     .presentationCornerRadius(30)
     .presentationDetents([.height(550)])

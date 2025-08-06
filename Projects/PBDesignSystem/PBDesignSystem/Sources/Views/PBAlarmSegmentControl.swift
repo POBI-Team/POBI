@@ -33,7 +33,7 @@ public struct PBAlarmSegmentControl: View {
                 isRepeated = false
               }
             } label: {
-              Text("하루")
+              Text("한번")
                 .font(PBFonts.button._2.font)
             }
             .buttonStyle(PlainButtonStyle())
