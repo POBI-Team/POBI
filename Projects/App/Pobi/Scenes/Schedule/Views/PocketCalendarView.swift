@@ -163,9 +163,7 @@ struct PocketCalendarView: View {
         Spacer()
       }
       .onAppear {
-        if calendars.isEmpty {
-          setupCalendar()
-        }
+        setupCalendar()
       }
       
       VStack {
