@@ -12,8 +12,6 @@ import PBStorageInterface
 import PBCalendar
 import PBDesignSystem
 
-import ComposableArchitecture
-
 struct PocketCalendarView: View {
   @EnvironmentObject private var formatter: PBFormatter
   @EnvironmentObject private var calendarManager: PBCalendarManager
@@ -22,8 +20,8 @@ struct PocketCalendarView: View {
   @Binding private var isPresentedCreate: Bool
   @Binding private var didTapTodayButton: UUID
   @Binding private var didTapPicketFinishButton: UUID
+  @Binding private var selectedItem: PBCalendarItem?
   
-  @State private var selectedItem: PBCalendarItem?
   @State private var currentPage = 0
   @State private var calendars: [[PBCalendarItem]] = []
   @State private var sheetHeight: CGFloat = 0
@@ -42,12 +40,14 @@ struct PocketCalendarView: View {
     isPresentedCreate: Binding<Bool>,
     didTapTodayButton: Binding<UUID>,
     didTapPicketFinishButton: Binding<UUID>,
+    selectedItem: Binding<PBCalendarItem?>,
     height: CGFloat
   ) {
     self._selectedDate = selectedDate
     self._isPresentedCreate = isPresentedCreate
     self._didTapTodayButton = didTapTodayButton
     self._didTapPicketFinishButton = didTapPicketFinishButton
+    self._selectedItem = selectedItem
     self.totalHeight = height
   }
   
@@ -167,17 +167,7 @@ struct PocketCalendarView: View {
           setupCalendar()
         }
       }
-      .fullScreenCover(isPresented: $isPresentedCreate) {
-        var date: Date? = nil
-        if let selectedItem {
-          date = Calendar.current.date(from: selectedItem.dateComponents)
-        }
-        return CreatePocketView(
-          store: Store(initialState: CreatePocketFeature.State(pocket: nil, date: date)) {
-            CreatePocketFeature()
-          }
-        )
-      }
+      
       VStack {
         Spacer()
         PocketSheet(
@@ -288,12 +278,15 @@ private extension Date {
 #Preview {
   @Previewable @State var date = Calendar.current.date(from: DateComponents(year: 2025, month: 6))!
   @Previewable @State var isPresentedCreate = false
+  @Previewable @State var selectedItem: PBCalendarItem? = nil
+  
   GeometryReader {
     PocketCalendarView(
       selectedDate: $date,
       isPresentedCreate: $isPresentedCreate,
       didTapTodayButton: .constant(.init()),
       didTapPicketFinishButton: .constant(.init()),
+      selectedItem: $selectedItem,
       height: $0.size.height
     )
       .environmentObject(PBCalendarManager())

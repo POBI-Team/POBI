@@ -10,10 +10,13 @@ import SwiftUI
 import PBDesignSystem
 import PBCalendar
 
+import ComposableArchitecture
+
 struct ScheduleView: View {
   @EnvironmentObject private var formatter: PBFormatter
   @EnvironmentObject private var calendarManager: PBCalendarManager
 
+  @State private var selectedItem: PBCalendarItem? = nil
   @State private var selectedDate: Date = .now
   @State private var isPresentedDatePicker: Bool = false
   @State private var isPresentedCreate: Bool = false
@@ -81,6 +84,7 @@ struct ScheduleView: View {
           isPresentedCreate: $isPresentedCreate,
           didTapTodayButton: $didTapTodayButton,
           didTapPicketFinishButton: $didTapPickerFinishButton,
+          selectedItem: $selectedItem,
           height: reader.size.height
         )
         .padding(.horizontal, 9)
@@ -90,6 +94,17 @@ struct ScheduleView: View {
       YearAndMonthPickerView(
         selectedDate: $selectedDate,
         didTapPickerFinishButton: $didTapPickerFinishButton
+      )
+    }
+    .fullScreenCover(isPresented: $isPresentedCreate) {
+      var date: Date? = nil
+      if let selectedItem {
+        date = Calendar.current.date(from: selectedItem.dateComponents)
+      }
+      return CreatePocketView(
+        store: Store(initialState: CreatePocketFeature.State(pocket: nil, date: date)) {
+          CreatePocketFeature()
+        }
       )
     }
   }

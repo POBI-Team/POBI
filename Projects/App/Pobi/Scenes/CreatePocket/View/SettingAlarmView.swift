@@ -17,12 +17,12 @@ struct SettingAlarmView: View {
 
   @Binding private var pocket: Pocket
   @Binding private var isDidTapDownButton: Bool
-  @FocusState private var isFocused: Bool
+  @FocusState.Binding private var isFocused: Bool
   @EnvironmentObject private var formatter: PBFormatter
   
   init(
     pocket: Binding<Pocket>,
-    isFocused: FocusState<Bool>,
+    isFocused: FocusState<Bool>.Binding,
     isDidTapDownButton: Binding<Bool>
   ) {
     self._pocket = pocket
@@ -152,7 +152,7 @@ private extension SettingAlarmView {
   
   SettingAlarmView(
     pocket: $pocket,
-    isFocused: _isFocused,
+    isFocused: $isFocused,
     isDidTapDownButton: .constant(false)
   )
   .environmentObject(PBFormatter())

@@ -56,7 +56,7 @@ struct CreatePocketView: View {
                 // MARK: SettingAlarmView
                 SettingAlarmView(
                   pocket: $store.pocket.sending(\.setPocket),
-                  isFocused: _isFocused,
+                  isFocused: $isFocused,
                   isDidTapDownButton: $isDidTapDownButton
                 )
                 // MARK: Alarm & Calendar Toggle
@@ -166,7 +166,7 @@ struct CreatePocketView: View {
 
 #Preview("Create") {
   CreatePocketView(
-    store: Store(initialState: CreatePocketFeature.State(pocket: nil)) {
+    store: Store(initialState: CreatePocketFeature.State(pocket: nil, date: .now)) {
       CreatePocketFeature()
     }
   )
