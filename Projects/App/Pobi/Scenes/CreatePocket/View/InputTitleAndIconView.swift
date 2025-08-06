@@ -151,9 +151,6 @@ struct InputTitleAndIconView<P: Pocketable>: View {
             target: FirebaseAPI.icons,
             of: [String].self
           )
-          if pocket.icon == nil {
-            pocket.icon = icons.first ?? ""
-          }
         } catch {
           #warning("에러 처리")
         }

@@ -148,7 +148,7 @@ final class CreatePocketFeatureTests: XCTestCase {
   
   @MainActor func test_create_호출_시_selectedTemplate이_존재하면_Template을_통해_Pocket_생성() async {
     // Arrange
-    let template = TemplateModel(title: "TestTemplate", icon: "❤️")
+    let template = TemplateModel(title: "TestTemplate", icon: "✈️")
     await sut.send(.setTemplate(template)) {
       $0.selectedTemplate = template
     }
@@ -156,7 +156,7 @@ final class CreatePocketFeatureTests: XCTestCase {
       $0.pocket.title = "TestTemplate"
     }
     await sut.receive(\.setIcon) {
-      $0.pocket.icon = "❤️"
+      $0.pocket.icon = "✈️"
     }
     // Act
     await sut.send(.create)

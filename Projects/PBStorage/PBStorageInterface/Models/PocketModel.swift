@@ -106,7 +106,7 @@ public struct Pocket: Pocketable {
   public var repeats: Bool
   public var isCalendar: Bool
   public var colorIndex: Int
-  public var icon: String?
+  public var icon: String
   public var alarm: Alarm
   
   public init(
@@ -123,7 +123,7 @@ public struct Pocket: Pocketable {
     self.repeats = repeats
     self.isCalendar = isCalendar
     self.colorIndex = colorIndex
-    self.icon = icon
+    self.icon = icon ?? "❤️"
     self.alarm = alarm
   }
 }

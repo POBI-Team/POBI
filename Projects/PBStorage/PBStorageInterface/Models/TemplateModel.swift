@@ -50,7 +50,7 @@ public final class TemplateModel: PocketModelable {
 
 public struct Template: Pocketable {
   public var title: String
-  public var icon: String?
+  public var icon: String
   public var colorIndex: Int = 7
 
   public init(
@@ -58,6 +58,6 @@ public struct Template: Pocketable {
     icon: String? = nil,
   ) {
     self.title = title
-    self.icon = icon
+    self.icon = icon ?? "❤️"
   }
 }

@@ -58,7 +58,7 @@ struct CreatePocketFeature {
       case .setTitle(let title):
         state.pocket.title = title
       case .setIcon(let icon):
-        state.pocket.icon = icon
+        state.pocket.icon = icon ?? "❤️"
       case .setOnAlarm(let onAlarm):
         state.pocket.onAlarm = onAlarm
       case .setTemplate(let template):
