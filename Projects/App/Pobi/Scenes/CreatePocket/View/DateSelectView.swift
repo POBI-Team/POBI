@@ -32,10 +32,10 @@ struct DateSelectView: View {
   }
   
   var body: some View {
-    VStack(spacing: 12) {
+    VStack(spacing: 0) {
       HStack(alignment: .bottom, spacing: 32) {
         VStack(spacing: 6) {
-          Text("시작")
+          Text("시작일")
             .foregroundStyle(PBColors.navy._300.color)
             .font(PBFonts.label._2.font)
           
@@ -51,7 +51,7 @@ struct DateSelectView: View {
           .foregroundStyle(PBColors.navy._100.color)
           .padding(.bottom, 6)
         VStack(spacing: 6) {
-          Text("종료")
+          Text("종료일")
             .foregroundStyle(PBColors.navy._300.color)
             .font(PBFonts.label._2.font)
           
@@ -63,7 +63,8 @@ struct DateSelectView: View {
         }
         .onTapGesture { selectedDate = .end }
       }
-      .padding(.top, 22)
+      .padding(.top, 28)
+      .padding(.bottom, 6)
       DatePicker(
         "",
         selection: Binding(
@@ -72,6 +73,7 @@ struct DateSelectView: View {
         ),
         displayedComponents: .date
       )
+      .padding(.horizontal, 20)
       .labelsHidden()
       .tint(PBColors.yellow._500.color)
       .datePickerStyle(.graphical)
@@ -91,7 +93,7 @@ struct DateSelectView: View {
       .padding(.horizontal, 20)
     }
     .presentationCornerRadius(30)
-    .presentationDetents([.height(550)])
+    .presentationDetents([.height(510)])
   }
 }
 
