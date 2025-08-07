@@ -6,6 +6,7 @@
 //
 
 struct PBRecommendedItem: Decodable {
+  let vacation: [String]
   let work: [String]
   let health: [String]
   let domesticTravel: [String]

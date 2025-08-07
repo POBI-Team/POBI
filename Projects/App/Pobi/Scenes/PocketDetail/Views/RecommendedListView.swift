@@ -33,6 +33,7 @@ struct RecommendedListView: View {
           PBSegmentView(
             selected: $seletedCategoryIndex,
             items: [
+              .init("여름 휴가", icon: "🏖️"),
               .init("외출", icon: "👟"),
               .init("출근", icon: "💼"),
               .init("운동", icon: "💪"),
@@ -110,14 +111,16 @@ struct RecommendedListView: View {
             let recommendedItem else { return }
       switch newValue {
       case 0:
-        items = recommendedItem.outing
+        items = recommendedItem.vacation
       case 1:
-        items = recommendedItem.work
+        items = recommendedItem.outing
       case 2:
-        items = recommendedItem.health
+        items = recommendedItem.work
       case 3:
-        items = recommendedItem.domesticTravel
+        items = recommendedItem.health
       case 4:
+        items = recommendedItem.domesticTravel
+      case 5:
         items = recommendedItem.overseasTravel
       default: break
       }
@@ -129,7 +132,7 @@ struct RecommendedListView: View {
             target: FirebaseAPI.items,
             of: PBRecommendedItem.self
           )
-          items = recommendedItem?.work ?? []
+          items = recommendedItem?.vacation ?? []
         } catch {
           #warning("에러 처리")
         }
