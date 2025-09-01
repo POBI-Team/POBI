@@ -1,5 +1,5 @@
 {
-  "originHash" : "308b11b24b46bcbf9eb8f1474bc02570c250703c0890fc1854db6f50eeac1ced",
+  "originHash" : "f54a6018afd5bb027741d573ffd17f8d236413469acf0b0e67e92c03a95bd34a",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -26,6 +26,15 @@
       "state" : {
         "revision" : "5928286acce13def418ec36d05a001a9641086f2",
         "version" : "1.0.3"
+      }
+    },
+    {
+      "identity" : "feather",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Siwon-L/Feather",
+      "state" : {
+        "revision" : "d51e0ab7b4d48eece163d4ce02b484e0616d92ab",
+        "version" : "1.1.8"
       }
     },
     {
