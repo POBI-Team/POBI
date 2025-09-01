@@ -39,7 +39,7 @@ struct ItemList<P: PocketModelable>: View {
           FirebaseManager.shared.logEvent(event: .didTapReset)
         } label: {
           HStack(alignment: .center, spacing: 6) {
-            Text("리셋")
+            Text("체크 리셋")
               .font(PBFonts.label._1.font)
             PBImages.reset.image
               .renderingMode(.template)
