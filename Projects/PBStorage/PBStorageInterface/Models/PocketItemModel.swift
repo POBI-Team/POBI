@@ -33,7 +33,6 @@ public final class PocketItemModel {
     return PocketItemModel(
       title: self.title,
       memo: self.memo,
-      isChecked: self.isChecked,
       sortIndex: self.sortIndex
     )
   }

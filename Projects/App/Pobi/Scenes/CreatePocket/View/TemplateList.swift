@@ -16,16 +16,8 @@ struct TemplateList: View {
   @Binding private var selectedTemplate: TemplateModel?
   @State private var tempTemplate: TemplateModel?
   
-  #if DEBUG
-  private var templates: [TemplateModel] = [
-    TemplateModel(title: "템플릿 1", icon: "✈️"),
-    TemplateModel(title: "템플릿 2", icon: "✈️"),
-    TemplateModel(title: "템플릿 3", icon: "✈️")
-  ]
-  #else
   @Query(sort: [SortDescriptor<TemplateModel>(\.createAt, order: .forward)])
   private var templates: [TemplateModel]
-  #endif
   
   init(selectedTemplate: Binding<TemplateModel?>) {
     self._selectedTemplate = selectedTemplate
