@@ -10,6 +10,7 @@ import NetworkServiceInterface
 enum FirebaseAPI {
   case icons
   case items
+  case banner
 }
 
 extension FirebaseAPI: TargetAPI {
@@ -23,6 +24,8 @@ extension FirebaseAPI: TargetAPI {
       "icons.json"
     case .items:
       "items.json"
+    case .banner:
+      "banner.json"
     }
   }
   
