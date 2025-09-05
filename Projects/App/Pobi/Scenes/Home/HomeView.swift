@@ -31,7 +31,7 @@ struct HomeView: View {
   
   var body: some View {
     VStack(alignment: .leading, spacing: 20) {
-      VStack(alignment: .leading, spacing: 4) {
+      VStack(alignment: .center, spacing: 4) {
         HStack {
           Text("\(nickname)의 포켓")
             .font(PBFonts.headline._1.font)
@@ -47,15 +47,21 @@ struct HomeView: View {
         if let banner, !banner.url.isEmpty, let url = URL(string: banner.url) {
           Link(destination: banner.link) {
             FTImage()
-              .setImageURL(url, isDownsampling: false)
+              .setImageURL(url, isDownsampling: false) {
+                ProgressView()
+                  .frame(width: 335, height: 68)
+              }
               .frame(width: 335, height: 68)
           }
           .padding(.bottom, 16)
         }
         
-        PBSegmentView(
-          selected: $selectedTabIndex, items: .init("내 포켓"), .init("템플릿")
-        )
+        HStack {
+          PBSegmentView(
+            selected: $selectedTabIndex, items: .init("내 포켓"), .init("템플릿")
+          )
+          Spacer()
+        }
       }
       .padding(.leading, 4)
       PocketList(selectedTabIndex: selectedTabIndex)
