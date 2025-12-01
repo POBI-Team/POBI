@@ -80,6 +80,16 @@
 		9BF8D2E22DC3632400ACED78 /* PBCalender.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PBCalender.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		9B68A9C62EDDB0AF00BADE63 /* Exceptions for "Pobi" folder in "Pobi" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 9BE14C3B2D6043DF008A0E49 /* Pobi */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		9B26A7DA2E1D08960010CF17 /* PobiTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -88,6 +98,9 @@
 		};
 		9BE14C3E2D6043DF008A0E49 /* Pobi */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9B68A9C62EDDB0AF00BADE63 /* Exceptions for "Pobi" folder in "Pobi" target */,
+			);
 			path = Pobi;
 			sourceTree = "<group>";
 		};
@@ -463,6 +476,7 @@
 		9BE14C4B2D6043E0008A0E49 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = WinterAppIcon;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -471,6 +485,7 @@
 				DEVELOPMENT_TEAM = S44QFR96WL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Pobi/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "포비";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -484,7 +499,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.5;
+				MARKETING_VERSION = 1.1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.siwon.Pobi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -500,6 +515,7 @@
 		9BE14C4C2D6043E0008A0E49 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = WinterAppIcon;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -508,6 +524,7 @@
 				DEVELOPMENT_TEAM = S44QFR96WL;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Pobi/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "포비";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -521,7 +538,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.5;
+				MARKETING_VERSION = 1.1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.siwon.Pobi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

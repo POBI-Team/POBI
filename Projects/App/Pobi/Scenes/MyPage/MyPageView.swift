@@ -104,7 +104,7 @@ struct MyPageView: View {
           
           HStack {
             VStack(alignment: .leading, spacing: 12) {
-              Text("포비에게 궁금한 게 있다면\n언제든 연락주세요!")
+              Text("포비에게 궁금한 점이 있다면\n언제든 연락주세요!")
                 .lineSpacing(3)
                 .font(PBFonts.body._4.font)
                 .foregroundStyle(PBColors.navy._900.color)
