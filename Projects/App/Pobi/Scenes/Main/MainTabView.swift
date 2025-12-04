@@ -67,7 +67,6 @@ struct MainTabView: View {
     let now = Date()
     let year = calendar.component(.year, from: now)
     
-    // 12월 1일 00:00
     guard let start = calendar.date(from: DateComponents(year: year, month: start.month, day: start.day)),
           let end = calendar.date(from: DateComponents(year: year, month: end.month, day: end.day + 1)) else { return nil }
     
