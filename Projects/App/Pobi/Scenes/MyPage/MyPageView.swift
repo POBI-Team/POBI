@@ -143,10 +143,6 @@ struct MyPageView: View {
           .forEach({ pocket in
             modelContext.delete(pocket)
           })
-        try? modelContext.fetch(FetchDescriptor<TemplateModel>())
-          .forEach({ template in
-            modelContext.delete(template)
-          })
         try? modelContext.save()
       }
     }
