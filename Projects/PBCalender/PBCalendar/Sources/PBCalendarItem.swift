@@ -12,9 +12,9 @@ public struct PBCalendarItem: @unchecked Sendable, Identifiable {
   public let dateComponents: DateComponents
   public let isToday: Bool
   public let isInCurrentMonth: Bool
-  public var pockets: [PocketModel]
+  public var pockets: [CDPocketModel]
   
-  public init(id: String, dateComponents: DateComponents, isToday: Bool, isInCurrentMonth: Bool, pockets: [PocketModel]) {
+  public init(id: String, dateComponents: DateComponents, isToday: Bool, isInCurrentMonth: Bool, pockets: [CDPocketModel]) {
     self.id = id + "\(isInCurrentMonth)"
     self.dateComponents = dateComponents
     self.isToday = isToday

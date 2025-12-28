@@ -5,53 +5,22 @@
 //  Created by 이시원 on 2/25/25.
 //
 
-import SwiftData
+import CoreData
 
-@Model
-public final class PocketItemModel {
-  @Attribute(.unique) public var id: UUID
-  public var title: String
-  public var memo: String
-  public var isChecked: Bool
-  public var sortIndex: Int 
-
-  public init(
-    id: UUID = UUID(),
-    title: String = "",
-    memo: String = "",
-    isChecked: Bool = false,
-    sortIndex: Int = 0
-  ) {
-    self.id = id
-    self.title = title
-    self.memo = memo
-    self.isChecked = isChecked
-    self.sortIndex = sortIndex
-  }
-  
-  public func copy() -> PocketItemModel {
-    return PocketItemModel(
-      title: self.title,
-      memo: self.memo,
-      sortIndex: self.sortIndex
-    )
-  }
-}
-
-extension Array where Element: PocketItemModel {
+extension Array where Element: CDPocketItemModel {
   public func updateSortIndices() {
     for (index, item) in self.enumerated() {
-      item.sortIndex = index
+      item.sortIndex = Int64(index)
     }
   }
 }
 
 public struct PocketItem {
-  public let id: UUID
-  public let title: String
-  public let memo: String
-  public let isChecked: Bool
-  public let sortIndex: Int
+  public var id: UUID
+  public var title: String
+  public var memo: String
+  public var isChecked: Bool
+  public var sortIndex: Int
   
   public init(
     id: UUID = .init(),
@@ -67,15 +36,21 @@ public struct PocketItem {
     self.sortIndex = sortIndex
   }
   
-  public init(model: PocketItemModel) {
+  public init(model: CDPocketItemModel) {
     self.id = model.id
     self.title = model.title
     self.memo = model.memo
     self.isChecked = model.isChecked
-    self.sortIndex = model.sortIndex
+    self.sortIndex = Int(model.sortIndex)
   }
   
-  public func toModel() -> PocketItemModel {
-    return .init(id: self.id, title: self.title, memo: self.memo, isChecked: self.isChecked, sortIndex: self.sortIndex)
+  public func toModel(context: NSManagedObjectContext) -> CDPocketItemModel {
+    let model: CDPocketItemModel = .init(context: context)
+    model.id = self.id
+    model.title = self.title
+    model.memo = self.memo
+    model.isChecked = self.isChecked
+    model.sortIndex = Int64(self.sortIndex)
+    return model    
   }
 }

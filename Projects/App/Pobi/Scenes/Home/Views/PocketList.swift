@@ -16,14 +16,14 @@ import ComposableArchitecture
 struct PocketList: View {
   @EnvironmentObject var notificationManager: NotificationManager
   
-  @Query(sort: [SortDescriptor<PocketModel>(\.createAt, order: .forward)])
-  private var pockets: [PocketModel]
-  @Query(sort: [SortDescriptor<TemplateModel>(\.createAt, order: .forward)])
-  private var templates: [TemplateModel]
+  @FetchRequest(sortDescriptors: [SortDescriptor(\.createAt, order: .forward)])
+  var pockets: FetchedResults<CDPocketModel>
+  @FetchRequest(sortDescriptors: [SortDescriptor(\.createAt, order: .forward)])
+  var templates: FetchedResults<CDTemplateModel>
   
   @State private var isPresentedCreate: Bool = false
   @State private var isPresentedDetail: Bool = false
-  @State private var seletedPocket: PocketModel?
+  @State private var seletedPocket: CDPocketModel?
   private let selectedTabIndex: Int
   
   init(selectedTabIndex: Int) {
@@ -37,7 +37,7 @@ struct PocketList: View {
         spacing: 15
       ) {
         if selectedTabIndex == 0 {
-          ForEach(pockets) { pocket in
+          ForEach(pockets, id: \.id) { pocket in
             NavigationLink {
               PocketDetailView(pocket)
             } label: {
@@ -45,7 +45,7 @@ struct PocketList: View {
             }
           }
         } else {
-          ForEach(templates) { template in
+          ForEach(templates, id: \.id) { template in
             NavigationLink {
               PocketDetailView(template)
             } label: {

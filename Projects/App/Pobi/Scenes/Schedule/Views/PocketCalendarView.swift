@@ -32,8 +32,11 @@ struct PocketCalendarView: View {
 
   private let totalHeight: CGFloat
 
-  @Query(filter: #Predicate<PocketModel> { $0.isCalendar })
-  private var pockets: [PocketModel]
+  @FetchRequest(
+    sortDescriptors: [],
+    predicate: NSPredicate(format: "isCalendar == YES")
+  )
+  private var pockets: FetchedResults<CDPocketModel>
   
   init(
     selectedDate: Binding<Date>,
@@ -141,7 +144,7 @@ struct PocketCalendarView: View {
                 selectedDate = selectedDate.moveMonth(by: currentPage)!
                 let newCalendar = calendarManager.days(
                   in: selectedDate.moveMonth(by: currentPage)!,
-                  with: pockets
+                  with: Array(pockets)
                 )
                 if currentPage == 1 {
                   calendars.append(newCalendar)
@@ -187,10 +190,10 @@ struct PocketCalendarView: View {
       setupCalendar()
       selectedItem = calendars[1].first { $0.isInCurrentMonth }
     }
-    .onChange(of: pockets) {
-      setupCalendar()
-      selectedItem = calendars[1].first { $0.id == selectedItem?.id }
-    }
+//    .onChange(of: pockets) {
+//      setupCalendar()
+//      selectedItem = calendars[1].first { $0.id == selectedItem?.id }
+//    }
     .onChange(of: sheetHeight) { oldValue, newValue in
       if newValue <= 0 {
         isEditMode = false
@@ -273,21 +276,21 @@ private extension Date {
   }
 }
 
-#Preview {
-  @Previewable @State var date = Calendar.current.date(from: DateComponents(year: 2025, month: 6))!
-  @Previewable @State var isPresentedCreate = false
-  @Previewable @State var selectedItem: PBCalendarItem? = nil
-  
-  GeometryReader {
-    PocketCalendarView(
-      selectedDate: $date,
-      isPresentedCreate: $isPresentedCreate,
-      didTapTodayButton: .constant(.init()),
-      didTapPicketFinishButton: .constant(.init()),
-      selectedItem: $selectedItem,
-      height: $0.size.height
-    )
-      .environmentObject(PBCalendarManager())
-      .environmentObject(PBFormatter())
-  }
-}
+//#Preview {
+//  @Previewable @State var date = Calendar.current.date(from: DateComponents(year: 2025, month: 6))!
+//  @Previewable @State var isPresentedCreate = false
+//  @Previewable @State var selectedItem: PBCalendarItem? = nil
+//  
+//  GeometryReader {
+//    PocketCalendarView(
+//      selectedDate: $date,
+//      isPresentedCreate: $isPresentedCreate,
+//      didTapTodayButton: .constant(.init()),
+//      didTapPicketFinishButton: .constant(.init()),
+//      selectedItem: $selectedItem,
+//      height: $0.size.height
+//    )
+//      .environmentObject(PBCalendarManager())
+//      .environmentObject(PBFormatter())
+//  }
+//}

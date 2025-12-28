@@ -155,20 +155,20 @@ struct CreatePocketView: View {
   }
 }
 
-#Preview("Edit") {
-  CreatePocketView(
-    store: Store(initialState: CreatePocketFeature.State(pocket: .init(onAlarm: true))) {
-      CreatePocketFeature()
-    }
-  )
-  .environmentObject(PBFormatter())
-}
-
-#Preview("Create") {
-  CreatePocketView(
-    store: Store(initialState: CreatePocketFeature.State(pocket: nil, date: .now)) {
-      CreatePocketFeature()
-    }
-  )
-  .environmentObject(PBFormatter())
-}
+//#Preview("Edit") {
+//  CreatePocketView(
+//    store: Store(initialState: CreatePocketFeature.State(pocket: .init(onAlarm: true))) {
+//      CreatePocketFeature()
+//    }
+//  )
+//  .environmentObject(PBFormatter())
+//}
+//
+//#Preview("Create") {
+//  CreatePocketView(
+//    store: Store(initialState: CreatePocketFeature.State(pocket: nil, date: .now)) {
+//      CreatePocketFeature()
+//    }
+//  )
+//  .environmentObject(PBFormatter())
+//}

@@ -7,34 +7,36 @@
 
 import Foundation
 import SwiftUI
+import CoreData
 
 import PBDesignSystem
 import PBStorageInterface
 
-struct ItemList<P: PocketModelable>: View {
+struct ItemList<P: CDPocketModelable>: View {
   private let pocket: P
-  @Environment(\.modelContext) private var modelContext
-  @State private var newPocketItem: PocketItemModel
-  @State private var lists: [PocketItemModel]
+  @Environment(\.managedObjectContext) private var managedObjectContext
+  @State private var newPocketItem: CDPocketItemModel
+  @State private var itemList: [CDPocketItemModel]
   @State private var isPresnetedRecommend: Bool = false
   @FocusState private var focusIndex: Int?
   
-  init(pocket: P) {
+  init(pocket: P, managedObjectContext: NSManagedObjectContext) {
     self.pocket = pocket
-    self.lists = pocket.items.sorted(by: { $0.sortIndex < $1.sortIndex })
-    self.newPocketItem = PocketItemModel(sortIndex: pocket.items.count)
+    self.itemList = pocket.items.sorted(by: { $0.sortIndex < $1.sortIndex })
+    self.newPocketItem = CDPocketItemModel(context: managedObjectContext)
+    newPocketItem.sortIndex = Int64(pocket.items.count)
   }
   
   var body: some View {
     HStack {
-      Text("소지품 \(lists.count)개")
+      Text("소지품 \(itemList.count)개")
         .font(PBFonts.caption._2.font)
         .foregroundStyle(PBColors.navy._100.color)
       Spacer()
-      if pocket is PocketModel {
+      if pocket is CDPocketModel {
         Button {
-          for i in lists.indices {
-            lists[i].isChecked = false
+          for i in itemList.indices {
+            itemList[i].isChecked = false
           }
           FirebaseManager.shared.logEvent(event: .didTapReset)
         } label: {
@@ -54,7 +56,7 @@ struct ItemList<P: PocketModelable>: View {
     ScrollViewReader { proxy in
       List {
         Section {
-          ForEach(Array(lists.enumerated()), id: \.element) { i, item in
+          ForEach(Array(itemList.enumerated()), id: \.element) { i, item in
             HStack {
               TextField(
                 "소지품",
@@ -66,12 +68,12 @@ struct ItemList<P: PocketModelable>: View {
                 title: Binding(get: { item.title }, set: { item.title = $0 }),
                 memo: Binding(get: { item.memo }, set: { item.memo = $0 }),
                 isChecked: Binding(get: { item.isChecked }, set: { item.isChecked = $0 }),
-                isDisable: pocket is TemplateModel
+                isDisable: pocket is CDTemplateModel
               ) {
                 if item.title.isEmpty {
-                  lists.removeAll(where: { $0.id == item.id })
+                  itemList.removeAll(where: { $0.id == item.id })
                 } else {
-                  if focusIndex == lists.count - 1 {
+                  if focusIndex == itemList.count - 1 {
                     focusIndex = -1
                   } else {
                     focusIndex! += 1
@@ -80,12 +82,12 @@ struct ItemList<P: PocketModelable>: View {
               }
               .onChange(of: focusIndex) { _, newValue in
                 if newValue != i, item.title.isEmpty {
-                  lists.removeAll(where: { $0.id == item.id })
+                  itemList.removeAll(where: { $0.id == item.id })
                 }
               }
               .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                 Button(role: .destructive) {
-                  lists.removeAll(where: { $0.id == item.id })
+                  itemList.removeAll(where: { $0.id == item.id })
                 } label: {
                   Text("삭제")
                     .font(PBFonts.button._3.font)
@@ -97,7 +99,7 @@ struct ItemList<P: PocketModelable>: View {
             .padding(.horizontal, 4)
           }
           .onMove { indexSet, index in
-            lists.move(fromOffsets: indexSet, toOffset: index)
+            itemList.move(fromOffsets: indexSet, toOffset: index)
           }
           TextField("소지품", text: $newPocketItem.title, axis: .vertical)
             .onChange(of: focusIndex) { _, newValue in
@@ -127,17 +129,18 @@ struct ItemList<P: PocketModelable>: View {
         }
         .listRowSeparator(.hidden)
       }
-      .animation(.default, value: lists)
+      .animation(.default, value: itemList)
       .listStyle(PlainListStyle())
-      .onChange(of: lists) { old, new in
+      .onChange(of: itemList) { old, new in
         if old.count >= new.count {
-          lists.updateSortIndices()
+          itemList.updateSortIndices()
         }
-        pocket.items = lists
+        pocket.items = Set(itemList)
+        try? managedObjectContext.save()
       }
     }
     .fullScreenCover(isPresented: $isPresnetedRecommend) {
-      RecommendedListView(pocketItems: $lists)
+      RecommendedListView(pocketItems: $itemList)
     }
     .overlay(alignment: .bottomTrailing) {
       Button {
@@ -165,15 +168,16 @@ struct ItemList<P: PocketModelable>: View {
 
 private extension ItemList {
   func addItem() {
-    lists.append(newPocketItem)
-    newPocketItem = PocketItemModel(sortIndex: lists.count)
+    itemList.append(newPocketItem)
+    newPocketItem = CDPocketItemModel(context: managedObjectContext)
+    newPocketItem.sortIndex = Int64(pocket.items.count)
   }
 }
 
-#Preview {
-  ItemList(pocket: PocketModel())
-}
-
-#Preview("Template") {
-  ItemList(pocket: TemplateModel())
-}
+//#Preview {
+//  ItemList(pocket: PocketModel())
+//}
+//
+//#Preview("Template") {
+//  ItemList(pocket: TemplateModel())
+//}

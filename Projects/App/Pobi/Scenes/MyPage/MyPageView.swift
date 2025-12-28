@@ -14,7 +14,7 @@ import PBStorageInterface
 import LocalNotiService
 
 struct MyPageView: View {
-  @Environment(\.modelContext) private var modelContext
+  @Environment(\.managedObjectContext) private var managedObjectContext
   @EnvironmentObject private var profileStorage: ProfileStorage
   @State private var isPresentAlert: Bool = false
   @State private var profileImage: Image?
@@ -139,11 +139,11 @@ struct MyPageView: View {
       }
       .pbAlert(isPresented: $isPresentAlert, type: .deleteAll) {
         LocalNotiCenter.shared.removeAll()
-        try? modelContext.fetch(FetchDescriptor<PocketModel>())
+        try? managedObjectContext.fetch(CDPocketModel.fetchRequest())
           .forEach({ pocket in
-            modelContext.delete(pocket)
+            managedObjectContext.delete(pocket)
           })
-        try? modelContext.save()
+        try? managedObjectContext.save()
       }
     }
     .title("마이페이지")

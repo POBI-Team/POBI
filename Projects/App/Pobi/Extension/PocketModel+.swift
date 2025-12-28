@@ -9,7 +9,7 @@ import PBStorageInterface
 import LocalNotiService
 import LocalNotiInterface
 
-extension PocketModel {
+extension CDPocketModel {
   public func registerPushAlarm(userNickname: String) {
     LocalNotiCenter.shared.register(
       title: "POBI",
