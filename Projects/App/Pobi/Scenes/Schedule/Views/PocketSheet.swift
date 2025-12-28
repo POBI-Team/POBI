@@ -14,7 +14,7 @@ import PBStorageInterface
 import ComposableArchitecture
 
 struct PocketSheet: View {
-  @Environment(\.modelContext) private var modelContext
+  @Environment(\.managedObjectContext) private var managedObjectContext
   @EnvironmentObject private var formatter: PBFormatter
   @Binding private var item: PBCalendarItem?
   @Binding private var isEditMode: Bool
@@ -114,7 +114,7 @@ struct PocketSheet: View {
                   }
                   .frame(height: 48)
                   .padding(.horizontal, 16)
-                  .background(PBColors.list.colors[pocket.colorIndex]._03.color)
+                  .background(PBColors.list.colors[Int(pocket.colorIndex)]._03.color)
                   .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
                 if isEditMode {
@@ -133,8 +133,8 @@ struct PocketSheet: View {
                   .pbAlert(isPresented: $isPresentedDeleteAlert, type: .delete) {
                     pocket.deletePushAlarm()
                     item?.pockets.removeAll { $0.id == pocket.id }
-                    modelContext.delete(pocket)
-                    try? modelContext.save()
+                    managedObjectContext.delete(pocket)
+                    try? managedObjectContext.save()
                   }
                 }
               }
@@ -177,28 +177,28 @@ extension PocketSheet {
   }
 }
 
-#if DEBUG
-#Preview {
-  @Previewable @State var item: PBCalendarItem? = PBCalendarItem(
-    id: "test",
-    dateComponents: .init(),
-    isToday: false,
-    isInCurrentMonth: true,
-    pockets: [
-      PocketModel(title: "Test1", colorIndex: 0, icon: "❤️"),
-      PocketModel(title: "Test2", colorIndex: 1, icon: "❤️"),
-      PocketModel(title: "Test3", colorIndex: 2, icon: "❤️")
-    ]
-  )
-  @Previewable @State var isEditMode: Bool = false
-  
-  NavigationStack {
-    PocketSheet(
-      item: $item,
-      isEditMode: $isEditMode,
-      minHeight: 300.0
-    )
-      .environmentObject(PBFormatter())
-  }
-}
-#endif
+//#if DEBUG
+//#Preview {
+//  @Previewable @State var item: PBCalendarItem? = PBCalendarItem(
+//    id: "test",
+//    dateComponents: .init(),
+//    isToday: false,
+//    isInCurrentMonth: true,
+//    pockets: [
+//      PocketModel(title: "Test1", colorIndex: 0, icon: "❤️"),
+//      PocketModel(title: "Test2", colorIndex: 1, icon: "❤️"),
+//      PocketModel(title: "Test3", colorIndex: 2, icon: "❤️")
+//    ]
+//  )
+//  @Previewable @State var isEditMode: Bool = false
+//  
+//  NavigationStack {
+//    PocketSheet(
+//      item: $item,
+//      isEditMode: $isEditMode,
+//      minHeight: 300.0
+//    )
+//      .environmentObject(PBFormatter())
+//  }
+//}
+//#endif

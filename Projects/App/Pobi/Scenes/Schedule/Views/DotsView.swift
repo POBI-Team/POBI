@@ -24,7 +24,7 @@ struct DotsView: View {
     HStack(alignment: .center, spacing: 4) {
       ForEach(0..<min(dotLimit, item.pockets.count), id: \.self) { i in
         RoundedRectangle(cornerRadius: 1)
-          .foregroundStyle(PBColors.list.colors[item.pockets[i].colorIndex]._02.color)
+          .foregroundStyle(PBColors.list.colors[Int(item.pockets[i].colorIndex)]._02.color)
           .frame(width: 6, height: 6)
       }
     }

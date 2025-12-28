@@ -13,16 +13,16 @@ import PBStorageInterface
 
 struct CreateTemplateView: View {
   @Environment(\.dismiss) var dismiss
-  @Environment(\.modelContext) var modelContext
+  @Environment(\.managedObjectContext) private var managedObjectContext
   @State private var template: Template
   @State private var isDidTapDownButton: Bool = true
   @State private var isPresentedEditAlert = false
   @State private var toastID: UUID?
   @FocusState private var isFocused: Bool
   
-  private let templateModel: TemplateModel?
+  private let templateModel: CDTemplateModel?
   
-  init(template: TemplateModel?) {
+  init(template: CDTemplateModel?) {
     self.template = template?.temporary() ?? .init()
     self.templateModel = template
   }
@@ -50,8 +50,9 @@ struct CreateTemplateView: View {
       PBRoundButton(16) {
         guard !template.title.isEmpty else { toastID = .init(); return }
         if templateModel == nil {
-          let newTemplateModel = TemplateModel(template)
-          modelContext.insert(newTemplateModel)
+          let newTemplateModel = CDTemplateModel(with: template, context: managedObjectContext)
+          managedObjectContext.insert(newTemplateModel)
+          try? managedObjectContext.save()
           FirebaseManager.shared.logEvent(event: .createTemplate)
           dismiss()
         } else {

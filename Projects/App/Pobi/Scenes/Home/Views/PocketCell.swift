@@ -12,8 +12,8 @@ import PBStorageInterface
 
 import ComposableArchitecture
 
-struct PocketCell<P: PocketModelable>: View {
-  private let pocket: P
+struct PocketCell<P: CDPocketModelable>: View {
+  private var pocket: P
   private let colors = PBColors.list.colors
   @State private var isPresentedPocketMore = false
   @State private var isPresentedEdit = false
@@ -35,7 +35,7 @@ struct PocketCell<P: PocketModelable>: View {
             .lineLimit(1)
             .font(PBFonts.title._2.font)
             .foregroundStyle(PBColors.navy._900.color)
-          if let pocket = pocket as? PocketModel {
+          if let pocket = pocket as? CDPocketModel {
             Text(alarmLabel(pocket))
               .font(PBFonts.label._1.font)
               .lineLimit(1)
@@ -55,13 +55,13 @@ struct PocketCell<P: PocketModelable>: View {
       .padding(.leading, 16)
       .padding(.trailing, 12)
       .frame(height: 40)
-      .background(colors[pocket.colorIndex]._02.color)
+      .background(colors[Int(pocket.colorIndex)]._02.color)
       .clipShape(RoundedRectangle(cornerRadius: 20))
     }
     .sheet(isPresented: $isPresentedPocketMore) {
       PocketMoreView(pocket, isPresentedEdit: $isPresentedEdit)
     }
-    .background(colors[pocket.colorIndex]._03.color)
+    .background(colors[Int(pocket.colorIndex)]._03.color)
     .clipShape(RoundedRectangle(cornerRadius: 20))
     .aspectRatio(1, contentMode: .fit)
     .overlay(alignment: .top) {
@@ -80,13 +80,13 @@ struct PocketCell<P: PocketModelable>: View {
       .padding(.trailing, 12)
     }
     .navigationDestination(isPresented: $isPresentedEdit) {
-      if let pocket = pocket as? PocketModel {
+      if let pocket = pocket as? CDPocketModel {
         CreatePocketView(
           store: Store(initialState: CreatePocketFeature.State(pocket: pocket)) {
             CreatePocketFeature()
           }
         )
-      } else if let template = pocket as? TemplateModel {
+      } else if let template = pocket as? CDTemplateModel {
         CreateTemplateView(template: template)
       }
     }
@@ -94,7 +94,7 @@ struct PocketCell<P: PocketModelable>: View {
 }
 
 private extension PocketCell {
-  func alarmLabel(_ pocket: PocketModel) -> String {
+  func alarmLabel(_ pocket: CDPocketModel) -> String {
     if pocket.repeats {
       return formatter.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
     }
@@ -102,40 +102,40 @@ private extension PocketCell {
   }
 }
 
-#Preview("week") {
-  PocketCell(PocketModel(id: .init(), title: "테스트", onAlarm: true, repeats: true, alarm: .init(isWeekRepeat: true, days: [1,2,3,4,5,6], date: .now, time: .now)))
-    .environmentObject(PBFormatter())
-}
-
-#Preview("day") {
-  PocketCell(PocketModel(id: .init(), title: "테스트", onAlarm: true, repeats: true, alarm: .init(isWeekRepeat: false, days: [1,2], date: .now, time: .now)))
-    .environmentObject(PBFormatter())
-}
-
-#Preview("date") {
-  PocketCell(PocketModel(id: .init(), title: "테스트", onAlarm: true, alarm: .init(isWeekRepeat: true, days: [1,2], date: .now, endDate: .now, time: .now)))
-    .environmentObject(PBFormatter())
-}
-
-#Preview("date-endDate") {
-  PocketCell(
-    PocketModel(
-      id: .init(),
-      title: "테스트",
-      onAlarm: true,
-      alarm: .init(
-        isWeekRepeat: true,
-        days: [1,2],
-        date: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 20))!,
-        endDate: .now,
-        time: .now
-      )
-    )
-  )
-    .environmentObject(PBFormatter())
-}
-
-#Preview("Template") {
-  PocketCell(TemplateModel(title: "테스트"))
-    .environmentObject(PBFormatter())
-}
+//#Preview("week") {
+//  PocketCell(PocketModel(id: .init(), title: "테스트", onAlarm: true, repeats: true, alarm: .init(isWeekRepeat: true, days: [1,2,3,4,5,6], date: .now, time: .now)))
+//    .environmentObject(PBFormatter())
+//}
+//
+//#Preview("day") {
+//  PocketCell(PocketModel(id: .init(), title: "테스트", onAlarm: true, repeats: true, alarm: .init(isWeekRepeat: false, days: [1,2], date: .now, time: .now)))
+//    .environmentObject(PBFormatter())
+//}
+//
+//#Preview("date") {
+//  PocketCell(PocketModel(id: .init(), title: "테스트", onAlarm: true, alarm: .init(isWeekRepeat: true, days: [1,2], date: .now, endDate: .now, time: .now)))
+//    .environmentObject(PBFormatter())
+//}
+//
+//#Preview("date-endDate") {
+//  PocketCell(
+//    PocketModel(
+//      id: .init(),
+//      title: "테스트",
+//      onAlarm: true,
+//      alarm: .init(
+//        isWeekRepeat: true,
+//        days: [1,2],
+//        date: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 20))!,
+//        endDate: .now,
+//        time: .now
+//      )
+//    )
+//  )
+//    .environmentObject(PBFormatter())
+//}
+//
+//#Preview("Template") {
+//  PocketCell(TemplateModel(title: "테스트"))
+//    .environmentObject(PBFormatter())
+//}

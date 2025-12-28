@@ -12,9 +12,9 @@ import PBStorage
 import PBStorageInterface
 import LocalNotiService
 
-struct PocketMoreView<P: PocketModelable>: View {
+struct PocketMoreView<P: CDPocketModelable>: View {
   @Environment(\.dismiss) private var dismiss
-  @Environment(\.modelContext) private var modelContext
+  @Environment(\.managedObjectContext) private var context
   @Binding private var isPresentedEdit: Bool
   @State private var isPresentedDeleteAlert: Bool = false
   private let pocket: P
@@ -48,13 +48,12 @@ struct PocketMoreView<P: PocketModelable>: View {
             }
             .background(.white)
             
-            if let pocket = pocket as? PocketModel {
+            if let pocket = pocket as? CDPocketModel {
               Button {
                 dismiss()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                  let newPocket = pocket.copy()
-                  modelContext.insert(newPocket)
-                  try? modelContext.save()
+                  let newPocket = pocket.copyModel()
+                  try? context.save()
                 }
               } label: {
                 HStack(spacing: 8) {
@@ -75,8 +74,8 @@ struct PocketMoreView<P: PocketModelable>: View {
                 dismiss()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                   let newTemplate = pocket.template()
-                  modelContext.insert(newTemplate)
                   FirebaseManager.shared.logEvent(event: .createTemplate)
+                  try? context.save()
                 }
               } label: {
                 HStack(spacing: 8) {
@@ -130,37 +129,37 @@ struct PocketMoreView<P: PocketModelable>: View {
         .padding(.top, 8)
         .pbAlert(
           isPresented: $isPresentedDeleteAlert,
-          type: pocket is PocketModel ? .delete : .deleteTemplate
+          type: pocket is CDPocketModel ? .delete : .deleteTemplate
         ) {
           dismiss()
           DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            if let pocket = pocket as? PocketModel {
+            if let pocket = pocket as? CDPocketModel {
               pocket.deletePushAlarm()
             }
-            modelContext.delete(pocket)
-            try? modelContext.save()
+            context.delete(pocket)
+            try? context.save()
           }
         }
       }
       .presentationCornerRadius(30)
-      .presentationDetents([.height(pocket is PocketModel ? 311 : 227)])
+      .presentationDetents([.height(pocket is CDPocketModel ? 311 : 227)])
   }
 }
 
-#Preview {
-  Color.white
-    .sheet(
-      isPresented: .constant(true),
-      content: {
-        PocketMoreView(PocketModel(id: .init(), title: "테스트"), isPresentedEdit: .constant(false))
-      })
-}
-
-#Preview("Template") {
-  Color.white
-    .sheet(
-      isPresented: .constant(true),
-      content: {
-        PocketMoreView(TemplateModel(id: .init(), title: "테스트"), isPresentedEdit: .constant(false))
-      })
-}
+//#Preview {
+//  Color.white
+//    .sheet(
+//      isPresented: .constant(true),
+//      content: {
+//        PocketMoreView(PocketModel(id: .init(), title: "테스트"), isPresentedEdit: .constant(false))
+//      })
+//}
+//
+//#Preview("Template") {
+//  Color.white
+//    .sheet(
+//      isPresented: .constant(true),
+//      content: {
+//        PocketMoreView(TemplateModel(id: .init(), title: "테스트"), isPresentedEdit: .constant(false))
+//      })
+//}

@@ -13,13 +13,13 @@ import PBStorageInterface
 
 struct TemplateList: View {
   @Environment(\.dismiss) private var dismiss
-  @Binding private var selectedTemplate: TemplateModel?
-  @State private var tempTemplate: TemplateModel?
+  @Binding private var selectedTemplate: CDTemplateModel?
+  @State private var tempTemplate: CDTemplateModel?
   
-  @Query(sort: [SortDescriptor<TemplateModel>(\.createAt, order: .forward)])
-  private var templates: [TemplateModel]
+  @FetchRequest(sortDescriptors: [SortDescriptor(\.createAt, order: .forward)])
+  private var templates: FetchedResults<CDTemplateModel>
   
-  init(selectedTemplate: Binding<TemplateModel?>) {
+  init(selectedTemplate: Binding<CDTemplateModel?>) {
     self._selectedTemplate = selectedTemplate
   }
   
@@ -27,7 +27,7 @@ struct TemplateList: View {
     PBNavigationBar {
       ScrollView {
         LazyVStack(spacing: 12) {
-          ForEach(templates) { template in
+          ForEach(templates, id: \.id) { template in
             HStack(spacing: 8) {
               Text(template.icon ?? "")
                 .font(PBFonts.tossFace.xsmall.font)
@@ -103,8 +103,8 @@ struct TemplateList: View {
   }
 }
 
-#Preview {
-  @Previewable @State var selectedTemplate: TemplateModel? = nil
-  
-  TemplateList(selectedTemplate: $selectedTemplate)
-}
+//#Preview {
+//  @Previewable @State var selectedTemplate: TemplateModel? = nil
+//  
+//  TemplateList(selectedTemplate: $selectedTemplate)
+//}
