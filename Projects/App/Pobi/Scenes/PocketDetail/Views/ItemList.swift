@@ -57,75 +57,55 @@ struct ItemList<P: CDPocketModelable>: View {
       List {
         Section {
           ForEach(Array(itemList.enumerated()), id: \.element) { i, item in
-            HStack {
-              TextField(
-                "소지품",
-                text: Binding(get: { item.title }, set: { item.title = $0 }),
-                axis: .vertical
-              )
-              .focused($focusIndex, equals: i)
-              .checkBoxAndMemoField(
-                title: Binding(get: { item.title }, set: { item.title = $0 }),
-                memo: Binding(get: { item.memo }, set: { item.memo = $0 }),
-                isChecked: Binding(get: { item.isChecked }, set: { item.isChecked = $0 }),
-                isDisable: pocket is CDTemplateModel
-              ) {
-                if item.title.isEmpty {
-                  itemList.removeAll(where: { $0.id == item.id })
+            ItemView<P>(item: item) {
+              if item.title.isEmpty {
+                itemList.removeAll(where: { $0.id == item.id })
+              } else {
+                if focusIndex == itemList.count - 1 {
+                  focusIndex = -1
                 } else {
-                  if focusIndex == itemList.count - 1 {
-                    focusIndex = -1
-                  } else {
-                    focusIndex! += 1
-                  }
+                  focusIndex! += 1
                 }
               }
-              .onChange(of: focusIndex) { _, newValue in
-                if newValue != i, item.title.isEmpty {
-                  itemList.removeAll(where: { $0.id == item.id })
-                }
-              }
-              .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                Button(role: .destructive) {
-                  itemList.removeAll(where: { $0.id == item.id })
-                } label: {
-                  Text("삭제")
-                    .font(PBFonts.button._3.font)
-                }
-              }
-              Spacer()
-              PBImages.slide.image
             }
-            .padding(.horizontal, 4)
+            .focused($focusIndex, equals: i)
+            .onChange(of: focusIndex) { _, newValue in
+              if newValue != i, item.title.isEmpty {
+                itemList.removeAll(where: { $0.id == item.id })
+              }
+            }
+            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+              Button(role: .destructive) {
+                itemList.removeAll(where: { $0.id == item.id })
+              } label: {
+                Text("삭제")
+                  .font(PBFonts.button._3.font)
+              }
+            }
           }
           .onMove { indexSet, index in
             itemList.move(fromOffsets: indexSet, toOffset: index)
           }
-          TextField("소지품", text: $newPocketItem.title, axis: .vertical)
-            .onChange(of: focusIndex) { _, newValue in
-              if newValue != -1, !newPocketItem.title.isEmpty {
-                addItem()
-              }
-            }
-            .checkBoxAndMemoField(
-              title: $newPocketItem.title,
-              memo: $newPocketItem.memo,
-              isChecked: .constant(false)
-            ) {
-              if !newPocketItem.title.isEmpty {
-                addItem()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                  withAnimation {
-                    proxy.scrollTo(-1, anchor: .bottom)
-                  }
+          InputTextField(item: newPocketItem) {
+            if !newPocketItem.title.isEmpty {
+              addItem()
+              DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                withAnimation {
+                  proxy.scrollTo(-1, anchor: .bottom)
                 }
-              } else {
-                focusIndex = nil
               }
+            } else {
+              focusIndex = nil
             }
-            .focused($focusIndex, equals: -1)
-            .padding(.horizontal, 4)
-            .id(-1)
+          }
+          .onChange(of: focusIndex) { _, newValue in
+            if newValue != -1, !newPocketItem.title.isEmpty {
+              addItem()
+            }
+          }
+          .focused($focusIndex, equals: -1)
+          .padding(.horizontal, 4)
+          .id(-1)
         }
         .listRowSeparator(.hidden)
       }
@@ -165,12 +145,31 @@ struct ItemList<P: CDPocketModelable>: View {
   }
 }
 
-
 private extension ItemList {
   func addItem() {
     itemList.append(newPocketItem)
     newPocketItem = CDPocketItemModel(context: managedObjectContext)
     newPocketItem.sortIndex = Int64(pocket.items.count)
+  }
+}
+
+private struct InputTextField: View {
+  @ObservedObject private var item: CDPocketItemModel
+  private var onSubmit: () -> Void = {}
+  
+  init(item: CDPocketItemModel, onSubmit: @escaping () -> Void = {}) {
+    self.item = item
+    self.onSubmit = onSubmit
+  }
+  
+  var body: some View {
+    TextField("소지품", text: $item.title, axis: .vertical)
+      .checkBoxAndMemoField(
+        title: $item.title,
+        memo: $item.memo,
+        isChecked: .constant(false),
+        onSubmitAction: onSubmit
+      )
   }
 }
 

@@ -13,7 +13,7 @@ import PBStorageInterface
 import ComposableArchitecture
 
 struct PocketCell<P: CDPocketModelable>: View {
-  private var pocket: P
+  @ObservedObject private var pocket: P
   private let colors = PBColors.list.colors
   @State private var isPresentedPocketMore = false
   @State private var isPresentedEdit = false
