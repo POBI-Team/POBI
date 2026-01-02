@@ -16,7 +16,7 @@ public class CDPocketAlarmModel: NSManagedObject {
   override public func awakeFromInsert() {
     super.awakeFromInsert()
     self.isWeekRepeat = true
-    self.days = [1,2,3,4,5,6,7]
+    self.daysValue = [1,2,3,4,5,6,7]
     self.date = Date.now
     self.time = Date.now
   }
