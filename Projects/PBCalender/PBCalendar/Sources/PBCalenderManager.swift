@@ -56,11 +56,11 @@ public final class PBCalendarManager: Sendable, ObservableObject {
           guard isToday || pocket.createAt < date! || !pocket.repeats else { return }
           if pocket.repeats {
             if pocket.alarm.isWeekRepeat {
-              if pocket.alarm.days.contains(weekday) {
+              if pocket.alarm.daysValue.contains(weekday) {
                 targetPockets.append(pocket)
               }
             } else {
-              if pocket.alarm.days.contains(day) {
+              if pocket.alarm.daysValue.contains(day) {
                 targetPockets.append(pocket)
               }
             }

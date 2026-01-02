@@ -96,7 +96,7 @@ struct PocketCell<P: CDPocketModelable>: View {
 private extension PocketCell {
   func alarmLabel(_ pocket: CDPocketModel) -> String {
     if pocket.repeats {
-      return formatter.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
+      return formatter.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.daysValue)
     }
     return formatter.alarmLabel(pocket.alarm.date, endDate: pocket.alarm.endDate)
   }

@@ -93,7 +93,7 @@ private extension PocketDetailView {
     if pocket.onAlarm {
       let time = formatter.label(pocket.alarm.time, format: "a h:mm", locale: Locale(identifier: "ko_KR"))
       if pocket.repeats {
-        let days = formatter.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
+        let days = formatter.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.daysValue)
         return AnyView(
           HStack(spacing: 0) {
             Text("\(days)")

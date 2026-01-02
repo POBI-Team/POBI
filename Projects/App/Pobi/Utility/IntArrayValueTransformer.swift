@@ -10,7 +10,8 @@ import Foundation
 class IntArrayValueTransformer: NSSecureUnarchiveFromDataTransformer {
   override static var allowedTopLevelClasses: [AnyClass] { [
     NSArray.self,
-    NSNumber.self
+    NSNumber.self,
+    NSData.self
   ] }
   
   static func register() {
