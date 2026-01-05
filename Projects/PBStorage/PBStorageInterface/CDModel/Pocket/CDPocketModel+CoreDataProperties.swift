@@ -68,12 +68,7 @@ extension CDPocketModel {
     newPocket.icon = self.icon
     newPocket.alarm = self.alarm.copyModel()
     newPocket.alarm.pocket = newPocket
-    let items = Set(self.items.map {
-      let copyItem = $0.copyModel()
-      copyItem.pocket = newPocket
-      return copyItem
-    })
-    newPocket.addToItems(items)
+    newPocket.items = Set(self.items.map { $0.copyModel() })
     return newPocket
   }
   
@@ -81,12 +76,7 @@ extension CDPocketModel {
     let template = CDTemplateModel(context: managedObjectContext!)
     template.title = self.title
     template.icon = self.icon
-    let items = Set(self.items.map {
-      let copyItem = $0.copyModel()
-      copyItem.template = template
-      return copyItem
-    })
-    template.addToItems(items)
+    template.items = Set(self.items.map { $0.copyModel() })
     return template
   }
   
