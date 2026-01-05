@@ -21,10 +21,14 @@ struct CreatePocketFeature {
     
     init(pocket: CDPocketModel?, date: Date? = nil) {
       self.pocketModel = pocket
-      self.pocket = pocket?.temporary() ?? Pocket(
-        isCalendar: date != nil,
-        alarm: Alarm(date: date ?? .now)
-      )
+      if let pocket, !pocket.isDeleted, pocket.managedObjectContext != nil {
+        self.pocket = pocket.temporary()
+      } else {
+        self.pocket = Pocket(
+          isCalendar: date != nil,
+          alarm: Alarm(date: date ?? .now)
+        )
+      }
     }
   }
   

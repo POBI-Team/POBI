@@ -24,70 +24,72 @@ struct PocketCell<P: CDPocketModelable>: View {
   }
   
   var body: some View {
-    VStack(alignment: .leading, spacing: 0) {
-      Spacer()
-        .frame(height: 16)
-      VStack(alignment: .leading, spacing: 10) {
-        PBCircleEmojiView(pocket.icon, size: .small)
-          .foregroundStyle(.white)
-        VStack(alignment: .leading, spacing: 6) {
-          Text(pocket.title)
-            .lineLimit(1)
-            .font(PBFonts.title._2.font)
-            .foregroundStyle(PBColors.navy._900.color)
-          if let pocket = pocket as? CDPocketModel {
-            Text(alarmLabel(pocket))
-              .font(PBFonts.label._1.font)
+    if !pocket.isDeleted && pocket.managedObjectContext != nil {
+      VStack(alignment: .leading, spacing: 0) {
+        Spacer()
+          .frame(height: 16)
+        VStack(alignment: .leading, spacing: 10) {
+          PBCircleEmojiView(pocket.icon, size: .small)
+            .foregroundStyle(.white)
+          VStack(alignment: .leading, spacing: 6) {
+            Text(pocket.title)
               .lineLimit(1)
-              .foregroundStyle(PBColors.navy._400.color)
+              .font(PBFonts.title._2.font)
+              .foregroundStyle(PBColors.navy._900.color)
+            if let pocket = pocket as? CDPocketModel {
+              Text(alarmLabel(pocket))
+                .font(PBFonts.label._1.font)
+                .lineLimit(1)
+                .foregroundStyle(PBColors.navy._400.color)
+            }
           }
         }
-      }
-      .padding(.horizontal, 16)
-      Spacer()
-      HStack {
-        Text("소지품 \(pocket.items.count)개")
-          .font(PBFonts.caption._2.font)
-          .foregroundStyle(PBColors.navy._900.color)
+        .padding(.horizontal, 16)
         Spacer()
-        PBImages.right.image
+        HStack {
+          Text("소지품 \(pocket.items.count)개")
+            .font(PBFonts.caption._2.font)
+            .foregroundStyle(PBColors.navy._900.color)
+          Spacer()
+          PBImages.right.image
+        }
+        .padding(.leading, 16)
+        .padding(.trailing, 12)
+        .frame(height: 40)
+        .background(colors[Int(pocket.colorIndex)]._02.color)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
       }
-      .padding(.leading, 16)
-      .padding(.trailing, 12)
-      .frame(height: 40)
-      .background(colors[Int(pocket.colorIndex)]._02.color)
+      .sheet(isPresented: $isPresentedPocketMore) {
+        PocketMoreView(pocket, isPresentedEdit: $isPresentedEdit)
+      }
+      .background(colors[Int(pocket.colorIndex)]._03.color)
       .clipShape(RoundedRectangle(cornerRadius: 20))
-    }
-    .sheet(isPresented: $isPresentedPocketMore) {
-      PocketMoreView(pocket, isPresentedEdit: $isPresentedEdit)
-    }
-    .background(colors[Int(pocket.colorIndex)]._03.color)
-    .clipShape(RoundedRectangle(cornerRadius: 20))
-    .aspectRatio(1, contentMode: .fit)
-    .overlay(alignment: .top) {
-      HStack {
-        Spacer()
-        Button {
-          withAnimation {
-            isPresentedPocketMore = true
+      .aspectRatio(1, contentMode: .fit)
+      .overlay(alignment: .top) {
+        HStack {
+          Spacer()
+          Button {
+            withAnimation {
+              isPresentedPocketMore = true
+            }
+            
+          } label: {
+            PBImages.manu.image
           }
-          
-        } label: {
-          PBImages.manu.image
         }
+        .padding(.top, 20)
+        .padding(.trailing, 12)
       }
-      .padding(.top, 20)
-      .padding(.trailing, 12)
-    }
-    .navigationDestination(isPresented: $isPresentedEdit) {
-      if let pocket = pocket as? CDPocketModel {
-        CreatePocketView(
-          store: Store(initialState: CreatePocketFeature.State(pocket: pocket)) {
-            CreatePocketFeature()
-          }
-        )
-      } else if let template = pocket as? CDTemplateModel {
-        CreateTemplateView(template: template)
+      .navigationDestination(isPresented: $isPresentedEdit) {
+        if let pocket = pocket as? CDPocketModel {
+          CreatePocketView(
+            store: Store(initialState: CreatePocketFeature.State(pocket: pocket)) {
+              CreatePocketFeature()
+            }
+          )
+        } else if let template = pocket as? CDTemplateModel {
+          CreateTemplateView(template: template)
+        }
       }
     }
   }
