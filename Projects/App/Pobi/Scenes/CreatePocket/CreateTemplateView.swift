@@ -50,8 +50,7 @@ struct CreateTemplateView: View {
       PBRoundButton(16) {
         guard !template.title.isEmpty else { toastID = .init(); return }
         if templateModel == nil {
-          let newTemplateModel = CDTemplateModel(with: template, context: managedObjectContext)
-          managedObjectContext.insert(newTemplateModel)
+          _ = CDTemplateModel(with: template, context: managedObjectContext)
           try? managedObjectContext.save()
           FirebaseManager.shared.logEvent(event: .createTemplate)
           dismiss()

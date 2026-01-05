@@ -52,7 +52,7 @@ struct PocketMoreView<P: CDPocketModelable>: View {
               Button {
                 dismiss()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                  let newPocket = pocket.copyModel()
+                  _ = pocket.copyModel()
                   try? context.save()
                 }
               } label: {
@@ -73,7 +73,7 @@ struct PocketMoreView<P: CDPocketModelable>: View {
               Button {
                 dismiss()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                  let newTemplate = pocket.template()
+                  _ = pocket.template()
                   FirebaseManager.shared.logEvent(event: .createTemplate)
                   try? context.save()
                 }

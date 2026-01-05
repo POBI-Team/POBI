@@ -120,12 +120,7 @@ struct CreatePocketFeature {
           firebaseManager.logEvent(event: .offCalendar)
         }
         if let template = state.selectedTemplate {
-          let items = Set(template.items.map {
-            let newItem = $0.copyModel()
-            newItem.pocket = newPocketModel
-            return newItem
-          })
-          newPocketModel.addToItems(items)
+          newPocketModel.items = Set(template.items.map { $0.copyModel() })
           firebaseManager.logEvent(event: .importTemplate)
         }
         firebaseManager.logEvent(event: .createPocket)

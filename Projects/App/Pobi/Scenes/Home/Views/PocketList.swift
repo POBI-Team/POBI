@@ -16,9 +16,9 @@ import ComposableArchitecture
 struct PocketList: View {
   @EnvironmentObject var notificationManager: NotificationManager
   
-  @FetchRequest(sortDescriptors: [SortDescriptor(\.createAt, order: .forward)])
+  @FetchRequest(sortDescriptors: [SortDescriptor(\.createAt, order: .reverse)])
   var pockets: FetchedResults<CDPocketModel>
-  @FetchRequest(sortDescriptors: [SortDescriptor(\.createAt, order: .forward)])
+  @FetchRequest(sortDescriptors: [SortDescriptor(\.createAt, order: .reverse)])
   var templates: FetchedResults<CDTemplateModel>
   
   @State private var isPresentedCreate: Bool = false
