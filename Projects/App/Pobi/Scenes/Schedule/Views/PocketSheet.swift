@@ -81,41 +81,7 @@ struct PocketSheet: View {
                     PocketDetailView(pocket)
                   }
                 } label: {
-                  HStack(spacing: 0) {
-                    if let icon = pocket.icon, !isEditMode {
-                      Text(icon)
-                        .font(PBFonts.tossFace.xsmall.font)
-                        .frame(width: 24, height: 24)
-                        .padding(.trailing, 8)
-                    }
-                    
-                    if isEditMode {
-                      PBImages.setting.image
-                        .frame(width: 24, height: 24)
-                        .padding(.trailing, 8)
-                    }
-                    
-                    Text(pocket.title)
-                      .lineLimit(1)
-                      .font(PBFonts.body._2.font)
-                      .foregroundStyle(PBColors.navy._900.color)
-                      .padding(.trailing, 12)
-                    if !isEditMode {
-                      Text(timeLabel(time: pocket.alarm.time))
-                        .font(PBFonts.label._2.font)
-                        .foregroundStyle(PBColors.navy._900.color)
-                    }
-                    Spacer()
-                    if !isEditMode {
-                      PBShapes.arrow(direction: .right)
-                        .frame(width: 14, height: 7)
-                        .foregroundStyle(PBColors.navy._900.color)
-                    }
-                  }
-                  .frame(height: 48)
-                  .padding(.horizontal, 16)
-                  .background(PBColors.list.colors[Int(pocket.colorIndex)]._03.color)
-                  .clipShape(RoundedRectangle(cornerRadius: 12))
+                  SheetItem(pocket: pocket, isEditMode: isEditMode)
                 }
                 if isEditMode {
                   Button {
@@ -163,17 +129,68 @@ struct PocketSheet: View {
   }
 }
 
-extension PocketSheet {
-  func timeLabel(time: Date) -> String {
-    formatter.label(time, format: "a h:mm", locale: Locale(identifier: "ko_KR"))
-  }
-  
+private extension PocketSheet {
   var dateLabel: String {
     guard let item,
           let month = item.dateComponents.month,
           let day = item.dateComponents.day,
           let weekday = formatter.weekDay(item.dateComponents.weekday ?? 0) else { return "날짜를 선택해주세요" }
     return "\(month)월 \(day)일 \(weekday)"
+  }
+}
+
+private struct SheetItem: View {
+  @EnvironmentObject private var formatter: PBFormatter
+  @ObservedObject private var pocket: CDPocketModel
+  private let isEditMode: Bool
+  
+  init(pocket: CDPocketModel, isEditMode: Bool) {
+    self.pocket = pocket
+    self.isEditMode = isEditMode
+  }
+  
+  var body: some View {
+    HStack(spacing: 0) {
+      if let icon = pocket.icon, !isEditMode {
+        Text(icon)
+          .font(PBFonts.tossFace.xsmall.font)
+          .frame(width: 24, height: 24)
+          .padding(.trailing, 8)
+      }
+      
+      if isEditMode {
+        PBImages.setting.image
+          .frame(width: 24, height: 24)
+          .padding(.trailing, 8)
+      }
+      
+      Text(pocket.title)
+        .lineLimit(1)
+        .font(PBFonts.body._2.font)
+        .foregroundStyle(PBColors.navy._900.color)
+        .padding(.trailing, 12)
+      if !isEditMode {
+        Text(timeLabel(time: pocket.alarm.time))
+          .font(PBFonts.label._2.font)
+          .foregroundStyle(PBColors.navy._900.color)
+      }
+      Spacer()
+      if !isEditMode {
+        PBShapes.arrow(direction: .right)
+          .frame(width: 14, height: 7)
+          .foregroundStyle(PBColors.navy._900.color)
+      }
+    }
+    .frame(height: 48)
+    .padding(.horizontal, 16)
+    .background(PBColors.list.colors[Int(pocket.colorIndex)]._03.color)
+    .clipShape(RoundedRectangle(cornerRadius: 12))
+  }
+}
+
+private extension SheetItem {
+  func timeLabel(time: Date) -> String {
+    formatter.label(time, format: "a h:mm", locale: Locale(identifier: "ko_KR"))
   }
 }
 

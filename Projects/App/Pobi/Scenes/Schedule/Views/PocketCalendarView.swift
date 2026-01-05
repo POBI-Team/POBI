@@ -19,7 +19,7 @@ struct PocketCalendarView: View {
   @Binding private var selectedDate: Date
   @Binding private var isPresentedCreate: Bool
   @Binding private var didTapTodayButton: UUID
-  @Binding private var didTapPicketFinishButton: UUID
+  @Binding private var didTapPickerFinishButton: UUID
   @Binding private var selectedItem: PBCalendarItem?
   
   @State private var currentPage = 0
@@ -42,14 +42,14 @@ struct PocketCalendarView: View {
     selectedDate: Binding<Date>,
     isPresentedCreate: Binding<Bool>,
     didTapTodayButton: Binding<UUID>,
-    didTapPicketFinishButton: Binding<UUID>,
+    didTapPickerFinishButton: Binding<UUID>,
     selectedItem: Binding<PBCalendarItem?>,
     height: CGFloat
   ) {
     self._selectedDate = selectedDate
     self._isPresentedCreate = isPresentedCreate
     self._didTapTodayButton = didTapTodayButton
-    self._didTapPicketFinishButton = didTapPicketFinishButton
+    self._didTapPickerFinishButton = didTapPickerFinishButton
     self._selectedItem = selectedItem
     self.totalHeight = height
   }
@@ -186,14 +186,14 @@ struct PocketCalendarView: View {
       setupCalendar()
       selectedItem = calendars[1].first { $0.isToday }
     }
-    .onChange(of: didTapPicketFinishButton) {
+    .onChange(of: didTapPickerFinishButton) {
       setupCalendar()
       selectedItem = calendars[1].first { $0.isInCurrentMonth }
     }
-//    .onChange(of: pockets) {
-//      setupCalendar()
-//      selectedItem = calendars[1].first { $0.id == selectedItem?.id }
-//    }
+    .onChange(of: pockets.count) {
+      setupCalendar()
+      selectedItem = calendars[1].first { $0.id == selectedItem?.id }
+    }
     .onChange(of: sheetHeight) { oldValue, newValue in
       if newValue <= 0 {
         isEditMode = false
@@ -286,7 +286,7 @@ private extension Date {
 //      selectedDate: $date,
 //      isPresentedCreate: $isPresentedCreate,
 //      didTapTodayButton: .constant(.init()),
-//      didTapPicketFinishButton: .constant(.init()),
+//      didTapPickerFinishButton: .constant(.init()),
 //      selectedItem: $selectedItem,
 //      height: $0.size.height
 //    )
