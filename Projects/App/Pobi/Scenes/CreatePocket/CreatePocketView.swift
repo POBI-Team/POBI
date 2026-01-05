@@ -65,7 +65,7 @@ struct CreatePocketView: View {
                     Toggle(
                       isOn: Binding(
                         get: { store.state.pocket.onAlarm },
-                        set: { print($0); store.send(.switchedAlarm($0)) }
+                        set: { store.send(.switchedAlarm($0)) }
                       )
                     ) {
                       Text("알림")

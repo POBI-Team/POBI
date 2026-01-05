@@ -12,7 +12,7 @@ import PBDesignSystem
 import PBStorageInterface
 
 struct CalendarTag: View {
-  private let pocket: CDPocketModel
+  @ObservedObject private var pocket: CDPocketModel
   
   init(pocket: CDPocketModel) {
     self.pocket = pocket
