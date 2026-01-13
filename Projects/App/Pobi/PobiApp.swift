@@ -43,7 +43,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     UNUserNotificationCenter.current().delegate = self
     FirebaseManager.shared.initSDK()
     IntArrayValueTransformer.register()
-    try? PocketStorage.shared.initializeContainer()
+    PocketStorage.shared.initializeContainer()
     return true
   }
   
@@ -90,6 +90,7 @@ struct PobiApp: App {
     WindowGroup {
       SplashView()
         .environment(\.managedObjectContext, PocketStorage.shared.context)
+        .environmentObject(PocketStorage.shared)
         .environmentObject(appDelegate.notificationManager)
         .environmentObject(PBFormatter())
         .environmentObject(PBCalendarManager())

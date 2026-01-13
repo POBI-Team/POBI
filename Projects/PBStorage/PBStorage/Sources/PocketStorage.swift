@@ -7,10 +7,11 @@
 
 import CoreData
 import CloudKit
+import Combine
 
 import PBStorageInterface
  
-public final class PocketStorage: @unchecked Sendable {
+public final class PocketStorage: @unchecked Sendable, ObservableObject {
   public static let shared = PocketStorage()
   
   public var context: NSManagedObjectContext {
@@ -20,13 +21,14 @@ public final class PocketStorage: @unchecked Sendable {
   private var privatePersistentStore: NSPersistentStore?
   private var sharedPersistentStore: NSPersistentStore?
   private var persistentContainer: NSPersistentCloudKitContainer!
+  public var initializationError: Error? = nil
   
   public init() {}
   
-  public func initializeContainer() throws {
-    let cloudKitContainer = NSPersistentCloudKitContainer(name: "CDPobiModel")
+  public func initializeContainer() {
+    persistentContainer = NSPersistentCloudKitContainer(name: "CDPobiModel")
 
-    let privateStoreDescription = cloudKitContainer.persistentStoreDescriptions.first
+    let privateStoreDescription = persistentContainer.persistentStoreDescriptions.first
     let storesURL = privateStoreDescription?.url?.deletingLastPathComponent()
     
     let privateStoreURL = storesURL?.appendingPathComponent("default.store")
@@ -34,42 +36,37 @@ public final class PocketStorage: @unchecked Sendable {
     
     let sharedStoreURL = storesURL?.appendingPathComponent("shared.store")
     guard let sharedStoreDescription = privateStoreDescription?.copy() as? NSPersistentStoreDescription else {
-      fatalError("Copying the private store description returned an unexpected value.")
+      initializationError = StorageError.storage(reason: .invalidPrivateStoreDescriptionCopy)
+      return
     }
     sharedStoreDescription.url = sharedStoreURL
 
     guard let containerIdentifier = privateStoreDescription?.cloudKitContainerOptions?.containerIdentifier else {
-      fatalError("Unable to get containerIdentifier")
+      initializationError = StorageError.storage(reason: .failedToGetContainerIdentifier)
+      return
     }
     let sharedStoreOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: containerIdentifier)
     sharedStoreOptions.databaseScope = .shared
     sharedStoreDescription.cloudKitContainerOptions = sharedStoreOptions
-    cloudKitContainer.persistentStoreDescriptions.append(sharedStoreDescription)
+    persistentContainer.persistentStoreDescriptions.append(sharedStoreDescription)
 
-    cloudKitContainer.loadPersistentStores { loadedStoreDescription, error in
-      if let error = error as NSError? {
-        fatalError("Failed to load persistent stores: \(error)")
-      }
-      
-      else if let cloudKitContainerOptions = loadedStoreDescription.cloudKitContainerOptions {
-        guard let loadedStoreDescritionURL = loadedStoreDescription.url else {
-          return
-        }
+    persistentContainer.loadPersistentStores { [weak self] loadedStoreDescription, error in
+      if let _ = error as NSError? {
+        self?.initializationError = StorageError.storage(reason: .failedToLoadPersistent)
+      } else if let cloudKitContainerOptions = loadedStoreDescription.cloudKitContainerOptions {
+        guard let self,
+              let loadedStoreDescritionURL = loadedStoreDescription.url else { return }
         if cloudKitContainerOptions.databaseScope == .private {
-          let privateStore = cloudKitContainer.persistentStoreCoordinator.persistentStore(for: loadedStoreDescritionURL)
-          self.privatePersistentStore = privateStore
+          let privateStore = persistentContainer.persistentStoreCoordinator.persistentStore(for: loadedStoreDescritionURL)
+          privatePersistentStore = privateStore
         } else if cloudKitContainerOptions.databaseScope == .shared {
-          let sharedStore = cloudKitContainer.persistentStoreCoordinator.persistentStore(for: loadedStoreDescritionURL)
-          self.sharedPersistentStore = sharedStore
+          let sharedStore = persistentContainer.persistentStoreCoordinator.persistentStore(for: loadedStoreDescritionURL)
+          sharedPersistentStore = sharedStore
         }
       }
     }
-    
-    cloudKitContainer.viewContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
-    cloudKitContainer.viewContext.automaticallyMergesChangesFromParent = true
-    try cloudKitContainer.viewContext.setQueryGenerationFrom(.current)
-
-    persistentContainer = cloudKitContainer
+    persistentContainer.viewContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
+    persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
   }
 }
 

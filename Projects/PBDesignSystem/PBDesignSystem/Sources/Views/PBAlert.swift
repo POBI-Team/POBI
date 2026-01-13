@@ -16,6 +16,7 @@ public enum PBAlertType {
   case offAlarm
   case edit
   case hidden
+  case error(message: String)
   
   func makeView(isPresented: Binding<Bool>, action: @escaping () -> Void, cancelAction: @escaping () -> Void) -> some View {
     switch self {
@@ -59,6 +60,12 @@ public enum PBAlertType {
         .body("포켓 알림이 비활성화돼요!")
         .addButton(.cancel(cancelAction))
         .addButton(.defalt("숨기기", action))
+    case .error(let message):
+      return PBAlertView(isPresented: isPresented)
+        .image(PBImages.warning.image)
+        .title("문제가 발생했어요")
+        .body(message)
+        .addButton(.defalt("확인", action))
     }
   }
 }
@@ -198,7 +205,12 @@ public struct PBAlert: ViewModifier {
 }
 
 extension View {
-  public func pbAlert(isPresented: Binding<Bool>, type: PBAlertType, okAction: @escaping () -> Void, cancelAction: @escaping () -> Void = {}) -> some View {
+  public func pbAlert(
+    isPresented: Binding<Bool>,
+    type: PBAlertType,
+    okAction: @escaping () -> Void = {},
+    cancelAction: @escaping () -> Void = {}
+  ) -> some View {
     return modifier(PBAlert(isPresented: isPresented, alert: type, action: okAction, cancelAction: cancelAction))
   }
 }
