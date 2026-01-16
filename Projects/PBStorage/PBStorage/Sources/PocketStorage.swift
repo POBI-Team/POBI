@@ -23,10 +23,14 @@ public final class PocketStorage: @unchecked Sendable, ObservableObject {
   private var persistentContainer: NSPersistentCloudKitContainer!
   public var initializationError: Error? = nil
   
-  public init() {}
+  public init() {
+    initializeContainer()
+  }
   
-  public func initializeContainer() {
-    persistentContainer = NSPersistentCloudKitContainer(name: "CDPobiModel")
+  private func initializeContainer() {
+    let modelURL = Bundle(for: CDPocketModel.self).url(forResource: "CDPobiModel", withExtension: "momd")!
+    let model = NSManagedObjectModel(contentsOf: modelURL)!
+    persistentContainer = NSPersistentCloudKitContainer(name: "CDPobiModel", managedObjectModel: model)
 
     let privateStoreDescription = persistentContainer.persistentStoreDescriptions.first
     let storesURL = privateStoreDescription?.url?.deletingLastPathComponent()

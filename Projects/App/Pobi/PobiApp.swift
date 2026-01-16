@@ -43,7 +43,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     UNUserNotificationCenter.current().delegate = self
     FirebaseManager.shared.initSDK()
     IntArrayValueTransformer.register()
-    PocketStorage.shared.initializeContainer()
     return true
   }
   
