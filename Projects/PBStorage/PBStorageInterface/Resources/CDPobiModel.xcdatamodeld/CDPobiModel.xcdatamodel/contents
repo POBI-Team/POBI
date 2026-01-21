@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24411" systemVersion="25B78" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="PocketAlarmModel" representedClassName="PocketAlarmModel" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="days" optional="YES" attributeType="Transformable" valueTransformerName="IntArrayValueTransformer"/>
+        <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="isWeekRepeat" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="time" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="pocket" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PocketModel" inverseName="alarm" inverseEntity="PocketModel"/>
+    </entity>
+    <entity name="PocketItemModel" representedClassName="PocketItemModel" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isChecked" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="memo" attributeType="String" defaultValueString=""/>
+        <attribute name="sortIndex" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" attributeType="String" defaultValueString=""/>
+        <relationship name="pocket" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PocketModel" inverseName="items" inverseEntity="PocketModel"/>
+        <relationship name="template" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TemplateModel" inverseName="items" inverseEntity="TemplateModel"/>
+    </entity>
+    <entity name="PocketModel" representedClassName="PocketModel" syncable="YES">
+        <attribute name="colorIndex" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="createAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="icon" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isCalendar" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="onAlarm" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="repeats" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="title" attributeType="String" defaultValueString=""/>
+        <relationship name="alarm" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="PocketAlarmModel" inverseName="pocket" inverseEntity="PocketAlarmModel"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PocketItemModel" inverseName="pocket" inverseEntity="PocketItemModel"/>
+    </entity>
+    <entity name="TemplateModel" representedClassName="TemplateModel" syncable="YES">
+        <attribute name="colorIndex" attributeType="Integer 64" defaultValueString="7" usesScalarValueType="YES"/>
+        <attribute name="createAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="icon" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="title" optional="YES" attributeType="String" defaultValueString=""/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PocketItemModel" inverseName="template" inverseEntity="PocketItemModel"/>
+    </entity>
+</model>

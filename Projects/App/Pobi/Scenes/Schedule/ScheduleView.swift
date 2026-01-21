@@ -83,7 +83,7 @@ struct ScheduleView: View {
           selectedDate: $selectedDate,
           isPresentedCreate: $isPresentedCreate,
           didTapTodayButton: $didTapTodayButton,
-          didTapPicketFinishButton: $didTapPickerFinishButton,
+          didTapPickerFinishButton: $didTapPickerFinishButton,
           selectedItem: $selectedItem,
           height: reader.size.height
         )
@@ -97,7 +97,7 @@ struct ScheduleView: View {
       )
     }
     .fullScreenCover(isPresented: $isPresentedCreate) {
-      var date: Date? = nil
+      var date: Date? = .now
       if let selectedItem {
         date = Calendar.current.date(from: selectedItem.dateComponents)
       }

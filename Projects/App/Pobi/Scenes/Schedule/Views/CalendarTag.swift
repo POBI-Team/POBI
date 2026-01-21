@@ -12,9 +12,9 @@ import PBDesignSystem
 import PBStorageInterface
 
 struct CalendarTag: View {
-  private let pocket: PocketModel
+  @ObservedObject private var pocket: CDPocketModel
   
-  init(pocket: PocketModel) {
+  init(pocket: CDPocketModel) {
     self.pocket = pocket
   }
   
@@ -27,7 +27,7 @@ struct CalendarTag: View {
         .padding(2)
       }
       .frame(height: 17)
-      .foregroundStyle(PBColors.list.colors[pocket.colorIndex]._02.color)
+      .foregroundStyle(PBColors.list.colors[Int(pocket.colorIndex)]._02.color)
       .clipped()
   }
 }
@@ -48,7 +48,7 @@ private struct ClippedLabel: UIViewRepresentable {
   }
 }
 
-#Preview {
-  CalendarTag(pocket: .init(title: "이름"))
-    .frame(width: 43)
-}
+//#Preview {
+//  CalendarTag(pocket: .init(title: "이름"))
+//    .frame(width: 43)
+//}

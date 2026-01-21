@@ -65,7 +65,7 @@ struct CreatePocketView: View {
                     Toggle(
                       isOn: Binding(
                         get: { store.state.pocket.onAlarm },
-                        set: { print($0); store.send(.switchedAlarm($0)) }
+                        set: { store.send(.switchedAlarm($0)) }
                       )
                     ) {
                       Text("알림")
@@ -155,20 +155,20 @@ struct CreatePocketView: View {
   }
 }
 
-#Preview("Edit") {
-  CreatePocketView(
-    store: Store(initialState: CreatePocketFeature.State(pocket: .init(onAlarm: true))) {
-      CreatePocketFeature()
-    }
-  )
-  .environmentObject(PBFormatter())
-}
-
-#Preview("Create") {
-  CreatePocketView(
-    store: Store(initialState: CreatePocketFeature.State(pocket: nil, date: .now)) {
-      CreatePocketFeature()
-    }
-  )
-  .environmentObject(PBFormatter())
-}
+//#Preview("Edit") {
+//  CreatePocketView(
+//    store: Store(initialState: CreatePocketFeature.State(pocket: .init(onAlarm: true))) {
+//      CreatePocketFeature()
+//    }
+//  )
+//  .environmentObject(PBFormatter())
+//}
+//
+//#Preview("Create") {
+//  CreatePocketView(
+//    store: Store(initialState: CreatePocketFeature.State(pocket: nil, date: .now)) {
+//      CreatePocketFeature()
+//    }
+//  )
+//  .environmentObject(PBFormatter())
+//}

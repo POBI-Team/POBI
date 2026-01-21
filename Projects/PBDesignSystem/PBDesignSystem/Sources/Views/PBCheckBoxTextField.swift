@@ -48,9 +48,7 @@ public struct PBCheckBoxTextFieldModifier: ViewModifier {
         PBImages.disableCheckBox.image
       } else {
         Button {
-          withAnimation {
-            isChecked.toggle()
-          }
+          isChecked.toggle()
         } label: {
           checkBox(title: title, isChecked: isChecked).checkBoxImage
         }

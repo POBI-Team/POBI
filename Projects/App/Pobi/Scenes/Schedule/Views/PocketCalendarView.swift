@@ -19,7 +19,7 @@ struct PocketCalendarView: View {
   @Binding private var selectedDate: Date
   @Binding private var isPresentedCreate: Bool
   @Binding private var didTapTodayButton: UUID
-  @Binding private var didTapPicketFinishButton: UUID
+  @Binding private var didTapPickerFinishButton: UUID
   @Binding private var selectedItem: PBCalendarItem?
   
   @State private var currentPage = 0
@@ -32,21 +32,24 @@ struct PocketCalendarView: View {
 
   private let totalHeight: CGFloat
 
-  @Query(filter: #Predicate<PocketModel> { $0.isCalendar })
-  private var pockets: [PocketModel]
+  @FetchRequest(
+    sortDescriptors: [],
+    predicate: NSPredicate(format: "isCalendar == YES")
+  )
+  private var pockets: FetchedResults<CDPocketModel>
   
   init(
     selectedDate: Binding<Date>,
     isPresentedCreate: Binding<Bool>,
     didTapTodayButton: Binding<UUID>,
-    didTapPicketFinishButton: Binding<UUID>,
+    didTapPickerFinishButton: Binding<UUID>,
     selectedItem: Binding<PBCalendarItem?>,
     height: CGFloat
   ) {
     self._selectedDate = selectedDate
     self._isPresentedCreate = isPresentedCreate
     self._didTapTodayButton = didTapTodayButton
-    self._didTapPicketFinishButton = didTapPicketFinishButton
+    self._didTapPickerFinishButton = didTapPickerFinishButton
     self._selectedItem = selectedItem
     self.totalHeight = height
   }
@@ -141,7 +144,7 @@ struct PocketCalendarView: View {
                 selectedDate = selectedDate.moveMonth(by: currentPage)!
                 let newCalendar = calendarManager.days(
                   in: selectedDate.moveMonth(by: currentPage)!,
-                  with: pockets
+                  with: Array(pockets)
                 )
                 if currentPage == 1 {
                   calendars.append(newCalendar)
@@ -183,11 +186,11 @@ struct PocketCalendarView: View {
       setupCalendar()
       selectedItem = calendars[1].first { $0.isToday }
     }
-    .onChange(of: didTapPicketFinishButton) {
+    .onChange(of: didTapPickerFinishButton) {
       setupCalendar()
       selectedItem = calendars[1].first { $0.isInCurrentMonth }
     }
-    .onChange(of: pockets) {
+    .onChange(of: pockets.count) {
       setupCalendar()
       selectedItem = calendars[1].first { $0.id == selectedItem?.id }
     }
@@ -273,21 +276,21 @@ private extension Date {
   }
 }
 
-#Preview {
-  @Previewable @State var date = Calendar.current.date(from: DateComponents(year: 2025, month: 6))!
-  @Previewable @State var isPresentedCreate = false
-  @Previewable @State var selectedItem: PBCalendarItem? = nil
-  
-  GeometryReader {
-    PocketCalendarView(
-      selectedDate: $date,
-      isPresentedCreate: $isPresentedCreate,
-      didTapTodayButton: .constant(.init()),
-      didTapPicketFinishButton: .constant(.init()),
-      selectedItem: $selectedItem,
-      height: $0.size.height
-    )
-      .environmentObject(PBCalendarManager())
-      .environmentObject(PBFormatter())
-  }
-}
+//#Preview {
+//  @Previewable @State var date = Calendar.current.date(from: DateComponents(year: 2025, month: 6))!
+//  @Previewable @State var isPresentedCreate = false
+//  @Previewable @State var selectedItem: PBCalendarItem? = nil
+//  
+//  GeometryReader {
+//    PocketCalendarView(
+//      selectedDate: $date,
+//      isPresentedCreate: $isPresentedCreate,
+//      didTapTodayButton: .constant(.init()),
+//      didTapPickerFinishButton: .constant(.init()),
+//      selectedItem: $selectedItem,
+//      height: $0.size.height
+//    )
+//      .environmentObject(PBCalendarManager())
+//      .environmentObject(PBFormatter())
+//  }
+//}

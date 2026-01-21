@@ -8,18 +8,31 @@
 import XCTest
 import PBStorageInterface
 @testable import PBCalendar
+import CoreData
 
 final class PBCalendarTests: XCTestCase {
   private var sut: PBCalendarManager!
+  private var context: NSManagedObjectContext!
   
   override func setUp() {
     var calendar = Calendar.current
     calendar.firstWeekday = 1
     sut = PBCalendarManager(caledar: calendar)
+    
+    let modelURL = Bundle(for: CDPocketModel.self).url(forResource: "CDPobiModel", withExtension: "momd")!
+    let model = NSManagedObjectModel(contentsOf: modelURL)!
+    
+    let container = NSPersistentContainer(name: "CDPobiModel", managedObjectModel: model)
+    let description = NSPersistentStoreDescription()
+    description.type = NSInMemoryStoreType
+    container.persistentStoreDescriptions = [description]
+    container.loadPersistentStores(completionHandler: { _, _ in })
+    context = container.viewContext
   }
   
   override func tearDown() {
     sut = nil
+    context = nil
   }
   
   func test_weeks_호출_시_시작_요일이_월요일인_경우_월부터_시작해서_일로_끝() {
@@ -57,16 +70,16 @@ final class PBCalendarTests: XCTestCase {
   func test_days_호출_시_10일에_포켓이_등록되어_있을_경우_10일에_표시() {
     // Arrange
     let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
-    let pockets: [PocketModel] = [
-      PocketModel(
-        title: "10일 하루",
-        repeats: false,
-        alarm: PocketAlarmModel(
-          isWeekRepeat: false,
-          days: [],
-          date: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 10))!,
-          time: .now
-        )
+    let pockets: [CDPocketModel] = [
+      CDPocketModel(
+        with: Pocket(
+          title: "10일 하루",
+          alarm: .init(
+            isWeekRepeat: false,
+            date: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 10))!
+          )
+        ),
+        context: context
       )
     ]
     // Act
@@ -86,17 +99,17 @@ final class PBCalendarTests: XCTestCase {
   func test_days_호출_시_date와_endDate가_10일로_동일할_경우_10일에_표시() {
     // Arrange
     let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
-    let pockets: [PocketModel] = [
-      PocketModel(
-        title: "10일 하루",
-        repeats: false,
-        alarm: PocketAlarmModel(
-          isWeekRepeat: false,
-          days: [],
-          date: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 10, hour: 3, minute: 3))!,
-          endDate: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 10, hour: 11, minute: 11))!,
-          time: .now
-        )
+    let pockets: [CDPocketModel] = [
+      CDPocketModel(
+        with: Pocket(
+          title: "10일 하루",
+          alarm: .init(
+            isWeekRepeat: false,
+            date: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 10))!,
+            endDate: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 10, hour: 11, minute: 11))!
+          )
+        ),
+        context: context
       )
     ]
     // Act
@@ -116,17 +129,17 @@ final class PBCalendarTests: XCTestCase {
   func test_days_호출_시_date_3월30일_endDate_4월2일인_경우_30일_부터_4일까지_표시() {
     // Arrange
     let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
-    let pockets: [PocketModel] = [
-      PocketModel(
-        title: "3월 30일 ~ 4월 2일",
-        repeats: false,
-        alarm: PocketAlarmModel(
-          isWeekRepeat: false,
-          days: [],
-          date: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 30, hour: 3, minute: 3))!,
-          endDate: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 2, hour: 11, minute: 11))!,
-          time: .now
-        )
+    let pockets: [CDPocketModel] = [
+      CDPocketModel(
+        with: Pocket(
+          title: "3월 30일 ~ 4월 2일",
+          alarm: .init(
+            isWeekRepeat: false,
+            date: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 30, hour: 3, minute: 3))!,
+            endDate: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 2, hour: 11, minute: 11))!
+          )
+        ),
+        context: context
       )
     ]
     // Act
@@ -146,19 +159,19 @@ final class PBCalendarTests: XCTestCase {
   func test_days_호출_시_일요일_반복_포켓이_등록되어_있을_경우_매주_일요일에_표시() {
     // Arrange
     let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
-    let pockets: [PocketModel] = [
-      PocketModel(
-        title: "일요일마다",
-        repeats: true,
-        alarm: PocketAlarmModel(
-          isWeekRepeat: true,
-          days: [1],
-          date: .now,
-          time: .now
+    let pockets: [CDPocketModel] = [
+      CDPocketModel(
+        with: Pocket(
+          title: "일요일마다",
+          repeats: true,
+          alarm: .init(
+            days: [1]
+          )
         ),
-        createAt: Calendar.current.date(from: DateComponents(year: 2025, month: 2))!
+        context: context
       )
     ]
+    pockets[0].createAt = Calendar.current.date(from: DateComponents(year: 2025, month: 2))!
     // Act
     let output = sut.days(in: date, with: pockets)
       .filter { item in
@@ -176,19 +189,22 @@ final class PBCalendarTests: XCTestCase {
   func test_days_호출_시_24일_반복_포켓이_등록되어_있을_경우_매달_24일에_표시() {
     // Arrange
     let date = Calendar.current.date(from: DateComponents(year: 2025, month: 3))! // 2025년 3월
-    let pockets: [PocketModel] = [
-      PocketModel(
-        title: "24일 마다",
-        repeats: true,
-        alarm: PocketAlarmModel(
-          isWeekRepeat: false,
-          days: [24],
-          date: .now,
-          time: .now
+    let pockets: [CDPocketModel] = [
+      CDPocketModel(
+        with: Pocket(
+          title: "24일 마다",
+          repeats: true,
+          alarm: .init(
+            isWeekRepeat: false,
+            days: [24]
+          )
         ),
-        createAt: Calendar.current.date(from: DateComponents(year: 2025, month: 2))!
+        context: context
       )
+
     ]
+    pockets[0].createAt = Calendar.current.date(from: DateComponents(year: 2025, month: 2))!
+
     // Act
     let output = sut.days(in: date, with: pockets)
       .filter { item in

@@ -12,8 +12,8 @@ import PBStorageInterface
 
 import ComposableArchitecture
 
-struct PocketDetailView<P: PocketModelable>: View {
-  @Environment(\.modelContext) private var modelContext
+struct PocketDetailView<P: CDPocketModelable>: View {
+  @Environment(\.managedObjectContext) private var managedObjectContext
   @Environment(\.dismiss) private var dismiss
   @EnvironmentObject private var formatter: PBFormatter
   private let pocket: P
@@ -31,7 +31,7 @@ struct PocketDetailView<P: PocketModelable>: View {
             Text(pocket.title)
               .font(PBFonts.title._1.font)
               .foregroundStyle(PBColors.navy._900.color)
-            if let pocket = pocket as? PocketModel {
+            if let pocket = pocket as? CDPocketModel {
               HStack(spacing: 6) {
                 PBImages.clock.image
                 alarmLabel(pocket)
@@ -48,16 +48,16 @@ struct PocketDetailView<P: PocketModelable>: View {
         }
         .padding(.vertical, 20)
         .padding(.horizontal, 24)
-        .background(colors[pocket.colorIndex]._03.color)
+        .background(colors[Int(pocket.colorIndex)]._03.color)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         
       }
       .onDisappear {
-        try? modelContext.save()
+        try? managedObjectContext.save()
       }
       .padding(.vertical, 20)
       .padding(.horizontal, 20)
-      ItemList(pocket: pocket)
+      ItemList(pocket: pocket, managedObjectContext: managedObjectContext)
         .padding(.leading, 2)
         .scrollDismissesKeyboard(.interactively)
     }
@@ -70,13 +70,13 @@ struct PocketDetailView<P: PocketModelable>: View {
     }
     .rightItem {
       NavigationLink {
-        if let pocket = pocket as? PocketModel {
+        if let pocket = pocket as? CDPocketModel {
           CreatePocketView(
             store: Store(initialState: CreatePocketFeature.State(pocket: pocket)) {
               CreatePocketFeature()
             }
           )
-        } else if let template = pocket as? TemplateModel {
+        } else if let template = pocket as? CDTemplateModel {
           CreateTemplateView(template: template)
         }
       } label: {
@@ -89,11 +89,11 @@ struct PocketDetailView<P: PocketModelable>: View {
 }
 
 private extension PocketDetailView {
-  func alarmLabel(_ pocket: PocketModel) -> some View {
+  func alarmLabel(_ pocket: CDPocketModel) -> some View {
     if pocket.onAlarm {
       let time = formatter.label(pocket.alarm.time, format: "a h:mm", locale: Locale(identifier: "ko_KR"))
       if pocket.repeats {
-        let days = formatter.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.days)
+        let days = formatter.label(isWeekDay: pocket.alarm.isWeekRepeat, days: pocket.alarm.daysValue)
         return AnyView(
           HStack(spacing: 0) {
             Text("\(days)")
@@ -118,54 +118,54 @@ private extension PocketDetailView {
   }
 }
 
-#Preview {
-  NavigationStack {
-    PocketDetailView(
-      PocketModel(
-        title: "테스트",
-        onAlarm: true,
-        alarm: PocketAlarmModel(
-          isWeekRepeat: true,
-          days: [1,2],
-          date: Calendar.current.date(from: DateComponents(year: 2025, month: 12, day: 20))!,
-          endDate:  Calendar.current.date(from: DateComponents(year: 2025, month: 12, day: 29))!,
-          time: .now
-        )
-      )
-    )
-    .environmentObject(PBFormatter())
-  }
-}
-
-#Preview {
-  NavigationStack {
-    PocketDetailView(
-      PocketModel(
-        title: "테스트",
-        onAlarm: true,
-        alarm: PocketAlarmModel(
-          isWeekRepeat: true,
-          days: [1,2],
-          date: .now,
-          endDate: .now,
-          time: .now
-        )
-      )
-    )
-    .environmentObject(PBFormatter())
-  }
-}
-
-#Preview {
-  NavigationStack {
-    PocketDetailView(
-      PocketModel(
-        title: "테스트",
-        onAlarm: true,
-        repeats: true,
-        alarm: PocketAlarmModel(isWeekRepeat: true, days: [1,2,3,4,5,6], date: .now, time: .now)
-      )
-    )
-    .environmentObject(PBFormatter())
-  }
-}
+//#Preview {
+//  NavigationStack {
+//    PocketDetailView(
+//      PocketModel(
+//        title: "테스트",
+//        onAlarm: true,
+//        alarm: PocketAlarmModel(
+//          isWeekRepeat: true,
+//          days: [1,2],
+//          date: Calendar.current.date(from: DateComponents(year: 2025, month: 12, day: 20))!,
+//          endDate:  Calendar.current.date(from: DateComponents(year: 2025, month: 12, day: 29))!,
+//          time: .now
+//        )
+//      )
+//    )
+//    .environmentObject(PBFormatter())
+//  }
+//}
+//
+//#Preview {
+//  NavigationStack {
+//    PocketDetailView(
+//      PocketModel(
+//        title: "테스트",
+//        onAlarm: true,
+//        alarm: PocketAlarmModel(
+//          isWeekRepeat: true,
+//          days: [1,2],
+//          date: .now,
+//          endDate: .now,
+//          time: .now
+//        )
+//      )
+//    )
+//    .environmentObject(PBFormatter())
+//  }
+//}
+//
+//#Preview {
+//  NavigationStack {
+//    PocketDetailView(
+//      PocketModel(
+//        title: "테스트",
+//        onAlarm: true,
+//        repeats: true,
+//        alarm: PocketAlarmModel(isWeekRepeat: true, days: [1,2,3,4,5,6], date: .now, time: .now)
+//      )
+//    )
+//    .environmentObject(PBFormatter())
+//  }
+//}

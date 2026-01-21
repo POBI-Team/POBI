@@ -41,18 +41,20 @@ final class CreatePocketFeatureTests: XCTestCase {
     mockProfileStorage = nil
     mockLocalNoti = nil
     mockFirebaseManager = nil
+    mockPocketStorage = nil
     sut = nil
   }
   
   @MainActor func test_edit_호출_시_onAlarm이_true이면_기존_등록된_알림은_삭제되고_유저_닉네임과_변경된_포켓_제목으로_새로운_알림이_등록된다() async {
     // Arrange
-    let pocket = PocketModel(title: "Test", onAlarm: true)
+    let pocket = CDPocketModel(with: Pocket(title: "Test", onAlarm: true), context: mockPocketStorage.context)
     sut = TestStore(initialState: CreatePocketFeature.State(pocket: pocket)) {
       CreatePocketFeature()
     } withDependencies: {
       $0.profileStorage = mockProfileStorage
       $0.localNotiCenter = mockLocalNoti
       $0.firebaseManager = mockFirebaseManager
+      $0.pocketStorage = mockPocketStorage
     }
     mockProfileStorage.returnValue.loadNickname = "testUser"
     let pushType = pocket.pushType
@@ -80,13 +82,14 @@ final class CreatePocketFeatureTests: XCTestCase {
   
   @MainActor func test_edit_호출_시_onAlarm이_false이면_변경_사항이_영구적으로_저장되고_기존_등록된_알림_삭제() async {
     // Arrange
-    let pocket = PocketModel(title: "Test", onAlarm: false)
+    let pocket = CDPocketModel(with: Pocket(title: "Test"), context: mockPocketStorage.context)
     sut = TestStore(initialState: CreatePocketFeature.State(pocket: pocket)) {
       CreatePocketFeature()
     } withDependencies: {
       $0.profileStorage = mockProfileStorage
       $0.localNotiCenter = mockLocalNoti
       $0.firebaseManager = mockFirebaseManager
+      $0.pocketStorage = mockPocketStorage
     }
     mockProfileStorage.returnValue.loadNickname = "testUser"
     let pushType = pocket.pushType
@@ -126,8 +129,7 @@ final class CreatePocketFeatureTests: XCTestCase {
     XCTAssertEqual(1, mockLocalNoti.callCount.register)
     XCTAssertEqual("똑똑! testUser님 'Test' 소지품 챙기세요!", mockLocalNoti.inputValue.register?.body)
     
-    XCTAssertEqual(1, mockPocketStorage.callCount.insert)
-    XCTAssertEqual("Test", mockPocketStorage.inputValue.insert?.title)
+    XCTAssertEqual(1, mockPocketStorage.callCount.save)
   }
   
   @MainActor func test_create_호출_시_onAlarm이_false이면_알림_등록X_영구_저장소에_저장() async {
@@ -142,13 +144,12 @@ final class CreatePocketFeatureTests: XCTestCase {
 
     XCTAssertEqual(0, mockLocalNoti.callCount.register)
     
-    XCTAssertEqual(1, mockPocketStorage.callCount.insert)
-    XCTAssertEqual("Test", mockPocketStorage.inputValue.insert?.title)
+    XCTAssertEqual(1, mockPocketStorage.callCount.save)
   }
   
   @MainActor func test_create_호출_시_selectedTemplate이_존재하면_Template을_통해_Pocket_생성() async {
     // Arrange
-    let template = TemplateModel(title: "TestTemplate", icon: "✈️")
+    let template = CDTemplateModel(with: Template(title: "TestTemplate", icon: "✈️"), context: mockPocketStorage.context)
     await sut.send(.setTemplate(template)) {
       $0.selectedTemplate = template
     }
@@ -161,8 +162,7 @@ final class CreatePocketFeatureTests: XCTestCase {
     // Act
     await sut.send(.create)
     // Assert
-    XCTAssertEqual(1, mockPocketStorage.callCount.insert)
-    XCTAssertEqual("TestTemplate", mockPocketStorage.inputValue.insert?.title)
+    XCTAssertEqual(1, mockPocketStorage.callCount.save)
   }
   
   @MainActor func test_switchedAlarm_호출하여_알림을_켤_때_앱_알림이_꺼져있는_경우_isPresentedOffAlarmAlert_true() async {
@@ -191,13 +191,14 @@ final class CreatePocketFeatureTests: XCTestCase {
   
   @MainActor func test_switchedAlarm_호출하여_알림을_끌_때_앱_알림이_켜져있는_경우_onAlarm_false() async {
     // Arrange
-    let pocket = PocketModel(title: "Test", onAlarm: true)
+    let pocket = CDPocketModel(with: Pocket(title: "Test", onAlarm: true), context: mockPocketStorage.context)
     sut = TestStore(initialState: CreatePocketFeature.State(pocket: pocket)) {
       CreatePocketFeature()
     } withDependencies: {
       $0.profileStorage = mockProfileStorage
       $0.localNotiCenter = mockLocalNoti
       $0.firebaseManager = mockFirebaseManager
+      $0.pocketStorage = mockPocketStorage
     }
     // Act
     await sut.send(.switchedAlarm(false))

@@ -12,15 +12,16 @@ import NetworkService
 import PBStorageInterface
 
 struct RecommendedListView: View {
+  @Environment(\.managedObjectContext) private var managedObjectContext
   @Environment(\.dismiss) private var dismiss
   @State private var seletedCategoryIndex: Int = 0
   @State private var recommendedItem: PBRecommendedItem? = nil
   @State private var items: [String] = []
   @State private var seletedItemTitles: Set<String>
   @State private var seletedItems: [PocketItem]
-  @Binding private var pocketItems: [PocketItemModel]
+  @Binding private var pocketItems: [CDPocketItemModel]
   
-  init(pocketItems: Binding<[PocketItemModel]>) {
+  init(pocketItems: Binding<[CDPocketItemModel]>) {
     self._pocketItems = pocketItems
     self.seletedItems = pocketItems.wrappedValue.map { PocketItem(model: $0) }
     self.seletedItemTitles = Set(pocketItems.wrappedValue.map(\.title))
@@ -97,8 +98,9 @@ struct RecommendedListView: View {
     .rightItem {
       Button {
         dismiss()
-        pocketItems = seletedItems.map { $0.toModel() }
+        pocketItems = seletedItems.map { $0.toModel(context: managedObjectContext) }
         pocketItems.updateSortIndices()
+        try? managedObjectContext.save()
         FirebaseManager.shared.logEvent(event: .addRecommendedList)
       } label: {
         Text("추가")

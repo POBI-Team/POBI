@@ -11,5 +11,5 @@ import PBStorageInterface
 import ComposableArchitecture
 
 struct PocketStorageKey: DependencyKey {
-  static let liveValue: (any PocketStorageInterface)? = PocketStorage()
+  static let liveValue: (any StorageInterface) = PocketStorage.shared
 }

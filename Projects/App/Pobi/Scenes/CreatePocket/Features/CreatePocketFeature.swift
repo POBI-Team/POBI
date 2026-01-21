@@ -15,23 +15,27 @@ struct CreatePocketFeature {
   @ObservableState
   struct State: Equatable {
     var pocket = Pocket()
-    let pocketModel: PocketModel?
-    var selectedTemplate: TemplateModel?
+    let pocketModel: CDPocketModel?
+    var selectedTemplate: CDTemplateModel?
     var isPresentedOffAlarmAlert = false
     
-    init(pocket: PocketModel?, date: Date? = nil) {
+    init(pocket: CDPocketModel?, date: Date? = nil) {
       self.pocketModel = pocket
-      self.pocket = pocket?.temporary() ?? Pocket(
-        isCalendar: date != nil,
-        alarm: Alarm(date: date ?? .now)
-      )
+      if let pocket, !pocket.isDeleted, pocket.managedObjectContext != nil {
+        self.pocket = pocket.temporary()
+      } else {
+        self.pocket = Pocket(
+          isCalendar: date != nil,
+          alarm: Alarm(date: date ?? .now)
+        )
+      }
     }
   }
   
   enum Action {
     case setTitle(String)
     case setOnAlarm(Bool)
-    case setTemplate(TemplateModel?)
+    case setTemplate(CDTemplateModel?)
     case setOnCalendar(Bool)
     case setPocket(Pocket)
     case setIsPresentedOffAlarmAlert(Bool)
@@ -94,8 +98,9 @@ struct CreatePocketFeature {
         } else {
           firebaseManager.logEvent(event: .alarmDisable)
         }
+        try? pocketStorage.save()
       case .create:
-        let newPocketModel = PocketModel(state.pocket)
+        let newPocketModel = CDPocketModel(with: state.pocket, context: pocketStorage.context)
         if state.pocket.onAlarm {
           let nickName = profileStorage.loadNickname() ?? "사용자"
           localNotiCenter.register(
@@ -115,11 +120,11 @@ struct CreatePocketFeature {
           firebaseManager.logEvent(event: .offCalendar)
         }
         if let template = state.selectedTemplate {
-          newPocketModel.items = template.items.map { $0.copy() }
+          newPocketModel.items = Set(template.items.map { $0.copyModel() })
           firebaseManager.logEvent(event: .importTemplate)
         }
-        try? pocketStorage?.insert(newPocketModel)
         firebaseManager.logEvent(event: .createPocket)
+        try? pocketStorage.save()
       }
       return .none
     }

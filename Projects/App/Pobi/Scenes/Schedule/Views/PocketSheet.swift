@@ -14,7 +14,7 @@ import PBStorageInterface
 import ComposableArchitecture
 
 struct PocketSheet: View {
-  @Environment(\.modelContext) private var modelContext
+  @Environment(\.managedObjectContext) private var managedObjectContext
   @EnvironmentObject private var formatter: PBFormatter
   @Binding private var item: PBCalendarItem?
   @Binding private var isEditMode: Bool
@@ -81,41 +81,7 @@ struct PocketSheet: View {
                     PocketDetailView(pocket)
                   }
                 } label: {
-                  HStack(spacing: 0) {
-                    if let icon = pocket.icon, !isEditMode {
-                      Text(icon)
-                        .font(PBFonts.tossFace.xsmall.font)
-                        .frame(width: 24, height: 24)
-                        .padding(.trailing, 8)
-                    }
-                    
-                    if isEditMode {
-                      PBImages.setting.image
-                        .frame(width: 24, height: 24)
-                        .padding(.trailing, 8)
-                    }
-                    
-                    Text(pocket.title)
-                      .lineLimit(1)
-                      .font(PBFonts.body._2.font)
-                      .foregroundStyle(PBColors.navy._900.color)
-                      .padding(.trailing, 12)
-                    if !isEditMode {
-                      Text(timeLabel(time: pocket.alarm.time))
-                        .font(PBFonts.label._2.font)
-                        .foregroundStyle(PBColors.navy._900.color)
-                    }
-                    Spacer()
-                    if !isEditMode {
-                      PBShapes.arrow(direction: .right)
-                        .frame(width: 14, height: 7)
-                        .foregroundStyle(PBColors.navy._900.color)
-                    }
-                  }
-                  .frame(height: 48)
-                  .padding(.horizontal, 16)
-                  .background(PBColors.list.colors[pocket.colorIndex]._03.color)
-                  .clipShape(RoundedRectangle(cornerRadius: 12))
+                  SheetItem(pocket: pocket, isEditMode: isEditMode)
                 }
                 if isEditMode {
                   Button {
@@ -133,8 +99,8 @@ struct PocketSheet: View {
                   .pbAlert(isPresented: $isPresentedDeleteAlert, type: .delete) {
                     pocket.deletePushAlarm()
                     item?.pockets.removeAll { $0.id == pocket.id }
-                    modelContext.delete(pocket)
-                    try? modelContext.save()
+                    managedObjectContext.delete(pocket)
+                    try? managedObjectContext.save()
                   }
                 }
               }
@@ -163,11 +129,7 @@ struct PocketSheet: View {
   }
 }
 
-extension PocketSheet {
-  func timeLabel(time: Date) -> String {
-    formatter.label(time, format: "a h:mm", locale: Locale(identifier: "ko_KR"))
-  }
-  
+private extension PocketSheet {
   var dateLabel: String {
     guard let item,
           let month = item.dateComponents.month,
@@ -177,28 +139,83 @@ extension PocketSheet {
   }
 }
 
-#if DEBUG
-#Preview {
-  @Previewable @State var item: PBCalendarItem? = PBCalendarItem(
-    id: "test",
-    dateComponents: .init(),
-    isToday: false,
-    isInCurrentMonth: true,
-    pockets: [
-      PocketModel(title: "Test1", colorIndex: 0, icon: "❤️"),
-      PocketModel(title: "Test2", colorIndex: 1, icon: "❤️"),
-      PocketModel(title: "Test3", colorIndex: 2, icon: "❤️")
-    ]
-  )
-  @Previewable @State var isEditMode: Bool = false
+private struct SheetItem: View {
+  @EnvironmentObject private var formatter: PBFormatter
+  @ObservedObject private var pocket: CDPocketModel
+  private let isEditMode: Bool
   
-  NavigationStack {
-    PocketSheet(
-      item: $item,
-      isEditMode: $isEditMode,
-      minHeight: 300.0
-    )
-      .environmentObject(PBFormatter())
+  init(pocket: CDPocketModel, isEditMode: Bool) {
+    self.pocket = pocket
+    self.isEditMode = isEditMode
+  }
+  
+  var body: some View {
+    HStack(spacing: 0) {
+      if let icon = pocket.icon, !isEditMode {
+        Text(icon)
+          .font(PBFonts.tossFace.xsmall.font)
+          .frame(width: 24, height: 24)
+          .padding(.trailing, 8)
+      }
+      
+      if isEditMode {
+        PBImages.setting.image
+          .frame(width: 24, height: 24)
+          .padding(.trailing, 8)
+      }
+      
+      Text(pocket.title)
+        .lineLimit(1)
+        .font(PBFonts.body._2.font)
+        .foregroundStyle(PBColors.navy._900.color)
+        .padding(.trailing, 12)
+      if !isEditMode {
+        Text(timeLabel(time: pocket.alarm.time))
+          .font(PBFonts.label._2.font)
+          .foregroundStyle(PBColors.navy._900.color)
+      }
+      Spacer()
+      if !isEditMode {
+        PBShapes.arrow(direction: .right)
+          .frame(width: 14, height: 7)
+          .foregroundStyle(PBColors.navy._900.color)
+      }
+    }
+    .frame(height: 48)
+    .padding(.horizontal, 16)
+    .background(PBColors.list.colors[Int(pocket.colorIndex)]._03.color)
+    .clipShape(RoundedRectangle(cornerRadius: 12))
   }
 }
-#endif
+
+private extension SheetItem {
+  func timeLabel(time: Date) -> String {
+    formatter.label(time, format: "a h:mm", locale: Locale(identifier: "ko_KR"))
+  }
+}
+
+//#if DEBUG
+//#Preview {
+//  @Previewable @State var item: PBCalendarItem? = PBCalendarItem(
+//    id: "test",
+//    dateComponents: .init(),
+//    isToday: false,
+//    isInCurrentMonth: true,
+//    pockets: [
+//      PocketModel(title: "Test1", colorIndex: 0, icon: "❤️"),
+//      PocketModel(title: "Test2", colorIndex: 1, icon: "❤️"),
+//      PocketModel(title: "Test3", colorIndex: 2, icon: "❤️")
+//    ]
+//  )
+//  @Previewable @State var isEditMode: Bool = false
+//  
+//  NavigationStack {
+//    PocketSheet(
+//      item: $item,
+//      isEditMode: $isEditMode,
+//      minHeight: 300.0
+//    )
+//      .environmentObject(PBFormatter())
+//  }
+//}
+//#endif

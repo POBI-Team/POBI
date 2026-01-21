@@ -5,36 +5,84 @@
 //  Created by 이시원 on 7/10/25.
 //
 
-import SwiftData
+import CoreData
+import CloudKit
+import Combine
 
 import PBStorageInterface
  
-public final class PocketStorage: PocketStorageInterface, @unchecked Sendable {  
-  private let modelContext: ModelContext
+public final class PocketStorage: @unchecked Sendable, ObservableObject {
+  public static let shared = PocketStorage()
   
-  public init?(isStoredInMemoryOnly: Bool = false) {
-    let schema = Schema([PocketModel.self, PocketItemModel.self, PocketAlarmModel.self, TemplateModel.self])
-    let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: isStoredInMemoryOnly)
-    guard let modelContainer = try? ModelContainer(for: schema, configurations: modelConfiguration) else { return nil }
-    self.modelContext = ModelContext(modelContainer)
+  public var context: NSManagedObjectContext {
+    persistentContainer.viewContext
   }
   
-  public func read<T: PocketModelable>(
-    _ type: T.Type,
-    sortBy sorts: [SortDescriptor<T>] = [],
-    filter: Predicate<T>? = nil
-  ) throws -> [T] {
-    let descriptor = FetchDescriptor<T>(predicate: filter, sortBy: sorts)
-    return try modelContext.fetch(descriptor)
+  private var privatePersistentStore: NSPersistentStore?
+  private var sharedPersistentStore: NSPersistentStore?
+  private var persistentContainer: NSPersistentCloudKitContainer!
+  public var initializationError: Error? = nil
+  
+  public init() {
+    initializeContainer()
   }
   
-  public func insert<T: PocketModelable>(_ model: T) throws {
-    modelContext.insert(model)
-    try modelContext.save()
-  }
-  
-  public func delete<T: PocketModelable>(_ model: T) throws {
-    modelContext.delete(model)
-    try? modelContext.save()
+  private func initializeContainer() {
+    let modelURL = Bundle(for: CDPocketModel.self).url(forResource: "CDPobiModel", withExtension: "momd")!
+    let model = NSManagedObjectModel(contentsOf: modelURL)!
+    persistentContainer = NSPersistentCloudKitContainer(name: "CDPobiModel", managedObjectModel: model)
+
+    let privateStoreDescription = persistentContainer.persistentStoreDescriptions.first
+    let storesURL = privateStoreDescription?.url?.deletingLastPathComponent()
+    
+    let privateStoreURL = storesURL?.appendingPathComponent("default.store")
+    privateStoreDescription?.url = privateStoreURL
+    
+    let sharedStoreURL = storesURL?.appendingPathComponent("shared.store")
+    guard let sharedStoreDescription = privateStoreDescription?.copy() as? NSPersistentStoreDescription else {
+      initializationError = StorageError.storage(reason: .invalidPrivateStoreDescriptionCopy)
+      return
+    }
+    sharedStoreDescription.url = sharedStoreURL
+
+    guard let containerIdentifier = privateStoreDescription?.cloudKitContainerOptions?.containerIdentifier else {
+      initializationError = StorageError.storage(reason: .failedToGetContainerIdentifier)
+      return
+    }
+    let sharedStoreOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: containerIdentifier)
+    sharedStoreOptions.databaseScope = .shared
+    sharedStoreDescription.cloudKitContainerOptions = sharedStoreOptions
+    persistentContainer.persistentStoreDescriptions.append(sharedStoreDescription)
+
+    persistentContainer.loadPersistentStores { [weak self] loadedStoreDescription, error in
+      if let _ = error as NSError? {
+        self?.initializationError = StorageError.storage(reason: .failedToLoadPersistent)
+      } else if let cloudKitContainerOptions = loadedStoreDescription.cloudKitContainerOptions {
+        guard let self,
+              let loadedStoreDescritionURL = loadedStoreDescription.url else { return }
+        if cloudKitContainerOptions.databaseScope == .private {
+          let privateStore = persistentContainer.persistentStoreCoordinator.persistentStore(for: loadedStoreDescritionURL)
+          privatePersistentStore = privateStore
+        } else if cloudKitContainerOptions.databaseScope == .shared {
+          let sharedStore = persistentContainer.persistentStoreCoordinator.persistentStore(for: loadedStoreDescritionURL)
+          sharedPersistentStore = sharedStore
+        }
+      }
+    }
+    persistentContainer.viewContext.mergePolicy = NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
+    persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
   }
 }
+
+extension PocketStorage: StorageInterface {
+  public func delete<T: NSManagedObject>(_ model: T) {
+    context.delete(model)
+  }
+  
+  public func save() throws {
+    if context.hasChanges {
+      try context.save()
+    }
+  }
+}
+

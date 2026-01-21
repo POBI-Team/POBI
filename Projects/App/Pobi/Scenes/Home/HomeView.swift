@@ -18,12 +18,14 @@ import Feather
 
 struct HomeView: View {
   @EnvironmentObject private var profileStorage: ProfileStorage
+  @EnvironmentObject private var pocketStorage: PocketStorage
   @State private var selectedTabIndex: Int = 0
   @Binding private var isPresentedCreate: Bool
   @State private var isAppear = false
   @State private var profileImageType: ProfileImageType = .first
   @State private var nickname: String = ""
   @State private var banner: PBBanner?
+  @State private var isPresentedAlert: Bool = false
   
   init(isPresentedCreate: Binding<Bool>) {
     self._isPresentedCreate = isPresentedCreate
@@ -77,6 +79,10 @@ struct HomeView: View {
         )
       }
     }
+    .onAppear {
+      isPresentedAlert = pocketStorage.initializationError != nil
+    }
+    .pbAlert(isPresented: $isPresentedAlert, type: .error(message: pocketStorage.initializationError?.localizedDescription ?? ""))
 //    .fullScreenCover(isPresented: $isPresentedWebView) {
 //      if let banner {
 //        PBNavigationBar {

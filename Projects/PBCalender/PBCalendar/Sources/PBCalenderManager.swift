@@ -23,7 +23,7 @@ public final class PBCalendarManager: Sendable, ObservableObject {
     }
   }
   
-  public func days(in date: Date, with pockets: [PocketModel] = []) -> [PBCalendarItem] {
+  public func days(in date: Date, with pockets: [CDPocketModel] = []) -> [PBCalendarItem] {
     let startFirstWeekdayIndex = (firstWeekdayOfMonth(in: date) - calendar.firstWeekday + 7) % 7
     let lastDay = numberOfDays(in: date)
     let lastDayOfMonthBefore = numberOfDays(in: previousMonth(at: date))
@@ -37,7 +37,7 @@ public final class PBCalendarManager: Sendable, ObservableObject {
         let isToday: Bool
         let isInCurrentMonth: Bool
         let weekday = weekdays[i%7]
-        var targetPockets: [PocketModel] = []
+        var targetPockets: [CDPocketModel] = []
         
         if e > -1 && e < lastDay { // 현재 달
           day = e + 1
@@ -56,11 +56,11 @@ public final class PBCalendarManager: Sendable, ObservableObject {
           guard isToday || pocket.createAt < date! || !pocket.repeats else { return }
           if pocket.repeats {
             if pocket.alarm.isWeekRepeat {
-              if pocket.alarm.days.contains(weekday) {
+              if pocket.alarm.daysValue.contains(weekday) {
                 targetPockets.append(pocket)
               }
             } else {
-              if pocket.alarm.days.contains(day) {
+              if pocket.alarm.daysValue.contains(day) {
                 targetPockets.append(pocket)
               }
             }

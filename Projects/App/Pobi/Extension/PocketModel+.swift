@@ -9,7 +9,7 @@ import PBStorageInterface
 import LocalNotiService
 import LocalNotiInterface
 
-extension PocketModel {
+extension CDPocketModel {
   public func registerPushAlarm(userNickname: String) {
     LocalNotiCenter.shared.register(
       title: "POBI",
@@ -27,9 +27,9 @@ extension PocketModel {
   public var pushType: RepeatType {
     if repeats {
       if alarm.isWeekRepeat {
-        return .week(weeks: alarm.days)
+        return .week(weeks: alarm.daysValue)
       } else {
-        return .day(days: alarm.days)
+        return .day(days: alarm.daysValue)
       }
     } else {
       return .date(start: alarm.date, end: alarm.endDate)

@@ -6,41 +6,43 @@
 //
 
 import PBStorageInterface
+import CoreData
 
-public final class MockPocketStorage: PocketStorageInterface, @unchecked Sendable {
+public final class MockPocketStorage: StorageInterface, @unchecked Sendable {
+  public var context: NSManagedObjectContext
+  
   public struct CallCount {
-    public var read: Int = 0
-    public var insert: Int = 0
+    public var save: Int = 0
     public var delete: Int = 0
   }
   
-  public struct ReturnValue {
-    public var read: [any PocketModelable] = []
-  }
+  public struct ReturnValue {}
   
   public struct InputValue {
-    public var insert: (any PocketModelable)?
-    public var delete: (any PocketModelable)?
+    public var delete: NSManagedObject?
   }
   
   public var callCount: CallCount = .init()
   public var returnValue: ReturnValue = .init()
   public var inputValue: InputValue = .init()
   
-  public init() {}
-  
-  public func read<T>(_ type: T.Type, sortBy sorts: [SortDescriptor<T>], filter: Predicate<T>?) throws -> [T] where T : PocketModelable {
-    callCount.read += 1
-    return returnValue.read.map { $0 as! T }
+  public init() {
+    let modelURL = Bundle(for: CDPocketModel.self).url(forResource: "CDPobiModel", withExtension: "momd")!
+    let model = NSManagedObjectModel(contentsOf: modelURL)!
+    let container = NSPersistentContainer(name: "CDPobiModel", managedObjectModel: model)
+    let description = NSPersistentStoreDescription()
+    description.type = NSInMemoryStoreType
+    container.persistentStoreDescriptions = [description]
+    container.loadPersistentStores(completionHandler: { _, _ in })
+    context = container.viewContext
   }
   
-  public func insert<T>(_ model: T) where T : PocketModelable {
-    callCount.insert += 1
-    inputValue.insert = model
-  }
-  
-  public func delete<T>(_ model: T) where T : PocketModelable {
+  public func delete<T>(_ model: T) where T : NSManagedObject {
     callCount.delete += 1
     inputValue.delete = model
+  }
+  
+  public func save() throws {
+    callCount.save += 1
   }
 }
